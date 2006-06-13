@@ -1,0 +1,5 @@
+* text=auto !eol
+/INSTALL.ASL -text
+/Makefile.am -text
+/configure -text
+/get.ASL -text
