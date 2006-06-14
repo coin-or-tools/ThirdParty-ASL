@@ -3520,6 +3520,7 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}no" >&6
       have_svn=no
     fi
+    rm -f confauto.out
   fi
 
   # Find the location of the BuildTools directory

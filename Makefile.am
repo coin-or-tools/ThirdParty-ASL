@@ -8,6 +8,10 @@ AUTOMAKE_OPTIONS = foreign
 
 EXTRA_DIST = get.ASL INSTALL.ASL
 
+########################################################################
+#                           Extra Targets                              #
+########################################################################
+
 compdir = compdir
 
 libampl   = amplsolver.a
@@ -35,7 +39,11 @@ stdio1.h arith.h funcadd0.o: $(libampl)
 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.o
 
-# ASLsolvers
+########################################################################
+#                         Maintainer Stuff                             #
+########################################################################
 
-distclean-local:
-	rm -rf ASLsolvers
+# Files that are generated and should be cleaned with make distclean
+DISTCLEANFILES =
+
+include ../../BuildTools/Makemain.inc
