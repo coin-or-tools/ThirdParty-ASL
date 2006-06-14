@@ -2231,7 +2231,7 @@ else
       icc* | */icc*)
         ;;
       *)
-        coin_opt_cflags="-O3 -fomit-frame-pointer"
+        coin_opt_cflags="-O3 -fomit-frame-pointer -ffast-math"
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
         coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
