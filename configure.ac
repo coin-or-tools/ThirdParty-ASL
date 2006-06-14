@@ -39,12 +39,9 @@ AC_CANONICAL_BUILD
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE
-if test "$coin_debug_compile" = true; then
-  AC_DEFINE([IP_DEBUG],[1],
-            [If defined, debug sanity checks are performed in Ipopt during runtime])
-fi
 
-# We need ln -s somewhere
+# We need egrep and ln -s somewhere
+AC_PROG_EGREP
 AC_PROG_LN_S
 
 # Get the name of the C compiler and appropriate compiler options
@@ -53,9 +50,9 @@ AC_COIN_PROG_CC
 # Initialize automake
 AC_COIN_INIT_AUTOMAKE
 
-#######################
-# AMPL SOLVER LIBRARY #
-#######################
+#############################################################################
+#                          AMPL SOLVER LIBRARY                              #
+#############################################################################
 
 if test -z "$ASLMAKEFLAGS" ; then
   asladdcflags=
