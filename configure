@@ -281,7 +281,7 @@ PACKAGE_BUGREPORT='http://projects.coin-or.org/BuildTools/newticket'
 
 ac_unique_file="solvers/asl.h"
 ac_default_prefix=`pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os COIN_DEBUG_TRUE COIN_DEBUG_FALSE EGREP LN_S CDEFS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE ASLMAKEFLAGS ASLMAKEFILECMDS LIBOBJS LTLIBOBJS VPATH_DISTCLEANFILES'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os COIN_DEBUG_TRUE COIN_DEBUG_FALSE EGREP LN_S CDEFS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT ADD_CFLAGS MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE ASLMAKEFLAGS ASLMAKEFILECMDS LIBOBJS LTLIBOBJS VPATH_DISTCLEANFILES'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -742,6 +742,10 @@ ac_env_CPPFLAGS_set=${CPPFLAGS+set}
 ac_env_CPPFLAGS_value=$CPPFLAGS
 ac_cv_env_CPPFLAGS_set=${CPPFLAGS+set}
 ac_cv_env_CPPFLAGS_value=$CPPFLAGS
+ac_env_ADD_CFLAGS_set=${ADD_CFLAGS+set}
+ac_env_ADD_CFLAGS_value=$ADD_CFLAGS
+ac_cv_env_ADD_CFLAGS_set=${ADD_CFLAGS+set}
+ac_cv_env_ADD_CFLAGS_value=$ADD_CFLAGS
 ac_env_MPICC_set=${MPICC+set}
 ac_env_MPICC_value=$MPICC
 ac_cv_env_MPICC_set=${MPICC+set}
@@ -844,6 +848,7 @@ Some influential environment variables:
               nonstandard directory <lib dir>
   CPPFLAGS    C/C++ preprocessor flags, e.g. -I<include dir> if you have
               headers in a nonstandard directory <include dir>
+  ADD_CFLAGS  Additional C compiler options
   MPICC       C MPI Compiler
   ASLMAKEFLAGS
               Compilation flags necessary for compiling the AMPL solver
@@ -2231,7 +2236,7 @@ else
       icc* | */icc*)
         ;;
       *)
-        coin_opt_cflags="-O3 -fomit-frame-pointer -ffast-math"
+        coin_opt_cflags="-O3 -fomit-frame-pointer"
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
         coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
@@ -2366,7 +2371,7 @@ rm -f conftest.err conftest.$ac_objext \
       *-ibm-*)
         case "$CC" in
           xlc* | */xlc* | mpxlc* | */mpxlc*)
-            coin_opt_cflags="-O3 -qarch=auto -qcache=auto -qhot -qtune=auto -qmaxmem=-1"
+            coin_opt_cflags="-O3 -qarch=auto -qcache=auto -qtune=auto -qmaxmem=-1"
             coin_add_cflags="-bmaxdata:0x80000000"
             coin_dbg_cflags="-g"
           ;;
@@ -2446,6 +2451,12 @@ rm -f conftest.err conftest.$ac_objext \
     fi
     CFLAGS="$coin_opt_cflags $coin_add_cflags -DNDEBUG $CDEFS $coin_warn_cflags"
   fi
+fi
+
+# Check if user wants to have additional CFLAGS options
+
+if test x"$ADD_CFLAGS" != x; then
+  CFLAGS="$CFLAGS $ADD_CFLAGS"
 fi
 
 # Try if CFLAGS works
@@ -3648,6 +3659,10 @@ ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
 
 
 
+if test x"$coin_need_flibs" = xyes; then
+  ADDLIBS="$ADDLIBS $FLIBS"
+fi
+
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -4346,6 +4361,7 @@ s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CC@,$ac_ct_CC,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
+s,@ADD_CFLAGS@,$ADD_CFLAGS,;t t
 s,@MPICC@,$MPICC,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
