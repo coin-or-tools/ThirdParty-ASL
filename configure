@@ -2598,6 +2598,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+# We filter out the -pedantic-errors flag for C compiler because
+# ASL otherwise doesn't compile
+if test "${with_mpi_lib+set}" = set; then
+  CFLAGS=`echo $CFLAGS | sed -e s/-pedantic-errors//g`
+fi
+
+
 # Initialize automake
 am__api_version="1.9"
 # Find a good install program.  We prefer a C program (faster),

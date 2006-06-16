@@ -47,6 +47,13 @@ AC_PROG_LN_S
 # Get the name of the C compiler and appropriate compiler options
 AC_COIN_PROG_CC
 
+# We filter out the -pedantic-errors flag for C compiler because
+# ASL otherwise doesn't compile
+if test "${with_mpi_lib+set}" = set; then
+  CFLAGS=`echo $CFLAGS | sed -e s/-pedantic-errors//g`
+fi
+
+
 # Initialize automake
 AC_COIN_INIT_AUTOMAKE
 
