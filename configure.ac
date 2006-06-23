@@ -30,6 +30,8 @@ AC_CONFIG_SRCDIR(solvers/asl.h)
 # /usr/local.
 AC_PREFIX_DEFAULT([`pwd`])
 
+AC_COIN_PROJECTDIR_INIT
+
 #############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
@@ -58,6 +60,18 @@ AC_COIN_INIT_AUTOMAKE
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
 #############################################################################
+
+# Determine the name of the ASL library
+AC_SUBST(AMPLSOLVER_A)
+case "$CXX" in
+  cl* | */cl*)
+    AMPLSOLVER_A=amplsolv.lib
+    msvc_compile=yes ;;
+  *)
+    AMPLSOLVER_A=amplsolver.a
+    msvc_compile=no ;;
+esac
+AM_CONDITIONAL(MSVC_COMPILE, test $msvc_compile = yes)
 
 if test -z "$ASLMAKEFLAGS" ; then
   asladdcflags=
@@ -125,6 +139,6 @@ ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
 AC_ARG_VAR(ASLMAKEFLAGS,[Compilation flags necessary for compiling the AMPL solver library])
 AC_SUBST(ASLMAKEFILECMDS)
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile compile_MS_ASL])
 
 AC_COIN_FINALIZE

@@ -53,7 +53,7 @@ DIST_COMMON = $(am__configure_deps) \
 	$(srcdir)/../../config.guess $(srcdir)/../../config.sub \
 	$(srcdir)/../../install-sh $(srcdir)/../../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(top_srcdir)/configure
+	$(srcdir)/compile_MS_ASL.in $(top_srcdir)/configure
 @HAVE_EXTERNALS_TRUE@am__append_1 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_2 = .Externals-stamp
 subdir = .
@@ -65,7 +65,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = compile_MS_ASL
 SOURCES =
 DIST_SOURCES =
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -80,9 +80,13 @@ GZIP_ENV = --best
 distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
 ACLOCAL = @ACLOCAL@
+ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
+ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
+ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
+AMPLSOLVER_A = @AMPLSOLVER_A@
 AMTAR = @AMTAR@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
@@ -107,6 +111,7 @@ ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+FADDLIBS = @FADDLIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -124,6 +129,8 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
+MSVC_COMPILE_FALSE = @MSVC_COMPILE_FALSE@
+MSVC_COMPILE_TRUE = @MSVC_COMPILE_TRUE@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -184,8 +191,8 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_1)
 #                           Extra Targets                              #
 ########################################################################
 compdir = compdir
-libampl = amplsolver.a
-CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.o
+libampl = $(AMPLSOLVER_A)
+CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
 #                         Maintainer Stuff                             #
@@ -229,6 +236,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(srcdir) && $(AUTOCONF)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
+compile_MS_ASL: $(top_builddir)/config.status $(srcdir)/compile_MS_ASL.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 uninstall-info-am:
 tags: TAGS
 TAGS:
@@ -240,7 +249,7 @@ CTAGS:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/../.. $(distdir)/../../BuildTools
+	$(mkdir_p) $(distdir)/. $(distdir)/../.. $(distdir)/../../BuildTools
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -455,24 +464,50 @@ uninstall-am: uninstall-info-am
 	pdf-am ps ps-am uninstall uninstall-am uninstall-info-am
 
 
-all-local: $(libampl) stdio1.h arith.h funcadd0.o
+all-local: $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
-$(libampl):
-	rm -rf $(compdir) ; \
-	$(mkinstalldirs) $(compdir); \
-	files=`cd $(abs_source_dir)/solvers; ls *.[chs] *.[ch]0 *.hd arith.* makefile* `; \
-	cd $(compdir); \
-	for file in $$files; \
-	do \
-	  $(LN_S) $(abs_source_dir)/solvers/$$file $$file ;\
-	done; \
-	rm -f makefile; \
-	$(ASLMAKEFILECMDS); \
-	$(MAKE) $(ASLMAKEFLAGS) CC="$(CC)" clean ;\
-	$(MAKE) $(ASLMAKEFLAGS) CC="$(CC)" ;\
-	mv amplsolver.a ../$(libampl)
-	-cd $(compdir); mv stdio1.h arith.h funcadd0.o ..
-	rm -rf $(compdir)
+@MSVC_COMPILE_TRUE@$(libampl):
+@MSVC_COMPILE_TRUE@	@echo " "
+@MSVC_COMPILE_TRUE@	@echo "*********************************************************************"
+@MSVC_COMPILE_TRUE@	@echo " "
+@MSVC_COMPILE_TRUE@	@echo "Please change into the following directory and type ./compile_MS_ASL"
+@MSVC_COMPILE_TRUE@	@pwd
+@MSVC_COMPILE_TRUE@	@echo " "
+@MSVC_COMPILE_TRUE@	@echo "*********************************************************************"
+@MSVC_COMPILE_TRUE@	@exit 1
+#	set -x -v; \
+#	rm -rf $(compdir) ; \
+#	$(mkinstalldirs) $(compdir); \
+#	files=`cd $(abs_source_dir)/solvers; ls *.[chs] *.[ch]0 *.hd arith.* makefile* *.bat amplsolv.lbc`; \
+#	cd $(compdir); \
+#	for file in $$files; \
+#	do \
+#	  rm -f $$file ;\
+#	  cp $(abs_source_dir)/solvers/$$file $$file ;\
+#	done; \
+#	cp details.c0 details.c; \
+#	rm -f makefile; \
+#	nmake.exe    
+#	mv $(compdir)/amplsolv.lib $(libampl)
+#	-cd $(compdir); mv stdio1.h arith.h funcadd0.o ..
+#	rm -rf $(compdir)
+@MSVC_COMPILE_FALSE@$(libampl):
+@MSVC_COMPILE_FALSE@	rm -rf $(compdir) ; \
+@MSVC_COMPILE_FALSE@	$(mkinstalldirs) $(compdir); \
+@MSVC_COMPILE_FALSE@	files=`cd $(abs_source_dir)/solvers; ls *.[chs] *.[ch]0 *.hd arith.* makefile* `; \
+@MSVC_COMPILE_FALSE@	cd $(compdir); \
+@MSVC_COMPILE_FALSE@	for file in $$files; \
+@MSVC_COMPILE_FALSE@	do \
+@MSVC_COMPILE_FALSE@	  rm -f $$file ;\
+@MSVC_COMPILE_FALSE@	  $(LN_S) $(abs_source_dir)/solvers/$$file $$file ;\
+@MSVC_COMPILE_FALSE@	done; \
+@MSVC_COMPILE_FALSE@	rm -f makefile; \
+@MSVC_COMPILE_FALSE@	$(ASLMAKEFILECMDS); \
+@MSVC_COMPILE_FALSE@	$(MAKE) $(ASLMAKEFLAGS) CC="$(CC)" clean ;\
+@MSVC_COMPILE_FALSE@	$(MAKE) $(ASLMAKEFLAGS) CC="$(CC)" ;\
+@MSVC_COMPILE_FALSE@	mv amplsolver.a ../$(libampl)
+@MSVC_COMPILE_FALSE@	-cd $(compdir); mv stdio1.h arith.h funcadd0.$(OBJEXT) ..
+@MSVC_COMPILE_FALSE@	rm -rf $(compdir)
 
 stdio1.h arith.h funcadd0.o: $(libampl)
 
