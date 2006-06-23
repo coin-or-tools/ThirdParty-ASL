@@ -142,3 +142,6 @@ AC_SUBST(ASLMAKEFILECMDS)
 AC_CONFIG_FILES([Makefile compile_MS_ASL])
 
 AC_COIN_FINALIZE
+
+# Finally, we need to make sure that compile_MS_ASL is executable
+chmod a+x compile_MS_ASL
