@@ -40,7 +40,7 @@ AC_COIN_PROJECTDIR_INIT
 AC_CANONICAL_BUILD
 
 # Check if user wants to produce debugging code
-AC_COIN_DEBUG_COMPILE
+AC_COIN_DEBUG_COMPILE(ASL)
 
 # We need egrep and ln -s somewhere
 AC_PROG_EGREP
