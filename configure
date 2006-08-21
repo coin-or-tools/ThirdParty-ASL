@@ -3739,6 +3739,12 @@ if test -z "$ASLMAKEFLAGS" ; then
       asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
       ;;
   esac
+
+# On BlueGene disable dynamic library loading
+  if test x"$enable_bg" = xyes; then
+    asladdcflags="$asladdcflags -DNO_FUNCADD"
+  fi
+
 # Do the following for now to make sure we are not interupting compilation
 # of ASL because of warning message:
   bla=
