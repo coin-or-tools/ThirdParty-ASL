@@ -844,6 +844,8 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          compile all projects with debug options tests
   --enable-debug-asl compile this project (ASL) with debug options
+  --enable-doscompile     Under Cygwin, compile so that executables run under
+                          DOS (default: disabled)
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-maintainer-mode  enable make rules and dependencies not useful
@@ -1552,6 +1554,22 @@ case $build in
     fi
     ;;
 esac
+
+# Check whether --enable-doscompile or --disable-doscompile was given.
+if test "${enable_doscompile+set}" = set; then
+  enableval="$enable_doscompile"
+  if test "$enable_doscompile = yes"; then
+  case $build in
+    *-cygwin*) ;;
+    *) { { echo "$as_me:$LINENO: error: --enable-doscompile option makes only sense under Cygwin" >&5
+echo "$as_me: error: --enable-doscompile option makes only sense under Cygwin" >&2;}
+   { (exit 1); exit 1; }; } ;;
+  esac
+fi
+else
+  enable_doscompile=no
+fi;
+
 
 
 
@@ -2333,11 +2351,11 @@ if test x"$CFLAGS" = x; then
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
         coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
-
-        case $build in
-          *-cygwin*)
-            CFLAGS="-mno-cygwin"
-            cat >conftest.$ac_ext <<_ACEOF
+        if test "$enable_doscompile" = yes; then
+          case $build in
+            *-cygwin*)
+              CFLAGS="-mno-cygwin"
+              cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -2382,10 +2400,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-            CFLAGS=
-          ;;
-        esac
-        ;;
+              CFLAGS=
+            ;;
+          esac
+        fi
     esac
   fi
   if test -z "$coin_opt_cflags"; then
