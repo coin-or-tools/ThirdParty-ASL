@@ -79,7 +79,7 @@ if test -z "$ASLMAKEFLAGS" ; then
     *-linux*)
       asladdcflags="-DNON_STDIO"
       case $CC in
-        pgcc* | */pgcc*)
+        pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
           asladdcflags="$asladdcflags -DNO_fpu_control";;
       esac
       ;;

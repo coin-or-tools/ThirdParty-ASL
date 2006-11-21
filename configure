@@ -844,6 +844,8 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          compile all projects with debug options tests
   --enable-debug-asl compile this project (ASL) with debug options
+  --enable-doscompile     Under Cygwin, compile so that executables run under
+                          DOS (default: disabled)
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-maintainer-mode  enable make rules and dependencies not useful
@@ -1552,6 +1554,22 @@ case $build in
     fi
     ;;
 esac
+
+# Check whether --enable-doscompile or --disable-doscompile was given.
+if test "${enable_doscompile+set}" = set; then
+  enableval="$enable_doscompile"
+  if test "$enable_doscompile = yes"; then
+  case $build in
+    *-cygwin*) ;;
+    *) { { echo "$as_me:$LINENO: error: --enable-doscompile option makes only sense under Cygwin" >&5
+echo "$as_me: error: --enable-doscompile option makes only sense under Cygwin" >&2;}
+   { (exit 1); exit 1; }; } ;;
+  esac
+fi
+else
+  enable_doscompile=no
+fi;
+
 
 
 
@@ -2333,11 +2351,11 @@ if test x"$CFLAGS" = x; then
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
         coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
-
-        case $build in
-          *-cygwin*)
-            CFLAGS="-mno-cygwin"
-            cat >conftest.$ac_ext <<_ACEOF
+        if test "$enable_doscompile" = yes; then
+          case $build in
+            *-cygwin*)
+              CFLAGS="-mno-cygwin"
+              cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -2382,10 +2400,10 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-            CFLAGS=
-          ;;
-        esac
-        ;;
+              CFLAGS=
+            ;;
+          esac
+        fi
     esac
   fi
   if test -z "$coin_opt_cflags"; then
@@ -3728,7 +3746,7 @@ if test -z "$ASLMAKEFLAGS" ; then
     *-linux*)
       asladdcflags="-DNON_STDIO"
       case $CC in
-        pgcc* | */pgcc*)
+        pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
           asladdcflags="$asladdcflags -DNO_fpu_control";;
       esac
       ;;
@@ -5057,11 +5075,75 @@ fi
 
 
 if test x"$coin_vpath_link_files" = x; then : ; else
-  { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
+  lnkcmd=
+  if test "$enable_doscompile" = yes; then
+    lnkcmd=cp
+  fi
+  case "$CC" in
+    cl* | */cl*)
+      lnkcmd=cp ;;
+  esac
+  if test "$lnkcmd" = cp; then
+    { echo "$as_me:$LINENO: Copying data files for VPATH configuration" >&5
+echo "$as_me: Copying data files for VPATH configuration" >&6;}
+  else
+    echo "$as_me:$LINENO: checking whether ln -s works" >&5
+echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me:$LINENO: result: no, using $LN_S" >&5
+echo "${ECHO_T}no, using $LN_S" >&6
+fi
+
+    { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
 echo "$as_me: Creating VPATH links for data files" >&6;}
+    lnkcmd="$LN_S"
+  fi
   for file in $coin_vpath_link_files; do
+    dir=`(dirname "./$file") 2>/dev/null ||
+$as_expr X"./$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"./$file" : 'X\(//\)[^/]' \| \
+	 X"./$file" : 'X\(//\)$' \| \
+	 X"./$file" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"./$file" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    if test -d $dir; then : ; else
+      { if $as_mkdir_p; then
+    mkdir -p $dir
+  else
+    as_dir=$dir
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`(dirname "$as_dir") 2>/dev/null ||
+$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$as_dir" : 'X\(//\)[^/]' \| \
+	 X"$as_dir" : 'X\(//\)$' \| \
+	 X"$as_dir" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"$as_dir" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || { { echo "$as_me:$LINENO: error: cannot create directory $dir" >&5
+echo "$as_me: error: cannot create directory $dir" >&2;}
+   { (exit 1); exit 1; }; }; }
+
+    fi
     rm -f $file
-    $LN_S $abs_source_dir/$file $file
+    $lnkcmd $abs_source_dir/$file $file
   done
 fi
 
