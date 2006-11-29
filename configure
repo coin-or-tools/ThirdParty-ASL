@@ -1547,6 +1547,7 @@ fi
 
 
 # Get the name of the C compiler and appropriate compiler options
+coin_skip_warn_cflags=yes
 case $build in
   *-mingw*)
     if test "${LD+set}" = set; then :; else
@@ -2556,6 +2557,11 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
+  fi
+
+  # if PM doesn't want the warning messages, take them out
+  if test x"$coin_skip_warn_cflags" = xyes; then
+    coin_warn_cflags=
   fi
 
   if test x${DBG_CFLAGS+set} != xset; then
@@ -3746,7 +3752,7 @@ if test -z "$ASLMAKEFLAGS" ; then
     *-linux*)
       asladdcflags="-DNON_STDIO"
       case $CC in
-        pgcc* | */pgcc*)
+        pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
           asladdcflags="$asladdcflags -DNO_fpu_control";;
       esac
       ;;
@@ -5075,11 +5081,75 @@ fi
 
 
 if test x"$coin_vpath_link_files" = x; then : ; else
-  { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
+  lnkcmd=
+  if test "$enable_doscompile" = yes; then
+    lnkcmd=cp
+  fi
+  case "$CC" in
+    cl* | */cl*)
+      lnkcmd=cp ;;
+  esac
+  if test "$lnkcmd" = cp; then
+    { echo "$as_me:$LINENO: Copying data files for VPATH configuration" >&5
+echo "$as_me: Copying data files for VPATH configuration" >&6;}
+  else
+    echo "$as_me:$LINENO: checking whether ln -s works" >&5
+echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me:$LINENO: result: no, using $LN_S" >&5
+echo "${ECHO_T}no, using $LN_S" >&6
+fi
+
+    { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
 echo "$as_me: Creating VPATH links for data files" >&6;}
+    lnkcmd="$LN_S"
+  fi
   for file in $coin_vpath_link_files; do
+    dir=`(dirname "./$file") 2>/dev/null ||
+$as_expr X"./$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"./$file" : 'X\(//\)[^/]' \| \
+	 X"./$file" : 'X\(//\)$' \| \
+	 X"./$file" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"./$file" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    if test -d $dir; then : ; else
+      { if $as_mkdir_p; then
+    mkdir -p $dir
+  else
+    as_dir=$dir
+    as_dirs=
+    while test ! -d "$as_dir"; do
+      as_dirs="$as_dir $as_dirs"
+      as_dir=`(dirname "$as_dir") 2>/dev/null ||
+$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+	 X"$as_dir" : 'X\(//\)[^/]' \| \
+	 X"$as_dir" : 'X\(//\)$' \| \
+	 X"$as_dir" : 'X\(/\)' \| \
+	 .     : '\(.\)' 2>/dev/null ||
+echo X"$as_dir" |
+    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
+  	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
+  	  /^X\(\/\/\)$/{ s//\1/; q; }
+  	  /^X\(\/\).*/{ s//\1/; q; }
+  	  s/.*/./; q'`
+    done
+    test ! -n "$as_dirs" || mkdir $as_dirs
+  fi || { { echo "$as_me:$LINENO: error: cannot create directory $dir" >&5
+echo "$as_me: error: cannot create directory $dir" >&2;}
+   { (exit 1); exit 1; }; }; }
+
+    fi
     rm -f $file
-    $LN_S $abs_source_dir/$file $file
+    $lnkcmd $abs_source_dir/$file $file
   done
 fi
 

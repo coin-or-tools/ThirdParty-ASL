@@ -47,6 +47,7 @@ AC_PROG_EGREP
 AC_PROG_LN_S
 
 # Get the name of the C compiler and appropriate compiler options
+coin_skip_warn_cflags=yes
 AC_COIN_PROG_CC
 
 # We filter out the -pedantic-errors flag for C compiler because
@@ -79,7 +80,7 @@ if test -z "$ASLMAKEFLAGS" ; then
     *-linux*)
       asladdcflags="-DNON_STDIO"
       case $CC in
-        pgcc* | */pgcc*)
+        pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
           asladdcflags="$asladdcflags -DNO_fpu_control";;
       esac
       ;;
