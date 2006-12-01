@@ -1342,12 +1342,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # Initialize the ADDLIBS variable
-ADDLIBS='-lm'
+ADDLIBS="-lm $LIBS"
 
 
 # Initialize the FADDLIBS variable (which is to be used with a fortran
 # compiler and will not include FLIBS)
-FADDLIBS=
+FADDLIBS="$LIBS"
 
 
 # A useful makefile conditional that is always false
@@ -1585,7 +1585,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # compiler, if the C++ is set, but the C compiler isn't (only for CXX=cl)
 if test x"$CXX" != x; then
   case "$CXX" in
-    cl*)
+    cl* | */cl*)
       if test x"$CC" = x; then
         CC="$CXX"
         { echo "$as_me:$LINENO: WARNING: C++ compiler name provided as $CXX, but CC is unset. Setting CC to $CXX" >&5
@@ -1611,7 +1611,7 @@ case $build in
 esac
 
 # We delete the cached value, since the test might not have been
-# performed with out choise of compilers earlier
+# performed with our choice of compilers earlier
 $as_unset ac_cv_prog_CC || test "${ac_cv_prog_CC+set}" != set || { ac_cv_prog_CC=; export ac_cv_prog_CC; }
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -2326,6 +2326,20 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+if test -z "$CC" ; then
+  { { echo "$as_me:$LINENO: error: Failed to find a C compiler!" >&5
+echo "$as_me: error: Failed to find a C compiler!" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+# Autoconf incorrectly concludes that cl recognises -g. It doesn't.
+case "$CC" in
+  cl* | */cl*)
+    if test "$ac_cv_prog_cc_g" = yes ; then
+      ac_cv_prog_cc_g=no
+      { echo "$as_me:$LINENO: Overruling autoconf; cl does not recognise -g." >&5
+echo "$as_me: Overruling autoconf; cl does not recognise -g." >&6;}
+    fi ;;
+esac
 CFLAGS="$save_cflags"
 
 # Check if a project specific CFLAGS variable has been set
@@ -2711,7 +2725,7 @@ fi
 
 # Correct ADDLIBS initialization if we are using the MS compiler
 case "$CC" in
-  cl*)
+  cl* | */cl*)
     ADDLIBS=
     case $build in
   *-mingw*)
@@ -3355,11 +3369,13 @@ coin_have_externals=no
 if test "$enable_maintainer_mode" = yes; then
 
   # If maintainer mode is chosen, we make sure that the correct versions
-  # of the tools are used, and that we know where libtoo.m4 is (to
+  # of the tools are used, and that we know where libtool.m4 is (to
   # recreate acinclude.m4)
 
 
   LIBTOOLM4=
+  # Normally, $HOME
+  AUTOTOOLS_DFLT=$HOME
 
   # Check if we have autoconf
   # Extract the first word of "autoconf", so it can be a program name with args.
@@ -3429,7 +3445,7 @@ echo $ECHO_N "checking whether autoconf is coming from the correct location... $
   autoconf_dir=`which autoconf | sed -e 's=/autoconf=='`
   autoconf_dir=`cd $autoconf_dir; pwd`
   if test x$AUTOTOOLS_DIR = x; then
-    want_dir=$HOME/bin
+    want_dir=$AUTOTOOLS_DFLT/bin
   else
     want_dir=$AUTOTOOLS_DIR/bin
   fi
@@ -3440,8 +3456,8 @@ echo "${ECHO_T}yes" >&6
     rm -f confauto.out
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: The autoconf executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&5
-echo "$as_me: error: The autoconf executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&2;}
+    { { echo "$as_me:$LINENO: error: The autoconf executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&5
+echo "$as_me: error: The autoconf executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&2;}
    { (exit 1); exit 1; }; }
   fi
 
@@ -3513,7 +3529,7 @@ echo $ECHO_N "checking whether automake is coming from the correct location... $
   automake_dir=`which automake | sed -e 's=/automake=='`
   automake_dir=`cd $automake_dir; pwd`
   if test x$AUTOTOOLS_DIR = x; then
-    want_dir=$HOME/bin
+    want_dir=$AUTOTOOLS_DFLT/bin
   else
     want_dir=$AUTOTOOLS_DIR/bin
   fi
@@ -3524,14 +3540,14 @@ echo "${ECHO_T}yes" >&6
     rm -f confauto.out
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    { { echo "$as_me:$LINENO: error: The automake executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&5
-echo "$as_me: error: The automake executable should be picked up from \$HOME/bin or \$AUTOTOOLS_DIR/bin." >&2;}
+    { { echo "$as_me:$LINENO: error: The automake executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&5
+echo "$as_me: error: The automake executable should be picked up from \$AUTOTOOLS_DFLT/bin or \$AUTOTOOLS_DIR/bin." >&2;}
    { (exit 1); exit 1; }; }
   fi
 
   # Check if we can find the libtool file
   if test x$AUTOTOOLS_DIR = x; then
-    want_dir=$HOME/share
+    want_dir=$AUTOTOOLS_DFLT/share
   else
     want_dir=$AUTOTOOLS_DIR/share
   fi
@@ -3833,7 +3849,8 @@ fi
 # library extension
 
 case "$CC" in
-  cl*) LIBEXT=lib ;;
+  cl* | */cl*)
+       LIBEXT=lib ;;
     *) LIBEXT=a ;;
 esac
 
