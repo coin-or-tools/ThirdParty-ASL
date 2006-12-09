@@ -50,11 +50,6 @@ AC_PROG_LN_S
 coin_skip_warn_cflags=yes
 AC_COIN_PROG_CC
 
-# We filter out the -pedantic-errors flag for C compiler because
-# ASL otherwise doesn't compile
-CFLAGS=`echo $CFLAGS | sed -e s/-pedantic-errors//g`
-
-
 # Initialize automake
 AC_COIN_INIT_AUTOMAKE
 
