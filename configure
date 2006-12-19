@@ -2428,7 +2428,7 @@ rm -f conftest.err conftest.$ac_objext \
           cl* | */cl*)
             coin_opt_cflags='-O2'
             coin_add_cflags='-nologo'
-            coin_dbg_cflags='-Yd'
+            coin_dbg_cflags='-MTd'
             ;;
         esac
         ;;
@@ -2601,12 +2601,6 @@ else
   if test x${OPT_CFLAGS+set} != xset; then
     OPT_CFLAGS="$CFLAGS"
   fi
-fi
-
-# Check if user wants to have additional CFLAGS options
-
-if test x"$ADD_CFLAGS" != x; then
-  CFLAGS="$CFLAGS $ADD_CFLAGS"
 fi
 
 # Try if CFLAGS works
