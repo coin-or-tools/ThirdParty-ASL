@@ -2333,7 +2333,7 @@ echo "$as_me: error: Failed to find a C compiler!" >&2;}
 fi
 # Autoconf incorrectly concludes that cl recognises -g. It doesn't.
 case "$CC" in
-  cl* | */cl*)
+  cl* | */cl* | CL* | */CL* )
     if test "$ac_cv_prog_cc_g" = yes ; then
       ac_cv_prog_cc_g=no
       { echo "$as_me:$LINENO: Overruling autoconf; cl does not recognise -g." >&5
