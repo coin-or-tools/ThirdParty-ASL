@@ -3756,7 +3756,7 @@ fi
 # Determine the name of the ASL library
 
 case "$CXX" in
-  cl* | */cl*)
+  cl* | */cl* | CL* | */CL*)
     AMPLSOLVER_A=amplsolv.lib
     msvc_compile=yes ;;
   *)

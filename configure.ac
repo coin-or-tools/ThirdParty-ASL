@@ -60,7 +60,7 @@ AC_COIN_INIT_AUTOMAKE
 # Determine the name of the ASL library
 AC_SUBST(AMPLSOLVER_A)
 case "$CXX" in
-  cl* | */cl*)
+  cl* | */cl* | CL* | */CL*)
     AMPLSOLVER_A=amplsolv.lib
     msvc_compile=yes ;;
   *)
