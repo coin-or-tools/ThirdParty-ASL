@@ -845,7 +845,10 @@ Optional Features:
   --enable-debug          compile all projects with debug options tests
   --enable-debug-asl compile this project (ASL) with debug options
   --enable-doscompile     Under Cygwin, compile so that executables run under
-                          DOS (default: disabled)
+                          DOS. Set to mingw to use gcc/g++/ld with
+                          -mno-cygwin. Set to msvc to use cl/link. Default
+                          when mentioned: mingw. Default when not mentioned:
+                          disabled.
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --enable-maintainer-mode  enable make rules and dependencies not useful
@@ -1554,22 +1557,44 @@ case $build in
       LD=link
     fi
     ;;
-esac
+ esac
+ case $enable_doscompile in
+   msvc)
+     if test "x${LD+set}" = xset; then :; else
+       LD=link
+     fi
+     ;;
+ esac
 
-# Check whether --enable-doscompile or --disable-doscompile was given.
+
+ # Check whether --enable-doscompile or --disable-doscompile was given.
 if test "${enable_doscompile+set}" = set; then
   enableval="$enable_doscompile"
-  if test "$enable_doscompile = yes"; then
-  case $build in
-    *-cygwin*) ;;
-    *) { { echo "$as_me:$LINENO: error: --enable-doscompile option makes only sense under Cygwin" >&5
-echo "$as_me: error: --enable-doscompile option makes only sense under Cygwin" >&2;}
+  if test "$enable_doscompile" != no; then
+     case $build in
+       *-cygwin*) ;;
+       *) { { echo "$as_me:$LINENO: error: --enable-doscompile option makes sense only under Cygwin" >&5
+echo "$as_me: error: --enable-doscompile option makes sense only under Cygwin" >&2;}
    { (exit 1); exit 1; }; } ;;
-  esac
-fi
+     esac
+   fi
 else
   enable_doscompile=no
 fi;
+ case "$enable_doscompile" in
+   msvc|mingw|no) ;;
+   yes) enable_doscompile=mingw ;;
+   *) { { echo "$as_me:$LINENO: error: Invalid value $enable_doscompile for --enable-doscompile.
+		    Try configure --help=recursive." >&5
+echo "$as_me: error: Invalid value $enable_doscompile for --enable-doscompile.
+		    Try configure --help=recursive." >&2;}
+   { (exit 1); exit 1; }; }
+      ;;
+  esac
+  if test "$enable_doscompile" != no ; then
+    { echo "$as_me:$LINENO: DOS compile style is: $enable_doscompile" >&5
+echo "$as_me: DOS compile style is: $enable_doscompile" >&6;}
+  fi
 
 
 
@@ -1603,9 +1628,19 @@ fi
 coin_has_cc=yes
 
 save_cflags="$CFLAGS"
+# For sparc-sun-solaris, promote Studio/Workshop compiler to front of list.
+# ToDo: If Studio/Workshop cc is not present, we may find /usr/ucb/cc, which
+# is likely to be a non-functional shell. But many installations will have
+# both cc and gcc, so promoting gcc isn't good either. How to test reliably?
 case $build in
   *-cygwin* | *-mingw*)
-             comps="gcc cl" ;;
+  	     if test "$enable_doscompile" = msvc ; then
+	       comps="cl"
+	     else
+	       comps="gcc cl"
+	     fi ;;
+  sparc-sun-solaris*)
+  	     comps="cc xlc gcc pgcc icc" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
   *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
@@ -1613,6 +1648,7 @@ esac
 # We delete the cached value, since the test might not have been
 # performed with our choice of compilers earlier
 $as_unset ac_cv_prog_CC || test "${ac_cv_prog_CC+set}" != set || { ac_cv_prog_CC=; export ac_cv_prog_CC; }
+# AC_MSG_NOTICE([C compiler candidates: $comps])
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2366,11 +2402,10 @@ if test x"$CFLAGS" = x; then
         coin_add_cflags="-pipe"
         coin_dbg_cflags="-g"
         coin_warn_cflags="-pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall"
-        if test "$enable_doscompile" = yes; then
-          case $build in
-            *-cygwin*)
-              CFLAGS="-mno-cygwin"
-              cat >conftest.$ac_ext <<_ACEOF
+	case $enable_doscompile in
+	  mingw)
+	    CFLAGS="-mno-cygwin"
+	    cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -2415,10 +2450,9 @@ sed 's/^/| /' conftest.$ac_ext >&5
 fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
-              CFLAGS=
-            ;;
-          esac
-        fi
+	    CFLAGS=
+	  ;;
+	esac
     esac
   fi
   if test -z "$coin_opt_cflags"; then
@@ -2426,8 +2460,8 @@ rm -f conftest.err conftest.$ac_objext \
       *-cygwin* | *-mingw*)
         case "$CC" in
           cl* | */cl* | CL* | */CL*)
-            coin_opt_cflags='-O2'
-            coin_add_cflags='-nologo'
+            coin_opt_cflags='-MT -O2'
+            coin_add_cflags='-nologo -wd4996'
             coin_dbg_cflags='-MTd'
             ;;
         esac
@@ -2603,6 +2637,23 @@ else
   fi
 fi
 
+# If CFLAGS contains -mno-cygwin, CPPFLAGS must also have it.
+
+case "$CFLAGS" in
+  *-mno-cygwin*)
+    if test x${CPPFLAGS+set} != xset ; then
+      CPPFLAGS="-mno-cygwin"
+    else
+      case "$CPPFLAGS" in
+        *-mno-cygwin*)
+	  ;;
+	*)
+	  CPPFLAGS="$CPPFLAGS -mno-cygwin"
+	  ;;
+      esac
+    fi ;;
+esac
+
 # Try if CFLAGS works
 save_CFLAGS="$CFLAGS"
 cat >conftest.$ac_ext <<_ACEOF
@@ -2727,7 +2778,14 @@ case "$CC" in
       LD=link
     fi
     ;;
-esac
+ esac
+ case $enable_doscompile in
+   msvc)
+     if test "x${LD+set}" = xset; then :; else
+       LD=link
+     fi
+     ;;
+ esac
 
     ;;
 esac
@@ -3069,6 +3127,8 @@ fi
 
 
 
+
+# AC_MSG_NOTICE([Beginning automake initialisation.])
 # Stuff for automake
 # test to see if srcdir already configured
 if test "`cd $srcdir && pwd`" != "`pwd`" &&
@@ -3746,6 +3806,9 @@ else
   HAVE_EXTERNALS_TRUE='#'
   HAVE_EXTERNALS_FALSE=
 fi
+
+
+# AC_MSG_NOTICE([End automake initialisation.])
 
 
 
