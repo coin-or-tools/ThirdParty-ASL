@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# Copyright (C) 2003, 2006 International Business Machines and others.
+# Copyright (C) 2003, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -88,8 +88,10 @@ AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
 AMPLSOLVER_A = @AMPLSOLVER_A@
 AMTAR = @AMTAR@
+ASLLIB = @ASLLIB@
 ASLMAKEFILECMDS = @ASLMAKEFILECMDS@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
+ASL_CPPFLAGS = @ASL_CPPFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -100,6 +102,8 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
+COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 CPPFLAGS = @CPPFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
@@ -128,6 +132,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MAKEOKFILE = @MAKEOKFILE@
 MPICC = @MPICC@
 MSVC_COMPILE_FALSE = @MSVC_COMPILE_FALSE@
 MSVC_COMPILE_TRUE = @MSVC_COMPILE_TRUE@
@@ -142,6 +147,8 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SKIPMAKE_FALSE = @SKIPMAKE_FALSE@
+SKIPMAKE_TRUE = @SKIPMAKE_TRUE@
 STRIP = @STRIP@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
@@ -193,6 +200,8 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_1)
 ########################################################################
 compdir = compdir
 libampl = $(AMPLSOLVER_A)
+@SKIPMAKE_FALSE@alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+@SKIPMAKE_TRUE@alltargets = 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
@@ -200,7 +209,7 @@ CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 ########################################################################
 
 # Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES = $(am__append_2) $(VPATH_DISTCLEANFILES)
+DISTCLEANFILES = $(MAKEOKFILE) $(am__append_2) $(VPATH_DISTCLEANFILES)
 all: all-am
 
 .SUFFIXES:
@@ -465,7 +474,7 @@ uninstall-am: uninstall-info-am
 	pdf-am ps ps-am uninstall uninstall-am uninstall-info-am
 
 
-all-local: $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+all-local: $(alltargets)
 
 @MSVC_COMPILE_TRUE@$(libampl):
 @MSVC_COMPILE_TRUE@	@echo " "
