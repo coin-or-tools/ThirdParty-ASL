@@ -55,7 +55,7 @@ AC_COIN_INIT_AUTOMAKE
 
 AC_COIN_HAS_ASL
 MAKEOKFILE=.MakeOk
-if test $coin_has_asl != no && test $use_asldir != BUILD; then
+if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
   skip_further_test=yes
   rm -f $MAKEOKFILE
   AC_MSG_NOTICE([The ASL sources don't need to be compiled])
