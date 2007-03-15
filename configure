@@ -1642,9 +1642,9 @@ case $build in
 	       comps="gcc cl"
 	     fi ;;
   sparc-sun-solaris*)
-  	     comps="cc xlc icc gcc pgcc icc" ;;
-  *-linux-*) comps="xlc icc gcc cc pgcc icc" ;;
-  *)         comps="xlc_r xlc icc cc gcc pgcc icc" ;;
+  	     comps="cc xlc gcc pgcc icc" ;;
+  *-linux-*) comps="xlc gcc cc pgcc icc" ;;
+  *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
 
 # We delete the cached value, since the test might not have been
