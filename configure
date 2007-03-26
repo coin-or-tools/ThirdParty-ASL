@@ -281,7 +281,7 @@ PACKAGE_BUGREPORT='http://projects.coin-or.org/BuildTools/newticket'
 
 ac_unique_file="solvers/asl.h"
 ac_default_prefix=`pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE build build_cpu build_vendor build_os EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE AMPLSOLVER_A MSVC_COMPILE_TRUE MSVC_COMPILE_FALSE ASLMAKEFLAGS ASLMAKEFILECMDS LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE build build_cpu build_vendor build_os EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE MAKEOKFILE SKIPMAKE_TRUE SKIPMAKE_FALSE AMPLSOLVER_A ASLMAKEFLAGS ASLMAKEFILECMDS MSVC_COMPILE_TRUE MSVC_COMPILE_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -859,6 +859,8 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-asl-verbosity specify the debug verbosity level for project ASL
   --with-asl-checklevel specify the sanity check level for project ASL
+  --with-asldir           specify path to AMPL solver directory (or BUILD for
+                          compilation, or "no" for disabling AMPL)
 
 Some influential environment variables:
   CDEFS       Additional -D flags to be used when compiling C code.
@@ -3812,23 +3814,340 @@ fi
 
 
 
+coin_aslobjdir=../ThirdParty/ASL
+coin_aslsrcdir=$srcdir/$coin_aslobjdir
+
+# Determine the name of the ASL library
+case "$CXX" in
+  cl* | */cl* | CL* | */CL*)
+    ampllib=amplsolv.lib ;;
+  *)
+    ampllib=amplsolver.a ;;
+esac
+
+
+# Check whether --with-asldir or --without-asldir was given.
+if test "${with_asldir+set}" = set; then
+  withval="$with_asldir"
+  use_asldir=$withval
+else
+  use_asldir=
+fi;
+
+if test "$use_asldir" = BUILD; then
+  if test "$PACKAGE_NAME" != ThirdPartyASL; then
+    # If we are configuring ThirdParty/ASL, don't check
+    if test -r $coin_aslobjdir/.MakeOk; then :; else
+      { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&5
+echo "$as_me: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+  fi
+elif test -z "$use_asldir"; then
+ # try to find sources - if not given don't compile
+  if test "$PACKAGE_NAME" != ThirdPartyASL; then
+    if test -r $coin_aslobjdir/.MakeOk; then
+      use_asldir=BUILD
+    else
+      use_asldir=no
+    fi
+  else
+    use_asldir=no
+  fi
+elif test "$use_asldir" != "no"; then
+  as_ac_File=`echo "ac_cv_file_$use_asldir/$ampllib" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $use_asldir/$ampllib" >&5
+echo $ECHO_N "checking for $use_asldir/$ampllib... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$use_asldir/$ampllib"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but library missing" >&5
+echo "$as_me: error: ASL directory \"$use_asldir\" specified, but library missing" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  as_ac_File=`echo "ac_cv_file_$use_asldir/asl.h" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $use_asldir/asl.h" >&5
+echo $ECHO_N "checking for $use_asldir/asl.h... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "$use_asldir/asl.h"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&5
+echo "$as_me: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+  use_asldir=`cd $use_asldir; pwd`
+  case $build in
+    *-cygwin*) use_asldir=`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg` ;;
+  esac
+fi
+
+# Variable containing ASL library (including full path)
+
+# Variable containing flags for including ASL header files
+
+
+if test "$use_asldir" = BUILD; then
+  coin_aslobjdir=`cd $coin_aslobjdir; pwd`
+  ASLLIB=`$CYGPATH_W $coin_aslobjdir/$ampllib | sed -e sX\\\\\\\\X/Xg`
+  coin_aslsrcdir=`cd $coin_aslsrcdir; pwd`
+  ASL_CPPFLAGS="-I"`$CYGPATH_W $coin_aslobjdir | sed -e sX\\\\\\\\X/Xg`" -I"`$CYGPATH_W $coin_aslsrcdir/solvers | sed -e sX\\\\\\\\X/Xg`
+elif test "$use_asldir" != no; then
+  ASLLIB=`$CYGPATH_W $use_asldir/$ampllib | sed -e sX\\\\\\\\X/Xg`
+  ASL_CPPFLAGS="-I"`$CYGPATH_W $use_asldir | sed -e sX\\\\\\\\X/Xg`
+fi
+
+if test "$use_asldir" != no; then
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+  echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dlopen ();
+int
+main ()
+{
+dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dl_dlopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
+if test $ac_cv_lib_dl_dlopen = yes; then
+  ASLLIB="$ASLLIB -ldl"
+fi
+
+  coin_has_asl=yes
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_ASL 1
+_ACEOF
+
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+else
+  coin_has_asl=no
+fi
+
+
+if test $coin_has_asl = yes; then
+  COIN_HAS_ASL_TRUE=
+  COIN_HAS_ASL_FALSE='#'
+else
+  COIN_HAS_ASL_TRUE='#'
+  COIN_HAS_ASL_FALSE=
+fi
+
+
+MAKEOKFILE=.MakeOk
+if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
+  skip_further_test=yes
+  rm -f $MAKEOKFILE
+  { echo "$as_me:$LINENO: The ASL sources don't need to be compiled" >&5
+echo "$as_me: The ASL sources don't need to be compiled" >&6;}
+  MAKEOKFILE=
+else
+  touch $MAKEOKFILE
+fi
+
+
+
+if test -z "$MAKEOKFILE"; then
+  SKIPMAKE_TRUE=
+  SKIPMAKE_FALSE='#'
+else
+  SKIPMAKE_TRUE='#'
+  SKIPMAKE_FALSE=
+fi
+
+
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
 #############################################################################
 
-# Determine the name of the ASL library
+if test x$skip_further_test != xyes; then
 
-case "$CXX" in
-  cl* | */cl* | CL* | */CL*)
-    AMPLSOLVER_A=amplsolv.lib
-    msvc_compile=yes ;;
-  *)
-    AMPLSOLVER_A=amplsolver.a
-    msvc_compile=no ;;
-esac
+  # Determine the name of the ASL library
+
+  case "$CXX" in
+    cl* | */cl* | CL* | */CL*)
+      AMPLSOLVER_A=amplsolv.lib
+      msvc_compile=yes ;;
+    *)
+      AMPLSOLVER_A=amplsolver.a
+      msvc_compile=no ;;
+  esac
+
+  if test -z "$ASLMAKEFLAGS" ; then
+    asladdcflags=
+    case $build in
+      *-linux*)
+        asladdcflags="-DNON_STDIO"
+        case $CC in
+          pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
+            asladdcflags="$asladdcflags -DNO_fpu_control";;
+        esac
+        ;;
+      *-cygwin*) # ToDo: If on Cygwin but not using -mno-cygwin, we should not define -DNo_Control87 -DNO_RUSAGE
+        asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
+        ;;
+      *-mingw32)
+        asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
+        ;;
+    esac
+
+# On BlueGene disable dynamic library loading
+    if test x"$enable_bg" = xyes; then
+      asladdcflags="$asladdcflags -DNO_FUNCADD"
+    fi
+
+# Do the following for now to make sure we are not interupting compilation
+# of ASL because of warning message:
+    bla=
+    for i in $CFLAGS; do
+      if test "$i" != "-Werror"; then
+        bla="$bla $i"
+      fi
+    done
+    ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
+
+#   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
+    case $CC in
+      xlc* | */xlc* | mpxlc* | */mpxlc*)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
+        ;;
+      pgcc* | */pgcc*)
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
+        ;;
+    esac
+
+    echo "$as_me:$LINENO: checking whether $am_make is the GNU make" >&5
+echo $ECHO_N "checking whether $am_make is the GNU make... $ECHO_C" >&6
+    rm -rf conftest.mak
+    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
+    if $EGREP GNU conftest.grp >&5 ; then
+      echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+    else
+      echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+    rm -f conftest.mak conftest.grp
+  fi
+
+  if test x"$AR" = x; then
+    AR=ar
+  fi
+
+  ASLMAKEFILECMDS="sed -e 's%ar \$\$(ARFLAGS)%$AR \$\$(ARFLAGS)%' makefile.u | sed -e 's%ar ruv%$AR ruv%' "
+  if test "$EXEEXT" = ".exe"; then
+    ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
+  fi
+  case $build in
+    *-cygwin*)
+      ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's%s/System_details/\`uname -sr\`/%s|System_details|\`uname -sr\`|%'" ;;
+  esac
+  ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
 
 
-if test $msvc_compile = yes; then
+
+
+fi
+
+
+
+if test x$msvc_compile = xyes; then
   MSVC_COMPILE_TRUE=
   MSVC_COMPILE_FALSE='#'
 else
@@ -3837,104 +4156,49 @@ else
 fi
 
 
-if test -z "$ASLMAKEFLAGS" ; then
-  asladdcflags=
-  case $build in
-    *-linux*)
-      asladdcflags="-DNON_STDIO"
-      case $CC in
-        pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
-          asladdcflags="$asladdcflags -DNO_fpu_control";;
-      esac
-      ;;
-    *-cygwin*) # ToDo: If on Cygwin but not using -mno-cygwin, we should not define -DNo_Control87 -DNO_RUSAGE
-      asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
-      ;;
-    *-mingw32)
-      asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
-      ;;
-  esac
-
-# On BlueGene disable dynamic library loading
-  if test x"$enable_bg" = xyes; then
-    asladdcflags="$asladdcflags -DNO_FUNCADD"
-  fi
-
-# Do the following for now to make sure we are not interupting compilation
-# of ASL because of warning message:
-  bla=
-  for i in $CFLAGS; do
-    if test "$i" != "-Werror"; then
-      bla="$bla $i"
-    fi
-  done
-  ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
-
-#   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
-  case $CC in
-    xlc* | */xlc* | mpxlc* | */mpxlc*)
-      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
-      ;;
-    pgcc* | */pgcc*)
-      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
-      ;;
-  esac
-
-  echo "$as_me:$LINENO: checking whether $am_make is the GNU make" >&5
-echo $ECHO_N "checking whether $am_make is the GNU make... $ECHO_C" >&6
-  rm -rf conftest.mak
-  ($am_make -v -f conftest.mak > conftest.grp) 2>&5
-  if $EGREP GNU conftest.grp >&5 ; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-  else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-  fi
-  rm -f conftest.mak conftest.grp
-fi
-
-if test x"$AR" = x; then
-  AR=ar
-fi
-
-ASLMAKEFILECMDS="sed -e 's%ar \$\$(ARFLAGS)%$AR \$\$(ARFLAGS)%' makefile.u | sed -e 's%ar ruv%$AR ruv%' "
-if test "$EXEEXT" = ".exe"; then
-  ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
-fi
-case $build in
-  *-cygwin*)
-    ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's%s/System_details/\`uname -sr\`/%s|System_details|\`uname -sr\`|%'" ;;
-esac
-ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
-
-
-
-
                     ac_config_files="$ac_config_files Makefile compile_MS_ASL"
 
 
 
-FADDLIBS="$ADDLIBS"
-if test x"$coin_need_flibs" = xyes; then
-  ADDLIBS="$ADDLIBS $FLIBS"
-fi
+if test x$coin_skip_ac_output != xyes; then
 
-# library extension
+  FADDLIBS="$ADDLIBS"
+  if test x"$coin_need_flibs" = xyes; then
+    ADDLIBS="$ADDLIBS $FLIBS"
+  fi
 
-case "$CC" in
-  cl* | */cl* | CL* | */CL*)
-       LIBEXT=lib ;;
-    *) LIBEXT=a ;;
-esac
+  # library extension
 
-# Define VPATH_DISTCLEANFILES to be everything that needs to be
-# cleaned for distclean in a vpath configuration
+  case "$CC" in
+    cl* | */cl* | CL* | */CL*)
+         LIBEXT=lib ;;
+      *) LIBEXT=a ;;
+  esac
 
-VPATH_DISTCLEANFILES="$coin_vpath_link_files"
+  # Define VPATH_DISTCLEANFILES to be everything that needs to be
+  # cleaned for distclean in a vpath configuration
 
-cat >confcache <<\_ACEOF
+  VPATH_DISTCLEANFILES="$coin_vpath_link_files"
+
+  # Take out subdirectories if their configuration concluded that they
+  # don't need to be compiled
+  if test x"$coin_ac_skip_subdirs" != x; then
+    new_subdirs=
+    for i in $subdirs; do
+      skipme=no
+      for j in $coin_ac_skip_subdirs; do
+        if test $i = $j; then
+          skipme=yes;
+        fi
+      done
+      if test $skipme = no; then
+        new_subdirs="$new_subdirs $i"
+      fi
+    done
+    subdirs="$new_subdirs"
+  fi
+
+  cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
 # scripts and configure runs, see configure's option --config-cache.
@@ -4088,6 +4352,20 @@ if test -z "${HAVE_EXTERNALS_TRUE}" && test -z "${HAVE_EXTERNALS_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"HAVE_EXTERNALS\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"HAVE_EXTERNALS\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_ASL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${SKIPMAKE_TRUE}" && test -z "${SKIPMAKE_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"SKIPMAKE\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"SKIPMAKE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -4692,11 +4970,18 @@ s,@abs_include_dir@,$abs_include_dir,;t t
 s,@abs_bin_dir@,$abs_bin_dir,;t t
 s,@HAVE_EXTERNALS_TRUE@,$HAVE_EXTERNALS_TRUE,;t t
 s,@HAVE_EXTERNALS_FALSE@,$HAVE_EXTERNALS_FALSE,;t t
+s,@ASLLIB@,$ASLLIB,;t t
+s,@ASL_CPPFLAGS@,$ASL_CPPFLAGS,;t t
+s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
+s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
+s,@MAKEOKFILE@,$MAKEOKFILE,;t t
+s,@SKIPMAKE_TRUE@,$SKIPMAKE_TRUE,;t t
+s,@SKIPMAKE_FALSE@,$SKIPMAKE_FALSE,;t t
 s,@AMPLSOLVER_A@,$AMPLSOLVER_A,;t t
-s,@MSVC_COMPILE_TRUE@,$MSVC_COMPILE_TRUE,;t t
-s,@MSVC_COMPILE_FALSE@,$MSVC_COMPILE_FALSE,;t t
 s,@ASLMAKEFLAGS@,$ASLMAKEFLAGS,;t t
 s,@ASLMAKEFILECMDS@,$ASLMAKEFILECMDS,;t t
+s,@MSVC_COMPILE_TRUE@,$MSVC_COMPILE_TRUE,;t t
+s,@MSVC_COMPILE_FALSE@,$MSVC_COMPILE_FALSE,;t t
 s,@LIBEXT@,$LIBEXT,;t t
 s,@VPATH_DISTCLEANFILES@,$VPATH_DISTCLEANFILES,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
@@ -5172,20 +5457,20 @@ if test "$no_create" != yes; then
 fi
 
 
-if test x"$coin_vpath_link_files" = x; then : ; else
-  lnkcmd=
-  if test "$enable_doscompile" = yes; then
-    lnkcmd=cp
-  fi
-  case "$CC" in
-    cl* | */cl* | CL* | */CL*)
-      lnkcmd=cp ;;
-  esac
-  if test "$lnkcmd" = cp; then
-    { echo "$as_me:$LINENO: Copying data files for VPATH configuration" >&5
+  if test x"$coin_vpath_link_files" = x; then : ; else
+    lnkcmd=
+    if test "$enable_doscompile" = yes; then
+      lnkcmd=cp
+    fi
+    case "$CC" in
+      cl* | */cl* | CL* | */CL*)
+        lnkcmd=cp ;;
+    esac
+    if test "$lnkcmd" = cp; then
+      { echo "$as_me:$LINENO: Copying data files for VPATH configuration" >&5
 echo "$as_me: Copying data files for VPATH configuration" >&6;}
-  else
-    echo "$as_me:$LINENO: checking whether ln -s works" >&5
+    else
+      echo "$as_me:$LINENO: checking whether ln -s works" >&5
 echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
 LN_S=$as_ln_s
 if test "$LN_S" = "ln -s"; then
@@ -5196,12 +5481,12 @@ else
 echo "${ECHO_T}no, using $LN_S" >&6
 fi
 
-    { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
+      { echo "$as_me:$LINENO: Creating VPATH links for data files" >&5
 echo "$as_me: Creating VPATH links for data files" >&6;}
-    lnkcmd="$LN_S"
-  fi
-  for file in $coin_vpath_link_files; do
-    dir=`(dirname "./$file") 2>/dev/null ||
+      lnkcmd="$LN_S"
+    fi
+    for file in $coin_vpath_link_files; do
+      dir=`(dirname "./$file") 2>/dev/null ||
 $as_expr X"./$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
 	 X"./$file" : 'X\(//\)[^/]' \| \
 	 X"./$file" : 'X\(//\)$' \| \
@@ -5213,8 +5498,8 @@ echo X"./$file" |
   	  /^X\(\/\/\)$/{ s//\1/; q; }
   	  /^X\(\/\).*/{ s//\1/; q; }
   	  s/.*/./; q'`
-    if test -d $dir; then : ; else
-      { if $as_mkdir_p; then
+      if test -d $dir; then : ; else
+        { if $as_mkdir_p; then
     mkdir -p $dir
   else
     as_dir=$dir
@@ -5239,19 +5524,24 @@ echo X"$as_dir" |
 echo "$as_me: error: cannot create directory $dir" >&2;}
    { (exit 1); exit 1; }; }; }
 
-    fi
-    rm -f $file
-    $lnkcmd $abs_source_dir/$file $file
-  done
+      fi
+      rm -f $file
+      $lnkcmd $abs_source_dir/$file $file
+    done
+  fi
+
+  if test x$coin_projectdir = xyes; then
+    { echo "$as_me:$LINENO: Configuration of $PACKAGE_NAME successful" >&5
+echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
+  else
+    { echo "$as_me:$LINENO: Main configuration of $PACKAGE_NAME successful" >&5
+echo "$as_me: Main configuration of $PACKAGE_NAME successful" >&6;}
+  fi
+else
+  { echo "$as_me:$LINENO: No configuration of $PACKAGE_NAME necessary" >&5
+echo "$as_me: No configuration of $PACKAGE_NAME necessary" >&6;}
 fi
 
-if test x$coin_projectdir = xyes; then
-  { echo "$as_me:$LINENO: Configuration of $PACKAGE_NAME successful" >&5
-echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
-else
-  { echo "$as_me:$LINENO: Main configuration of $PACKAGE_NAME successful" >&5
-echo "$as_me: Main configuration of $PACKAGE_NAME successful" >&6;}
-fi
 
 
 # Finally, we need to make sure that compile_MS_ASL is executable

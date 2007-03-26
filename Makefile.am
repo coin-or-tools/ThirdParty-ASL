@@ -1,4 +1,4 @@
-# Copyright (C) 2003, 2006 International Business Machines and others.
+# Copyright (C) 2003, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -16,7 +16,13 @@ compdir = compdir
 
 libampl   = $(AMPLSOLVER_A)
 
-all-local: $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+if SKIPMAKE
+  alltargets =
+else
+  alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+endif
+
+all-local: $(alltargets)
 
 if MSVC_COMPILE
 $(libampl):
@@ -73,6 +79,6 @@ CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 ########################################################################
 
 # Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES =
+DISTCLEANFILES = $(MAKEOKFILE)
 
 include ../../BuildTools/Makemain.inc
