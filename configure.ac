@@ -74,7 +74,7 @@ if test x$skip_further_test != xyes; then
 
   # Determine the name of the ASL library
   AC_SUBST(AMPLSOLVER_A)
-  case "$CXX" in
+  case "$CC" in
     cl* | */cl* | CL* | */CL*)
       AMPLSOLVER_A=amplsolv.lib
       msvc_compile=yes ;;

@@ -3818,7 +3818,7 @@ coin_aslobjdir=../ThirdParty/ASL
 coin_aslsrcdir=$srcdir/$coin_aslobjdir
 
 # Determine the name of the ASL library
-case "$CXX" in
+case "$CC" in
   cl* | */cl* | CL* | */CL*)
     ampllib=amplsolv.lib ;;
   *)
@@ -4059,7 +4059,7 @@ if test x$skip_further_test != xyes; then
 
   # Determine the name of the ASL library
 
-  case "$CXX" in
+  case "$CC" in
     cl* | */cl* | CL* | */CL*)
       AMPLSOLVER_A=amplsolv.lib
       msvc_compile=yes ;;
