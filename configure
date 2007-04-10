@@ -1490,7 +1490,10 @@ fi
 # Check whether --with-asl-verbosity or --without-asl-verbosity was given.
 if test "${with_asl_verbosity+set}" = set; then
   withval="$with_asl_verbosity"
-  coin_asl_verbosity=$withval
+  if test "$withval" = yes; then
+                withval=1
+              fi
+              coin_asl_verbosity=$withval
 else
   coin_asl_verbosity=0
 fi;
@@ -1504,7 +1507,10 @@ _ACEOF
 # Check whether --with-asl-checklevel or --without-asl-checklevel was given.
 if test "${with_asl_checklevel+set}" = set; then
   withval="$with_asl_checklevel"
-  coin_asl_checklevel=$withval
+  if test "$withval" = yes; then
+                withval=1
+              fi
+              coin_asl_checklevel=$withval
 else
   coin_asl_checklevel=0
 fi;
@@ -3818,7 +3824,7 @@ coin_aslobjdir=../ThirdParty/ASL
 coin_aslsrcdir=$srcdir/$coin_aslobjdir
 
 # Determine the name of the ASL library
-case "$CXX" in
+case "$CC" in
   cl* | */cl* | CL* | */CL*)
     ampllib=amplsolv.lib ;;
   *)
@@ -4059,7 +4065,7 @@ if test x$skip_further_test != xyes; then
 
   # Determine the name of the ASL library
 
-  case "$CXX" in
+  case "$CC" in
     cl* | */cl* | CL* | */CL*)
       AMPLSOLVER_A=amplsolv.lib
       msvc_compile=yes ;;
