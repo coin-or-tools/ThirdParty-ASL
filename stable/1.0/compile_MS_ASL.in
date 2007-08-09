@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -x
+mkinstalldirs="@install_sh@ -d"
+abs_source_dir=@abs_source_dir@
+libampl=@AMPLSOLVER_A@
+compdir=compdir
+
+rm -rf $compdir
+$mkinstalldirs $compdir
+files=`cd $abs_source_dir/solvers; ls *.[chs] *.[ch]0 *.hd arith.* makefile* *.bat amplsolv.lbc`
+cd $compdir
+for file in $files
+do
+  cp $abs_source_dir/solvers/$file $file;\
+done
+cp details.c0 details.c
+nmake -f makefile.vc
+mv amplsolv.lib ../$libampl
+mv stdio1.h arith.h funcadd0.obj ..
+cd ..
+rm -rf $compdir
