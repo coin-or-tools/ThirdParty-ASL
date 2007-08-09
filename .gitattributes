@@ -1,1 +1,6 @@
 * text=auto !eol
+trunk/INSTALL.ASL -text
+trunk/Makefile.am -text
+trunk/compile_MS_ASL.in -text
+trunk/configure -text
+trunk/get.ASL -text
