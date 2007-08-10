@@ -39,6 +39,10 @@ AC_COIN_PROJECTDIR_INIT
 # Get the system type
 AC_CANONICAL_BUILD
 
+#turn off warnings and pedantic mode since they could make trouble on some platforms,
+#and we couldn't fix them anyway
+coin_skip_warn_cflags=yes
+
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(ASL)
 
