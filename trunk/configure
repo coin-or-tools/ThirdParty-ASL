@@ -1586,9 +1586,9 @@ if test "${enable_doscompile+set}" = set; then
   enableval="$enable_doscompile"
   if test "$enable_doscompile" != no; then
      case $build in
-       *-cygwin*) ;;
-       *) { { echo "$as_me:$LINENO: error: --enable-doscompile option makes sense only under Cygwin" >&5
-echo "$as_me: error: --enable-doscompile option makes sense only under Cygwin" >&2;}
+       *-cygwin* | *-mingw*) ;;
+       *) { { echo "$as_me:$LINENO: error: --enable-doscompile option makes sense only under Cygwin or MinGW" >&5
+echo "$as_me: error: --enable-doscompile option makes sense only under Cygwin or MinGW" >&2;}
    { (exit 1); exit 1; }; } ;;
      esac
    fi
@@ -1596,7 +1596,12 @@ else
   enable_doscompile=no
 fi;
  case "$enable_doscompile" in
-   msvc|mingw|no) ;;
+   mingw)
+     case $build in
+       *-mingw*) enable_doscompile=no ;;
+     esac
+     ;;
+   msvc|no) ;;
    yes) enable_doscompile=mingw ;;
    *) { { echo "$as_me:$LINENO: error: Invalid value $enable_doscompile for --enable-doscompile.
 		    Try configure --help=recursive." >&5
