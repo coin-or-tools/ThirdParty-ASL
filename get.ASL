@@ -2,10 +2,16 @@
 
 set -e
 
+wgetcmd=wget
 wgetcount=`which wget 2>/dev/null | wc -w`
 if test ! $wgetcount = 1; then
   echo "Utility wget not found in your PATH."
-  exit -1
+  if test `uname` = Darwin; then
+    wgetcmd=ftp
+    echo "Using ftp command instead."
+  else
+    exit -1
+  fi
 fi
 
 echo " "
@@ -14,7 +20,7 @@ echo " "
 
 rm -f solvers.tar
 echo "Downloading the source code from www.netlib.org..."
-wget ftp://www.netlib.org/ampl/solvers.tar
+$wgetcmd ftp://www.netlib.org/ampl/solvers.tar
 
 echo "Unpacking the source code..."
 tar xf solvers.tar
