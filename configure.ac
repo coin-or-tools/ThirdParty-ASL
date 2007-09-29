@@ -1,10 +1,11 @@
-# Copyright (C) 2006 International Business Machines.
+# Copyright (C) 2007 International Business Machines.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
 ## $Id$
 
 # Author:  Andreas Waechter            IBM    2006-04-13
+# Revised: Lou Hafer		       SFU    2007-09-15
 
 #############################################################################
 #                       Names and other basic things                        #
@@ -30,8 +31,6 @@ AC_CONFIG_SRCDIR(solvers/asl.h)
 # /usr/local.
 AC_PREFIX_DEFAULT([`pwd`])
 
-AC_COIN_PROJECTDIR_INIT
-
 #############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
@@ -39,8 +38,11 @@ AC_COIN_PROJECTDIR_INIT
 # Get the system type
 AC_CANONICAL_BUILD
 
-#turn off warnings and pedantic mode since they could make trouble on some platforms,
-#and we couldn't fix them anyway
+# A bit of initial setup.
+AC_COIN_PROJECTDIR_INIT
+
+# Turn off warnings and pedantic mode since they could make trouble on some
+# platforms, and we can't fix issues in third-party code.
 coin_skip_warn_cflags=yes
 
 # Check if user wants to produce debugging code
@@ -50,14 +52,15 @@ AC_COIN_DEBUG_COMPILE(ASL)
 AC_PROG_EGREP
 AC_PROG_LN_S
 
-# Get the name of the C compiler and appropriate compiler options
-coin_skip_warn_cflags=yes
+# Get the name of the C compiler and compiler flags
 AC_COIN_PROG_CC
 
-# Initialize automake
-AC_COIN_INIT_AUTOMAKE
+# Initialize automake and libtool
+AC_COIN_INIT_AUTO_TOOLS
 
+# See what we're actually going to do for ASL. This will define ampllib.
 AC_COIN_HAS_ASL
+
 MAKEOKFILE=.MakeOk
 if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
   skip_further_test=yes
@@ -76,71 +79,103 @@ AM_CONDITIONAL(SKIPMAKE, test -z "$MAKEOKFILE")
 
 if test x$skip_further_test != xyes; then
 
-  # Determine the name of the ASL library
+# Set a substitutable variable with the library name, and determine the
+# compilation style.
+
   AC_SUBST(AMPLSOLVER_A)
+  AMPLSOLVER_A=$ampllib
   case "$CC" in
     cl* | */cl* | CL* | */CL*)
-      AMPLSOLVER_A=amplsolv.lib
       msvc_compile=yes ;;
     *)
-      AMPLSOLVER_A=amplsolver.a
       msvc_compile=no ;;
   esac
+  AC_MSG_NOTICE([Configuring ASL to build $AMPLSOLVER_A.])
+
+# Determine flags to be passed on the command line to (n)make. The main
+# activity is to groom CFLAGS and set up ASLMAKEFLAGS to pass CFLAGS on the
+# (n)make command line.
+# NON_STDIO no longer appears in any source file; removed all mention.
+# No_Control87 seems to be specific to DEC Alpha. Try leaving it undefined.
+# -- lh, 070915 --
 
   if test -z "$ASLMAKEFLAGS" ; then
     asladdcflags=
     case $build in
       *-linux*)
-        asladdcflags="-DNON_STDIO"
         case $CC in
           pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
             asladdcflags="$asladdcflags -DNO_fpu_control";;
         esac
         ;;
-      *-cygwin*) # ToDo: If on Cygwin but not using -mno-cygwin, we should not define -DNo_Control87 -DNO_RUSAGE
-        asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
-        ;;
-      *-mingw32)
-        asladdcflags="-DNON_STDIO -DNo_Control87 -DNO_RUSAGE"
-        ;;
     esac
 
+# The critical function for NO_RUSAGE is getrusage(). Use a standard test.
+# -- lh, 070915 --
+
+    AC_MSG_CHECKING([for getrusage])
+    AC_LANG_PUSH(C)
+    AC_LINK_IFELSE(
+      [AC_LANG_PROGRAM([[]],[[getrusage()]])],
+      [AC_MSG_RESULT([yes])],
+      [asladdcflags="$asladdcflags -DNO_RUSAGE"
+       AC_MSG_RESULT([no])])
+    AC_LANG_POP(C)
+
 # On BlueGene disable dynamic library loading
+
     if test x"$enable_bg" = xyes; then
       asladdcflags="$asladdcflags -DNO_FUNCADD"
     fi
 
-# Do the following for now to make sure we are not interupting compilation
-# of ASL because of warning message:
+# Groom CFLAGS before we merge it with asladdcflags.
+# Remove -Werror if present, to make sure we are not interrupting compilation
+# of ASL because of warning messages. The cl equivalent is -WX.
+
     bla=
+    if test x$msvc_compile = xyes ; then
+      warnToErr="-WX"
+    else
+      warnToErr="-Werror"
+    fi
     for i in $CFLAGS; do
-      if test "$i" != "-Werror"; then
+      if test "$i" != "$warnToErr"; then
         bla="$bla $i"
       fi
     done
     ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
-#   Somehow, -qtune=auto makes ASL segfault on AIX compiler, so take them out
+# Somehow, the flags specified here cause ASL to segfault on the AIX
+# compiler, so take them out.
+
     case $CC in
       xlc* | */xlc* | mpxlc* | */mpxlc*)
         ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
         ;;
       pgcc* | */pgcc*)
-        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed 's/-fast/-O1/g'`
+        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-fast/-O1/g'`
         ;;
     esac
 
-    AC_MSG_CHECKING([whether $am_make is the GNU make])
-    rm -rf conftest.mak
-    ($am_make -v -f conftest.mak > conftest.grp) 2>&5
-    if $EGREP GNU conftest.grp >&5 ; then
-      AC_MSG_RESULT([yes])
-      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-    else
-      AC_MSG_RESULT([no])
+# Limit GNU make to one thread. But remember that if we're building with
+# cl, ultimately we're going to use nmake, which knows nothing of this.
+
+    if test x$msvc_compile = xno ; then
+      rm -rf conftest.mak
+      ($am_make -v > conftest.grp) 2>&5
+      if $EGREP GNU conftest.grp >&5 ; then
+	ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
+      fi
+      rm -f conftest.grp
     fi
-    rm -f conftest.mak conftest.grp
   fi
+
+# End if-then to construct ASLMAKEFLAGS
+
+  AC_MSG_NOTICE([Command line flags for (n)make \"$ASLMAKEFLAGS\".])
+
+# Now create appropriate makefile commands. This applies only to non-msvc
+# builds. Perhaps convert to a script, following pattern of compile_MS_ASL?
 
   if test x"$AR" = x; then
     AR=ar
