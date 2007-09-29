@@ -1,9 +1,17 @@
 #!/bin/sh
 
-set -x
+# Script to compile the Ampl Solver Library using cl/link. Why this approach?
+# Well, we don't want to get into the business of creating (and maintaining)
+# the full set of autotools source files for the ASL. This approach tries to
+# leverage makefile.vc, which comes with ASL.
+
+# To support VPATH builds, the strategy is to copy the sources to the build
+# directory, build, and then erase the sources when we're done. Start by
+# copying the sources.
+
+# set -x
 mkinstalldirs="@install_sh@ -d"
 abs_source_dir=@abs_source_dir@
-libampl=@AMPLSOLVER_A@
 compdir=compdir
 
 rm -rf $compdir
@@ -14,8 +22,23 @@ for file in $files
 do
   cp $abs_source_dir/solvers/$file $file;\
 done
-cp details.c0 details.c
-nmake -f makefile.vc
+
+# Acquire the cl version and create details.c
+
+clver=`cl 2>&1 | egrep '^Microsoft' | sed -e 's/.*Version \(.*\)/\1/'`
+clver="Microsoft cl $clver"
+
+sed -e "s/System_details/$clver/" details.c0 > details.c
+
+# Do the build. CFLAGS specified on the command line (as a result of autoconf
+# replacing ASLMAKEFLAGS) will override the specs in makefile.vc, ensuring
+# that ASL is built with the same compiler flags as other code. It turns out
+# that Gnu make always sets MAKEFLAGS to --unix, and nmake tries to process
+# this, resulting in error U1065. Clear MAKEFLAGS to fix the problem.
+
+libampl=@AMPLSOLVER_A@
+MAKEFLAGS=
+nmake -f makefile.vc @ASLMAKEFLAGS@
 mv amplsolv.lib ../$libampl
 mv stdio1.h arith.h funcadd0.obj ..
 cd ..

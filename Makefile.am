@@ -26,30 +26,7 @@ all-local: $(alltargets)
 
 if MSVC_COMPILE
 $(libampl):
-	@echo " "
-	@echo "*********************************************************************"
-	@echo " "
-	@echo "Please change into the following directory and type ./compile_MS_ASL"
-	@pwd
-	@echo " "
-	@echo "*********************************************************************"
-	@exit 1
-#	set -x -v; \
-#	rm -rf $(compdir) ; \
-#	$(mkinstalldirs) $(compdir); \
-#	files=`cd $(abs_source_dir)/solvers; ls *.[chs] *.[ch]0 *.hd arith.* makefile* *.bat amplsolv.lbc`; \
-#	cd $(compdir); \
-#	for file in $$files; \
-#	do \
-#	  rm -f $$file ;\
-#	  cp $(abs_source_dir)/solvers/$$file $$file ;\
-#	done; \
-#	cp details.c0 details.c; \
-#	rm -f makefile; \
-#	nmake.exe    
-#	mv $(compdir)/amplsolv.lib $(libampl)
-#	-cd $(compdir); mv stdio1.h arith.h funcadd0.o ..
-#	rm -rf $(compdir)
+	compile_MS_ASL
 else
 $(libampl):
 	rm -rf $(compdir) ; \
