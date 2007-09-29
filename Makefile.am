@@ -47,7 +47,7 @@ $(libampl):
 	rm -rf $(compdir)
 endif
 
-stdio1.h arith.h funcadd0.o: $(libampl)
+stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 

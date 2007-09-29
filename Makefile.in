@@ -533,7 +533,7 @@ all-local: $(alltargets)
 @MSVC_COMPILE_FALSE@	-cd $(compdir); mv stdio1.h arith.h funcadd0.$(OBJEXT) ..
 @MSVC_COMPILE_FALSE@	rm -rf $(compdir)
 
-stdio1.h arith.h funcadd0.o: $(libampl)
+stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
 # Make sure acinclude is using most recent coin.m4
 @MAINTAINER_MODE_TRUE@$(srcdir)/acinclude.m4: $(BUILDTOOLSDIR)/coin.m4
