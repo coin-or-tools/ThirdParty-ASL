@@ -24,6 +24,7 @@ files=`cd $abs_source_dir/solvers ; ls *.[chs] *.[ch]0 *.hd arith.* makefile* *.
 
 cd $compdir
 for file in $files ; do
+  rm -f $file
   @LN_S@ $abs_source_dir/solvers/$file $file
 done
 
