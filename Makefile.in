@@ -516,9 +516,9 @@ uninstall-am: uninstall-info-am
 all-local: $(alltargets)
 
 @MSVC_COMPILE_TRUE@$(libampl):
-@MSVC_COMPILE_TRUE@	compile_MS_ASL
+@MSVC_COMPILE_TRUE@	./compile_MS_ASL
 @MSVC_COMPILE_FALSE@$(libampl):
-@MSVC_COMPILE_FALSE@	compile_Unix_ASL
+@MSVC_COMPILE_FALSE@	./compile_Unix_ASL
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 

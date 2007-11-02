@@ -26,10 +26,10 @@ all-local: $(alltargets)
 
 if MSVC_COMPILE
 $(libampl):
-	compile_MS_ASL
+	./compile_MS_ASL
 else
 $(libampl):
-	compile_Unix_ASL
+	./compile_Unix_ASL
 endif
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
