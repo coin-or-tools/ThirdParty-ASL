@@ -77,7 +77,7 @@ esac
 # that we stay with our chosen compiler. It will try and force CFLAGS, too, but
 # configure has already put the appropriate information into ASLMAKEFLAGS.
 
-make -f makefile.coin @ASLMAKEFLAGS@ CC=@CC@
+make -f makefile.coin @ASLMAKEFLAGS@ CC="@CC@"
 mv amplsolver.a ../$libampl
 mv stdio1.h arith.h funcadd0.@OBJEXT@ ..
 cd ..
