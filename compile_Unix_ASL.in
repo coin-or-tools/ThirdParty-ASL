@@ -28,9 +28,10 @@ for file in $files ; do
   @LN_S@ $abs_source_dir/solvers/$file $file
 done
 
-# Acquire the system details.
+# Acquire the system details. On some systems (Cygwin, for example), this
+# string will contain '/' characters, so escape them properly.
 
-sys_details=`uname -sr`
+sys_details=`uname -sr | sed -e 's/\\//\\\\\\//g'`
 
 sed -e "/sysdetails_ASL/s/System_details/$sys_details/" details.c0 > details.c
 
