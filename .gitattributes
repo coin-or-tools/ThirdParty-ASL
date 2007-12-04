@@ -2,5 +2,6 @@
 /INSTALL.ASL -text
 /Makefile.am -text
 /compile_MS_ASL.in -text
+/compile_Unix_ASL.in -text
 /configure -text
 /get.ASL -text

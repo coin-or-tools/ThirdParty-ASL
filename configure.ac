@@ -97,7 +97,6 @@ if test x$skip_further_test != xyes; then
 # (n)make command line.
 # NON_STDIO no longer appears in any source file; removed all mention.
 # No_Control87 seems to be specific to DEC Alpha. Try leaving it undefined.
-# -- lh, 070915 --
 
   if test -z "$ASLMAKEFLAGS" ; then
     asladdcflags=
@@ -110,16 +109,32 @@ if test x$skip_further_test != xyes; then
         ;;
     esac
 
+# Various feature checks. Force the language to be C while we do this to avoid
+# issues with C++ (re)declarations.
+
+    AC_LANG_PUSH(C)
+
 # The critical function for NO_RUSAGE is getrusage(). Use a standard test.
-# -- lh, 070915 --
 
     AC_MSG_CHECKING([for getrusage])
-    AC_LANG_PUSH(C)
     AC_LINK_IFELSE(
       [AC_LANG_PROGRAM([[]],[[getrusage()]])],
       [AC_MSG_RESULT([yes])],
       [asladdcflags="$asladdcflags -DNO_RUSAGE"
        AC_MSG_RESULT([no])])
+
+# Check for long long; we need to define NO_LONG_LONG if it's not present.  ASL
+# makefile.u and makefile.vc both deal with this, in their own way.
+# Unfortunately, when trying to build with cl under cygwin, the makefile.vc
+# solution, comptry.bat, fails. To safely discard comptry.bat, we need to do
+# this check. It's hardly likely that long long is missing on any modern
+# system, but it's easy to check.
+
+    AC_CHECK_TYPE([long long],[],
+      [asladdcflags="$asladdcflags -DNO_LONG_LONG"],[])
+
+# Back to whatever language we were in.
+
     AC_LANG_POP(C)
 
 # On BlueGene disable dynamic library loading
@@ -170,37 +185,22 @@ if test x$skip_further_test != xyes; then
     fi
   fi
 
-# End if-then to construct ASLMAKEFLAGS
+# End if-then to construct ASLMAKEFLAGS. Announce the result.
 
   AC_MSG_NOTICE([Command line flags for (n)make \"$ASLMAKEFLAGS\".])
-
-# Now create appropriate makefile commands. This applies only to non-msvc
-# builds. Perhaps convert to a script, following pattern of compile_MS_ASL?
-
-  if test x"$AR" = x; then
-    AR=ar
-  fi
-
-  ASLMAKEFILECMDS="sed -e 's%ar \$\$(ARFLAGS)%$AR \$\$(ARFLAGS)%' makefile.u | sed -e 's%ar ruv%$AR ruv%' "
-  if test "$EXEEXT" = ".exe"; then
-    ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's/a.out/a.exe/'"
-  fi
-  case $build in
-    *-cygwin*)
-      ASLMAKEFILECMDS="$ASLMAKEFILECMDS | sed 's%s/System_details/\`uname -sr\`/%s|System_details|\`uname -sr\`|%'" ;;
-  esac
-  ASLMAKEFILECMDS="$ASLMAKEFILECMDS > makefile"
-
-  AC_ARG_VAR(ASLMAKEFLAGS,[Compilation flags necessary for compiling the AMPL solver library])
-  AC_SUBST(ASLMAKEFILECMDS)
+  AC_ARG_VAR(ASLMAKEFLAGS,
+  	[Compilation flags necessary for compiling the AMPL solver library])
 
 fi
 
+# Set automake conditional and generate the output files.
+
 AM_CONDITIONAL(MSVC_COMPILE, test x$msvc_compile = xyes)
 
-AC_CONFIG_FILES([Makefile compile_MS_ASL])
+AC_CONFIG_FILES([Makefile compile_MS_ASL compile_Unix_ASL])
 
 AC_COIN_FINALIZE
 
-# Finally, we need to make sure that compile_MS_ASL is executable
-chmod a+x compile_MS_ASL
+# Finally, we need to make sure that the build scripts are executable
+
+chmod a+x compile_MS_ASL compile_Unix_ASL
