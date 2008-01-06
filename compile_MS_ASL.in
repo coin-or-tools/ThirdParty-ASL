@@ -24,6 +24,7 @@ do
 done
 
 # Acquire the cl version and create details.c
+# (This is not doing to right thing if we are using the Microsoft compiler)
 
 clver=`cl 2>&1 | egrep '^Microsoft' | sed -e 's/.*Version \(.*\)/\1/'`
 clver="Microsoft cl $clver"
@@ -50,7 +51,7 @@ sed -e 's/comptry\.bat \$(CC)/$(CC)/' makefile.vc > makefile.coin
 
 libampl=@AMPLSOLVER_A@
 MAKEFLAGS=
-nmake -f makefile.coin @ASLMAKEFLAGS@
+nmake -f makefile.coin @ASLMAKEFLAGS@ CC="@CC@"
 mv amplsolv.lib ../$libampl
 mv stdio1.h arith.h funcadd0.obj ..
 cd ..

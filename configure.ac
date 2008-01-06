@@ -85,7 +85,7 @@ if test x$skip_further_test != xyes; then
   AC_SUBST(AMPLSOLVER_A)
   AMPLSOLVER_A=$ampllib
   case "$CC" in
-    cl* | */cl* | CL* | */CL*)
+    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
       msvc_compile=yes ;;
     *)
       msvc_compile=no ;;
