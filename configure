@@ -20251,7 +20251,11 @@ else
 fi
 
 
-                              ac_config_files="$ac_config_files Makefile compile_MS_ASL compile_Unix_ASL"
+          ac_config_files="$ac_config_files Makefile"
+
+          ac_config_files="$ac_config_files compile_MS_ASL"
+
+          ac_config_files="$ac_config_files compile_Unix_ASL"
 
 
 
@@ -21368,6 +21372,11 @@ s,@INSTALL@,$ac_INSTALL,;t t
     rm -f $tmp/out
   fi
 
+  # Run the commands associated with the file.
+  case $ac_file in
+    compile_MS_ASL ) chmod a+x compile_MS_ASL ;;
+    compile_Unix_ASL ) chmod a+x compile_Unix_ASL ;;
+  esac
 done
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF
@@ -21670,7 +21679,3 @@ echo "$as_me: No configuration of $PACKAGE_NAME necessary" >&6;}
 fi
 
 
-
-# Finally, we need to make sure that the build scripts are executable
-
-chmod a+x compile_MS_ASL compile_Unix_ASL
