@@ -85,7 +85,7 @@ if test x$skip_further_test != xyes; then
   AC_SUBST(AMPLSOLVER_A)
   AMPLSOLVER_A=$ampllib
   case "$CC" in
-    cl* | */cl* | CL* | */CL*)
+    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
       msvc_compile=yes ;;
     *)
       msvc_compile=no ;;
@@ -197,10 +197,8 @@ fi
 
 AM_CONDITIONAL(MSVC_COMPILE, test x$msvc_compile = xyes)
 
-AC_CONFIG_FILES([Makefile compile_MS_ASL compile_Unix_ASL])
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([compile_MS_ASL],[chmod a+x compile_MS_ASL])
+AC_CONFIG_FILES([compile_Unix_ASL],[chmod a+x compile_Unix_ASL])
 
 AC_COIN_FINALIZE
-
-# Finally, we need to make sure that the build scripts are executable
-
-chmod a+x compile_MS_ASL compile_Unix_ASL
