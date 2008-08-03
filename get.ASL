@@ -30,6 +30,12 @@ tar xf solvers.tar
 echo "Uncompressing the source files..."
 gunzip -fr solvers
 
+echo "Adding No_dtoa to CFLAGS..."
+cd solvers
+mv makefile.u makefile.u.orig
+sed -e 's/CFLAGS = /CFLAGS = -DNo_dtoa /g' makefile.u.orig > makefile.u 
+cd ..
+
 echo "Deleting the tar file..."
 rm solvers.tar
 
