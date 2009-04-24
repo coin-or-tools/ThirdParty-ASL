@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # Script to compile the Ampl Solver Library on Unix systems. Why this approach?
 # Well, we don't want to get into the business of creating (and maintaining)
 # the full set of autotools source files for the ASL. This approach tries to
