@@ -1,4 +1,4 @@
-# Copyright (C) 2007 International Business Machines.
+# Copyright (C) 2007, 2009 International Business Machines.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -16,7 +16,7 @@ AC_PREREQ(2.59)
 AC_INIT([ThirdPartyASL],[1.0trunk],[http://projects.coin-or.org/BuildTools/newticket])
 
 AC_COPYRIGHT([
-Copyright 2006 International Business Machines and others.
+Copyright 2006, 2007, 2009 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package Coin which is distributed
 under the Common Public License.])
@@ -59,19 +59,28 @@ AC_COIN_PROG_CC
 AC_COIN_INIT_AUTO_TOOLS
 
 # See what we're actually going to do for ASL. This will define ampllib.
-AC_COIN_HAS_ASL
+#AC_COIN_HAS_ASL
 
-MAKEOKFILE=.MakeOk
-if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
-  skip_further_test=yes
-  rm -f $MAKEOKFILE
-  AC_MSG_NOTICE([The ASL sources don't need to be compiled])
-  MAKEOKFILE=
-else
-  touch $MAKEOKFILE
-fi
-AC_SUBST(MAKEOKFILE)
-AM_CONDITIONAL(SKIPMAKE, test -z "$MAKEOKFILE")
+# Determine the name of the ASL library
+case "$CC" in
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+    ampllib=amplsolv.lib ;;
+  *)
+    ampllib=amplsolver.a ;;
+esac
+
+
+#MAKEOKFILE=.MakeOk
+#if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
+#  skip_further_test=yes
+#  rm -f $MAKEOKFILE
+#  AC_MSG_NOTICE([The ASL sources don't need to be compiled])
+#  MAKEOKFILE=
+#else
+#  touch $MAKEOKFILE
+#fi
+#AC_SUBST(MAKEOKFILE)
+#AM_CONDITIONAL(SKIPMAKE, test -z "$MAKEOKFILE")
 
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
@@ -197,7 +206,7 @@ fi
 
 AM_CONDITIONAL(MSVC_COMPILE, test x$msvc_compile = xyes)
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile asl_addlibs.txt])
 AC_CONFIG_FILES([compile_MS_ASL],[chmod a+x compile_MS_ASL])
 AC_CONFIG_FILES([compile_Unix_ASL],[chmod a+x compile_Unix_ASL])
 
