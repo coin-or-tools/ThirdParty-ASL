@@ -9,7 +9,7 @@
 # gives unlimited permission to copy, distribute and modify it.
 #
 #
-# Copyright 2006, 2007, 2009 International Business Machines and others.
+# Copyright 2006 International Business Machines and others.
 # All Rights Reserved.
 # This file is part of the open source package Coin which is distributed
 # under the Common Public License.
@@ -472,7 +472,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS AMPLSOLVER_A ASLMAKEFLAGS MSVC_COMPILE_TRUE MSVC_COMPILE_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS ASLLIB ASL_CPPFLAGS COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE MAKEOKFILE SKIPMAKE_TRUE SKIPMAKE_FALSE AMPLSOLVER_A ASLMAKEFLAGS MSVC_COMPILE_TRUE MSVC_COMPILE_FALSE LIBEXT VPATH_DISTCLEANFILES LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1087,6 +1087,8 @@ Optional Packages:
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
+  --with-asldir           specify path to AMPL solver directory (or BUILD for
+                          compilation, or "no" for disabling AMPL)
 
 Some influential environment variables:
   CDEFS       Additional -D flags to be used when compiling C code.
@@ -1217,7 +1219,7 @@ This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
 
-Copyright 2006, 2007, 2009 International Business Machines and others.
+Copyright 2006 International Business Machines and others.
 All Rights Reserved.
 This file is part of the open source package Coin which is distributed
 under the Common Public License.
@@ -4734,7 +4736,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4737 "configure"' > conftest.$ac_ext
+  echo '#line 4739 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6333,7 +6335,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6336:" \
+echo "$as_me:6338:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7400,11 +7402,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7403: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7405: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7407: \$? = $ac_status" >&5
+   echo "$as_me:7409: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7668,11 +7670,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7671: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7673: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7675: \$? = $ac_status" >&5
+   echo "$as_me:7677: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7772,11 +7774,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7775: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7777: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7779: \$? = $ac_status" >&5
+   echo "$as_me:7781: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10117,7 +10119,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10120 "configure"
+#line 10122 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10217,7 +10219,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10220 "configure"
+#line 10222 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12561,11 +12563,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12564: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12566: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12568: \$? = $ac_status" >&5
+   echo "$as_me:12570: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12665,11 +12667,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12668: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12670: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12672: \$? = $ac_status" >&5
+   echo "$as_me:12674: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14235,11 +14237,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14238: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14240: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14242: \$? = $ac_status" >&5
+   echo "$as_me:14244: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14339,11 +14341,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14342: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14344: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14346: \$? = $ac_status" >&5
+   echo "$as_me:14348: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16546,11 +16548,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16549: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16551: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16553: \$? = $ac_status" >&5
+   echo "$as_me:16555: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16814,11 +16816,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16817: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16819: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16821: \$? = $ac_status" >&5
+   echo "$as_me:16823: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16918,11 +16920,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16921: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16923: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16925: \$? = $ac_status" >&5
+   echo "$as_me:16927: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19821,7 +19823,8 @@ fi
 }
 
 # See what we're actually going to do for ASL. This will define ampllib.
-#AC_COIN_HAS_ASL
+coin_aslobjdir=../ThirdParty/ASL
+coin_aslsrcdir=$srcdir/$coin_aslobjdir
 
 # Determine the name of the ASL library
 case "$CC" in
@@ -19832,17 +19835,199 @@ case "$CC" in
 esac
 
 
-#MAKEOKFILE=.MakeOk
-#if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
-#  skip_further_test=yes
-#  rm -f $MAKEOKFILE
-#  AC_MSG_NOTICE([The ASL sources don't need to be compiled])
-#  MAKEOKFILE=
-#else
-#  touch $MAKEOKFILE
-#fi
-#AC_SUBST(MAKEOKFILE)
-#AM_CONDITIONAL(SKIPMAKE, test -z "$MAKEOKFILE")
+# Check whether --with-asldir or --without-asldir was given.
+if test "${with_asldir+set}" = set; then
+  withval="$with_asldir"
+  use_asldir=$withval
+else
+  use_asldir=
+fi;
+
+if test "$use_asldir" = BUILD; then
+  if test "$PACKAGE_NAME" != ThirdPartyASL; then
+    # If we are configuring ThirdParty/ASL, don't check
+    if test -r $coin_aslobjdir/.MakeOk; then :; else
+      { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&5
+echo "$as_me: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+  fi
+elif test -z "$use_asldir"; then
+ # try to find sources - if not given don't compile
+  if test "$PACKAGE_NAME" != ThirdPartyASL; then
+    if test -r $coin_aslobjdir/.MakeOk; then
+      use_asldir=BUILD
+    else
+      use_asldir=no
+    fi
+  else
+    use_asldir=no
+  fi
+elif test "$use_asldir" != "no"; then
+  if test -r $use_asldir/$ampllib; then
+
+  :
+else
+  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but library missing" >&5
+echo "$as_me: error: ASL directory \"$use_asldir\" specified, but library missing" >&2;}
+   { (exit 1); exit 1; }; }
+  :
+fi
+
+  if test -r $use_asldir/asl.h; then
+
+  :
+else
+  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&5
+echo "$as_me: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&2;}
+   { (exit 1); exit 1; }; }
+  :
+fi
+
+  use_asldir=`cd $use_asldir; pwd`
+  case $build in
+    *-cygwin*) use_asldir=`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg` ;;
+  esac
+fi
+
+# Variable containing ASL library (including full path)
+
+# Variable containing flags for including ASL header files
+
+
+if test "$use_asldir" = BUILD; then
+  coin_aslobjdir=`cd $coin_aslobjdir; pwd`
+  ASLLIB=`$CYGPATH_W $coin_aslobjdir/$ampllib | sed -e sX\\\\\\\\X/Xg`
+  coin_aslsrcdir=`cd $coin_aslsrcdir; pwd`
+  ASL_CPPFLAGS="-I"`$CYGPATH_W $coin_aslobjdir | sed -e sX\\\\\\\\X/Xg`" -I"`$CYGPATH_W $coin_aslsrcdir/solvers | sed -e sX\\\\\\\\X/Xg`
+elif test "$use_asldir" != no; then
+  ASLLIB=`$CYGPATH_W $use_asldir/$ampllib | sed -e sX\\\\\\\\X/Xg`
+  ASL_CPPFLAGS="-I"`$CYGPATH_W $use_asldir | sed -e sX\\\\\\\\X/Xg`
+fi
+
+if test "$use_asldir" != no; then
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+  echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dlopen ();
+int
+main ()
+{
+dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dl_dlopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
+if test $ac_cv_lib_dl_dlopen = yes; then
+  ASLLIB="$ASLLIB -ldl"
+fi
+
+  coin_has_asl=yes
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_ASL 1
+_ACEOF
+
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+else
+  coin_has_asl=no
+fi
+
+
+if test $coin_has_asl = yes; then
+  COIN_HAS_ASL_TRUE=
+  COIN_HAS_ASL_FALSE='#'
+else
+  COIN_HAS_ASL_TRUE='#'
+  COIN_HAS_ASL_FALSE=
+fi
+
+
+
+MAKEOKFILE=.MakeOk
+if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
+  skip_further_test=yes
+  rm -f $MAKEOKFILE
+  { echo "$as_me:$LINENO: The ASL sources don't need to be compiled" >&5
+echo "$as_me: The ASL sources don't need to be compiled" >&6;}
+  MAKEOKFILE=
+else
+  touch $MAKEOKFILE
+fi
+
+
+
+if test -z "$MAKEOKFILE"; then
+  SKIPMAKE_TRUE=
+  SKIPMAKE_FALSE='#'
+else
+  SKIPMAKE_TRUE='#'
+  SKIPMAKE_FALSE=
+fi
+
 
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
@@ -20093,7 +20278,7 @@ else
 fi
 
 
-                    ac_config_files="$ac_config_files Makefile asl_addlibs.txt"
+          ac_config_files="$ac_config_files Makefile"
 
           ac_config_files="$ac_config_files compile_MS_ASL"
 
@@ -20318,6 +20503,20 @@ if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"am__fastdepCXX\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"am__fastdepCXX\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"COIN_HAS_ASL\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${SKIPMAKE_TRUE}" && test -z "${SKIPMAKE_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"SKIPMAKE\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"SKIPMAKE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -20768,7 +20967,6 @@ do
   case "$ac_config_target" in
   # Handling of arguments.
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "asl_addlibs.txt" ) CONFIG_FILES="$CONFIG_FILES asl_addlibs.txt" ;;
   "compile_MS_ASL" ) CONFIG_FILES="$CONFIG_FILES compile_MS_ASL" ;;
   "compile_Unix_ASL" ) CONFIG_FILES="$CONFIG_FILES compile_Unix_ASL" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
@@ -20950,6 +21148,13 @@ s,@ac_c_preproc_warn_flag@,$ac_c_preproc_warn_flag,;t t
 s,@ac_cxx_preproc_warn_flag@,$ac_cxx_preproc_warn_flag,;t t
 s,@RPATH_FLAGS@,$RPATH_FLAGS,;t t
 s,@LT_LDFLAGS@,$LT_LDFLAGS,;t t
+s,@ASLLIB@,$ASLLIB,;t t
+s,@ASL_CPPFLAGS@,$ASL_CPPFLAGS,;t t
+s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
+s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
+s,@MAKEOKFILE@,$MAKEOKFILE,;t t
+s,@SKIPMAKE_TRUE@,$SKIPMAKE_TRUE,;t t
+s,@SKIPMAKE_FALSE@,$SKIPMAKE_FALSE,;t t
 s,@AMPLSOLVER_A@,$AMPLSOLVER_A,;t t
 s,@ASLMAKEFLAGS@,$ASLMAKEFLAGS,;t t
 s,@MSVC_COMPILE_TRUE@,$MSVC_COMPILE_TRUE,;t t

@@ -27,8 +27,6 @@
 ########################################################################
 #                    Documentation installation                        #
 ########################################################################
-
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -51,14 +49,13 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = README $(am__configure_deps) \
+DIST_COMMON = $(am__configure_deps) \
 	$(srcdir)/../../BuildTools/Makemain.inc \
 	$(srcdir)/../../config.guess $(srcdir)/../../config.sub \
 	$(srcdir)/../../install-sh $(srcdir)/../../ltmain.sh \
 	$(srcdir)/../../missing $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/asl_addlibs.txt.in \
-	$(srcdir)/compile_MS_ASL.in $(srcdir)/compile_Unix_ASL.in \
-	$(thirdpartyinclude_HEADERS) $(top_srcdir)/configure
+	$(srcdir)/Makefile.in $(srcdir)/compile_MS_ASL.in \
+	$(srcdir)/compile_Unix_ASL.in $(top_srcdir)/configure
 @HAVE_EXTERNALS_TRUE@am__append_1 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_2 = .Externals-stamp
 subdir = .
@@ -70,23 +67,9 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = asl_addlibs.txt compile_MS_ASL compile_Unix_ASL
+CONFIG_CLEAN_FILES = compile_MS_ASL compile_Unix_ASL
 SOURCES =
 DIST_SOURCES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(addlibsdir)" \
-	"$(DESTDIR)$(thirdpartyincludedir)"
-addlibsDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(addlibs_DATA)
-thirdpartyincludeHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(thirdpartyinclude_HEADERS)
-ETAGS = etags
-CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -108,7 +91,9 @@ AMDEP_TRUE = @AMDEP_TRUE@
 AMPLSOLVER_A = @AMPLSOLVER_A@
 AMTAR = @AMTAR@
 AR = @AR@
+ASLLIB = @ASLLIB@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
+ASL_CPPFLAGS = @ASL_CPPFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -119,6 +104,8 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
+COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -157,6 +144,7 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
+MAKEOKFILE = @MAKEOKFILE@
 MPICC = @MPICC@
 MSVC_COMPILE_FALSE = @MSVC_COMPILE_FALSE@
 MSVC_COMPILE_TRUE = @MSVC_COMPILE_TRUE@
@@ -173,6 +161,8 @@ RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SKIPMAKE_FALSE = @SKIPMAKE_FALSE@
+SKIPMAKE_TRUE = @SKIPMAKE_TRUE@
 STRIP = @STRIP@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
@@ -237,20 +227,8 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_1)
 ########################################################################
 compdir = compdir
 libampl = $(AMPLSOLVER_A)
-
-#if SKIPMAKE
-#  alltargets =
-#else
-alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
-thirdpartylibdir = $(prefix)/lib/ThirdParty
-addlibsdir = $(prefix)/share/doc/coin/ThirdParty/ASL
-addlibs_DATA = README asl_addlibs.txt
-thirdpartyincludedir = $(includedir)/coin/ThirdParty
-thirdpartyinclude_HEADERS = \
-  solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
-  solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
-  stdio1.h arith.h
-
+@SKIPMAKE_FALSE@alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+@SKIPMAKE_TRUE@alltargets = 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
@@ -297,8 +275,6 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(srcdir) && $(AUTOCONF)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
-asl_addlibs.txt: $(top_builddir)/config.status $(srcdir)/asl_addlibs.txt.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 compile_MS_ASL: $(top_builddir)/config.status $(srcdir)/compile_MS_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 compile_Unix_ASL: $(top_builddir)/config.status $(srcdir)/compile_Unix_ASL.in
@@ -313,93 +289,17 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-install-addlibsDATA: $(addlibs_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(addlibsdir)" || $(mkdir_p) "$(DESTDIR)$(addlibsdir)"
-	@list='$(addlibs_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(addlibsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(addlibsdir)/$$f'"; \
-	  $(addlibsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(addlibsdir)/$$f"; \
-	done
-
-uninstall-addlibsDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(addlibs_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(addlibsdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(addlibsdir)/$$f"; \
-	done
-install-thirdpartyincludeHEADERS: $(thirdpartyinclude_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(thirdpartyincludedir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartyincludedir)"
-	@list='$(thirdpartyinclude_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(thirdpartyincludeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(thirdpartyincludedir)/$$f'"; \
-	  $(thirdpartyincludeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(thirdpartyincludedir)/$$f"; \
-	done
-
-uninstall-thirdpartyincludeHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(thirdpartyinclude_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(thirdpartyincludedir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(thirdpartyincludedir)/$$f"; \
-	done
-
-ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
-	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '    { files[$$0] = 1; } \
-	       END { for (i in files) print i; }'`; \
-	mkid -fID $$unique
 tags: TAGS
+TAGS:
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
-	tags=; \
-	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '    { files[$$0] = 1; } \
-	       END { for (i in files) print i; }'`; \
-	if test -z "$(ETAGS_ARGS)$$tags$$unique"; then :; else \
-	  test -n "$$unique" || unique=$$empty_fix; \
-	  $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
-	    $$tags $$unique; \
-	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
-		$(TAGS_FILES) $(LISP)
-	tags=; \
-	here=`pwd`; \
-	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
-	unique=`for i in $$list; do \
-	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
-	  done | \
-	  $(AWK) '    { files[$$0] = 1; } \
-	       END { for (i in files) print i; }'`; \
-	test -z "$(CTAGS_ARGS)$$tags$$unique" \
-	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
-	     $$tags $$unique
+CTAGS:
 
-GTAGS:
-	here=`$(am__cd) $(top_builddir) && pwd` \
-	  && cd $(top_srcdir) \
-	  && gtags -i $(GTAGS_ARGS) $$here
-
-distclean-tags:
-	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/../.. $(distdir)/../../BuildTools $(distdir)/solvers
+	$(mkdir_p) $(distdir)/. $(distdir)/../.. $(distdir)/../../BuildTools
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -525,11 +425,8 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-am
-all-am: Makefile $(DATA) $(HEADERS) all-local
+all-am: Makefile all-local
 installdirs:
-	for dir in "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
-	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -563,8 +460,7 @@ clean-am: clean-generic clean-libtool mostlyclean-am
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-libtool \
-	distclean-tags
+distclean-am: clean-am distclean-generic distclean-libtool
 
 dvi: dvi-am
 
@@ -576,9 +472,9 @@ info: info-am
 
 info-am:
 
-install-data-am: install-addlibsDATA install-thirdpartyincludeHEADERS
+install-data-am:
 
-install-exec-am: install-exec-local
+install-exec-am:
 
 install-info: install-info-am
 
@@ -604,25 +500,20 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-addlibsDATA uninstall-info-am uninstall-local \
-	uninstall-thirdpartyincludeHEADERS
+uninstall-am: uninstall-info-am
 
-.PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
-	clean clean-generic clean-libtool ctags dist dist-all \
-	dist-bzip2 dist-gzip dist-shar dist-tarZ dist-zip distcheck \
-	distclean distclean-generic distclean-libtool distclean-tags \
-	distcleancheck distdir distuninstallcheck dvi dvi-am html \
-	html-am info info-am install install-addlibsDATA install-am \
-	install-data install-data-am install-exec install-exec-am \
-	install-exec-local install-info install-info-am install-man \
-	install-strip install-thirdpartyincludeHEADERS installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-addlibsDATA uninstall-am uninstall-info-am \
-	uninstall-local uninstall-thirdpartyincludeHEADERS
+.PHONY: all all-am all-local am--refresh check check-am clean \
+	clean-generic clean-libtool dist dist-all dist-bzip2 dist-gzip \
+	dist-shar dist-tarZ dist-zip distcheck distclean \
+	distclean-generic distclean-libtool distcleancheck distdir \
+	distuninstallcheck dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-exec \
+	install-exec-am install-info install-info-am install-man \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	uninstall uninstall-am uninstall-info-am
 
-#endif
 
 all-local: $(alltargets)
 
@@ -632,12 +523,6 @@ all-local: $(alltargets)
 @MSVC_COMPILE_FALSE@	./compile_Unix_ASL
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
-install-exec-local: $(libampl)
-	test -z "$(DESTDIR)$(thirdpartylibdir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartylibdir)"
-	$(install_sh_DATA) $(libampl) "$(DESTDIR)$(thirdpartylibdir)/$(libampl)"
-
-uninstall-local:
-	rm -f $(DESTDIR)$(thirdpartylibdir)/$(libampl)
 
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"

@@ -16,11 +16,11 @@ compdir = compdir
 
 libampl   = $(AMPLSOLVER_A)
 
-#if SKIPMAKE
-#  alltargets =
-#else
+if SKIPMAKE
+  alltargets =
+else
   alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
-#endif
+endif
 
 all-local: $(alltargets)
 
@@ -33,23 +33,6 @@ $(libampl):
 endif
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
-
-thirdpartylibdir = $(prefix)/lib/ThirdParty
-install-exec-local: $(libampl)
-	test -z "$(DESTDIR)$(thirdpartylibdir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartylibdir)"
-	$(install_sh_DATA) $(libampl) "$(DESTDIR)$(thirdpartylibdir)/$(libampl)"
-
-uninstall-local:
-	rm -f $(DESTDIR)$(thirdpartylibdir)/$(libampl)
-
-addlibsdir = $(prefix)/share/doc/coin/ThirdParty/ASL
-addlibs_DATA = README asl_addlibs.txt
-
-thirdpartyincludedir = $(includedir)/coin/ThirdParty
-thirdpartyinclude_HEADERS = \
-  solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
-  solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
-  stdio1.h arith.h
 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
