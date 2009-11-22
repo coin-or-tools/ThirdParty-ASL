@@ -70,18 +70,6 @@ case "$CC" in
 esac
 
 
-#MAKEOKFILE=.MakeOk
-#if test $coin_has_asl != no && test "$use_asldir" != BUILD; then
-#  skip_further_test=yes
-#  rm -f $MAKEOKFILE
-#  AC_MSG_NOTICE([The ASL sources don't need to be compiled])
-#  MAKEOKFILE=
-#else
-#  touch $MAKEOKFILE
-#fi
-#AC_SUBST(MAKEOKFILE)
-#AM_CONDITIONAL(SKIPMAKE, test -z "$MAKEOKFILE")
-
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
 #############################################################################
