@@ -1,0 +1,9 @@
+prefix=@prefix@
+libdir=@exec_prefix@/lib/ThirdParty
+includedir=${prefix}/include/coin/ThirdParty
+
+Name: ASL
+Description: AMPL Solver Library
+Version: @PACKAGE_VERSION@
+Libs: ${libdir}/@AMPLSOLVER_A@ @ADDLIBS@
+Cflags: -I${includedir}

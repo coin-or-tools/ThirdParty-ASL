@@ -56,7 +56,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../../config.guess $(srcdir)/../../config.sub \
 	$(srcdir)/../../install-sh $(srcdir)/../../ltmain.sh \
 	$(srcdir)/../../missing $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/asl_addlibs.txt.in \
+	$(srcdir)/Makefile.in $(srcdir)/asl-uninstalled.pc.in \
+	$(srcdir)/asl.pc.in $(srcdir)/asl_addlibs.txt.in \
 	$(srcdir)/compile_MS_ASL.in $(srcdir)/compile_Unix_ASL.in \
 	$(thirdpartyinclude_HEADERS) $(top_srcdir)/configure
 @HAVE_EXTERNALS_TRUE@am__append_1 = Externals
@@ -70,7 +71,8 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = asl_addlibs.txt compile_MS_ASL compile_Unix_ASL
+CONFIG_CLEAN_FILES = asl_addlibs.txt compile_MS_ASL compile_Unix_ASL \
+	asl.pc asl-uninstalled.pc
 SOURCES =
 DIST_SOURCES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -80,9 +82,11 @@ am__vpath_adj = case $$p in \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(addlibsdir)" \
+	"$(DESTDIR)$(pkgconfiglibdir)" \
 	"$(DESTDIR)$(thirdpartyincludedir)"
 addlibsDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(addlibs_DATA)
+pkgconfiglibDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(addlibs_DATA) $(pkgconfiglib_DATA)
 thirdpartyincludeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(thirdpartyinclude_HEADERS)
 ETAGS = etags
@@ -252,6 +256,8 @@ thirdpartyinclude_HEADERS = \
   solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
   stdio1.h arith.h
 
+pkgconfiglibdir = $(prefix)/lib/ThirdParty/pkgconfig
+pkgconfiglib_DATA = asl.pc
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
@@ -304,6 +310,10 @@ compile_MS_ASL: $(top_builddir)/config.status $(srcdir)/compile_MS_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 compile_Unix_ASL: $(top_builddir)/config.status $(srcdir)/compile_Unix_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+asl.pc: $(top_builddir)/config.status $(srcdir)/asl.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+asl-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/asl-uninstalled.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -330,6 +340,23 @@ uninstall-addlibsDATA:
 	  f=$(am__strip_dir) \
 	  echo " rm -f '$(DESTDIR)$(addlibsdir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
+install-pkgconfiglibDATA: $(pkgconfiglib_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfiglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkgconfiglibdir)"
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(pkgconfiglibDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  $(pkgconfiglibDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
+
+uninstall-pkgconfiglibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
 	done
 install-thirdpartyincludeHEADERS: $(thirdpartyinclude_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -528,7 +555,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA) $(HEADERS) all-local
 installdirs:
-	for dir in "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
+	for dir in "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -577,7 +604,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-addlibsDATA install-thirdpartyincludeHEADERS
+install-data-am: install-addlibsDATA install-pkgconfiglibDATA \
+	install-thirdpartyincludeHEADERS
 
 install-exec-am: install-exec-local
 
@@ -606,7 +634,7 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-addlibsDATA uninstall-info-am uninstall-local \
-	uninstall-thirdpartyincludeHEADERS
+	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS
 
 .PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
 	clean clean-generic clean-libtool ctags dist dist-all \
@@ -616,12 +644,13 @@ uninstall-am: uninstall-addlibsDATA uninstall-info-am uninstall-local \
 	html-am info info-am install install-addlibsDATA install-am \
 	install-data install-data-am install-exec install-exec-am \
 	install-exec-local install-info install-info-am install-man \
-	install-strip install-thirdpartyincludeHEADERS installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-addlibsDATA uninstall-am uninstall-info-am \
-	uninstall-local uninstall-thirdpartyincludeHEADERS
+	install-pkgconfiglibDATA install-strip \
+	install-thirdpartyincludeHEADERS installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags uninstall uninstall-addlibsDATA uninstall-am \
+	uninstall-info-am uninstall-local uninstall-pkgconfiglibDATA \
+	uninstall-thirdpartyincludeHEADERS
 
 #endif
 

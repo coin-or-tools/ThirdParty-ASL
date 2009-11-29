@@ -19816,36 +19816,25 @@ fi
 #END
 }
 
-# See what we're actually going to do for ASL. This will define ampllib.
-#AC_COIN_HAS_ASL
-
-# Determine the name of the ASL library
-case "$CC" in
-  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    ampllib=amplsolv.lib ;;
-  *)
-    ampllib=amplsolver.a ;;
-esac
-
-
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
 #############################################################################
 
-if test x$skip_further_test != xyes; then
+# Determine the name of the ASL library
 
-# Set a substitutable variable with the library name, and determine the
-# compilation style.
+# Set a substitutable variable with the library name, and determine the compilation style.
 
-
-  AMPLSOLVER_A=$ampllib
-  case "$CC" in
-    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-      msvc_compile=yes ;;
-    *)
-      msvc_compile=no ;;
-  esac
-  { echo "$as_me:$LINENO: Configuring ASL to build $AMPLSOLVER_A." >&5
+case "$CC" in
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+    AMPLSOLVER_A=amplsolv.lib
+    msvc_compile=yes
+    ;;
+  *)
+    AMPLSOLVER_A=amplsolver.a
+    msvc_compile=no
+    ;;
+esac
+{ echo "$as_me:$LINENO: Configuring ASL to build $AMPLSOLVER_A." >&5
 echo "$as_me: Configuring ASL to build $AMPLSOLVER_A." >&6;}
 
 # Determine flags to be passed on the command line to (n)make. The main
@@ -19854,21 +19843,20 @@ echo "$as_me: Configuring ASL to build $AMPLSOLVER_A." >&6;}
 # NON_STDIO no longer appears in any source file; removed all mention.
 # No_Control87 seems to be specific to DEC Alpha. Try leaving it undefined.
 
-  if test -z "$ASLMAKEFLAGS" ; then
-    asladdcflags=
-    case $build in
-      *-linux*)
-        case $CC in
-          pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
-            asladdcflags="$asladdcflags -DNO_fpu_control";;
-        esac
-        ;;
-    esac
+if test -z "$ASLMAKEFLAGS" ; then
+  asladdcflags=
+  case $build in
+    *-linux*)
+      case $CC in
+        pgcc* | */pgcc* | xlc* | */xlc* | blrts_xlc* | */blrts_xlc*)
+          asladdcflags="$asladdcflags -DNO_fpu_control";;
+      esac
+      ;;
+  esac
 
 # Various feature checks. Force the language to be C while we do this to avoid
 # issues with C++ (re)declarations.
-
-    ac_ext=c
+  ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -19877,9 +19865,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # The critical function for NO_RUSAGE is getrusage(). Use a standard test.
 
-    echo "$as_me:$LINENO: checking for getrusage" >&5
+  echo "$as_me:$LINENO: checking for getrusage" >&5
 echo $ECHO_N "checking for getrusage... $ECHO_C" >&6
-    cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -19923,7 +19911,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 asladdcflags="$asladdcflags -DNO_RUSAGE"
-       echo "$as_me:$LINENO: result: no" >&5
+     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 rm -f conftest.err conftest.$ac_objext \
@@ -19936,7 +19924,7 @@ rm -f conftest.err conftest.$ac_objext \
 # this check. It's hardly likely that long long is missing on any modern
 # system, but it's easy to check.
 
-    echo "$as_me:$LINENO: checking for long long" >&5
+  echo "$as_me:$LINENO: checking for long long" >&5
 echo $ECHO_N "checking for long long... $ECHO_C" >&6
 if test "${ac_cv_type_long_long+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -20000,8 +19988,7 @@ fi
 
 
 # Back to whatever language we were in.
-
-    ac_ext=c
+  ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -20009,60 +19996,53 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 # On BlueGene disable dynamic library loading
-
-    if test x"$enable_bg" = xyes; then
-      asladdcflags="$asladdcflags -DNO_FUNCADD"
-    fi
+  if test x"$enable_bg" = xyes; then
+    asladdcflags="$asladdcflags -DNO_FUNCADD"
+  fi
 
 # Groom CFLAGS before we merge it with asladdcflags.
 # Remove -Werror if present, to make sure we are not interrupting compilation
 # of ASL because of warning messages. The cl equivalent is -WX.
-
-    bla=
-    if test x$msvc_compile = xyes ; then
-      warnToErr="-WX"
-    else
-      warnToErr="-Werror"
+  bla=
+  if test x$msvc_compile = xyes ; then
+    warnToErr="-WX"
+  else
+    warnToErr="-Werror"
+  fi
+  for i in $CFLAGS; do
+    if test "$i" != "$warnToErr"; then
+      bla="$bla $i"
     fi
-    for i in $CFLAGS; do
-      if test "$i" != "$warnToErr"; then
-        bla="$bla $i"
-      fi
-    done
-    ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
+  done
+  ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
 # Somehow, the flags specified here cause ASL to segfault on the AIX
 # compiler, so take them out.
-
-    case $CC in
-      xlc* | */xlc* | mpxlc* | */mpxlc*)
-        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
-        ;;
-      pgcc* | */pgcc*)
-        ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-fast/-O1/g'`
-        ;;
-    esac
+  case $CC in
+    xlc* | */xlc* | mpxlc* | */mpxlc*)
+      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
+      ;;
+    pgcc* | */pgcc*)
+      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-fast/-O1/g'`
+      ;;
+  esac
 
 # Limit GNU make to one thread. But remember that if we're building with
 # cl, ultimately we're going to use nmake, which knows nothing of this.
-
-    if test x$msvc_compile = xno ; then
-      rm -rf conftest.mak
-      ($am_make -v > conftest.grp) 2>&5
-      if $EGREP GNU conftest.grp >&5 ; then
-	ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
-      fi
-      rm -f conftest.grp
+  if test x$msvc_compile = xno ; then
+    rm -rf conftest.mak
+    ($am_make -v > conftest.grp) 2>&5
+    if $EGREP GNU conftest.grp >&5 ; then
+      ASLMAKEFLAGS="-j 1 $ASLMAKEFLAGS"
     fi
+    rm -f conftest.grp
   fi
-
+fi
 # End if-then to construct ASLMAKEFLAGS. Announce the result.
 
-  { echo "$as_me:$LINENO: Command line flags for (n)make \"$ASLMAKEFLAGS\"." >&5
+{ echo "$as_me:$LINENO: Command line flags for (n)make \"$ASLMAKEFLAGS\"." >&5
 echo "$as_me: Command line flags for (n)make \"$ASLMAKEFLAGS\"." >&6;}
 
-
-fi
 
 # Set automake conditional and generate the output files.
 
@@ -20082,6 +20062,8 @@ fi
           ac_config_files="$ac_config_files compile_MS_ASL"
 
           ac_config_files="$ac_config_files compile_Unix_ASL"
+
+                    ac_config_files="$ac_config_files asl.pc asl-uninstalled.pc"
 
 
 
@@ -20765,6 +20747,8 @@ do
   "asl_addlibs.txt" ) CONFIG_FILES="$CONFIG_FILES asl_addlibs.txt" ;;
   "compile_MS_ASL" ) CONFIG_FILES="$CONFIG_FILES compile_MS_ASL" ;;
   "compile_Unix_ASL" ) CONFIG_FILES="$CONFIG_FILES compile_Unix_ASL" ;;
+  "asl.pc" ) CONFIG_FILES="$CONFIG_FILES asl.pc" ;;
+  "asl-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES asl-uninstalled.pc" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

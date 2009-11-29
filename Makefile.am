@@ -51,6 +51,9 @@ thirdpartyinclude_HEADERS = \
   solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
   stdio1.h arith.h
 
+pkgconfiglibdir = $(prefix)/lib/ThirdParty/pkgconfig
+pkgconfiglib_DATA = asl.pc
+
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################

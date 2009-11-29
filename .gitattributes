@@ -2,6 +2,8 @@
 /INSTALL.ASL -text
 /Makefile.am -text
 /README -text
+/asl-uninstalled.pc.in -text
+/asl.pc.in -text
 /asl_addlibs.txt.in -text
 /compile_MS_ASL.in -text
 /compile_Unix_ASL.in -text
