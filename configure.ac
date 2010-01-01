@@ -78,6 +78,14 @@ case "$CC" in
 esac
 AC_MSG_NOTICE([Configuring ASL to build $AMPLSOLVER_A.])
 
+# Set substitutable variables with the absolute path to the library name
+# translate to windows style if necessary, but use slashes instead of backslashes
+ABSPATH_AMPLSOLVER_INSTALLED=`${CYGPATH_W} ${prefix}/lib/ThirdParty/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
+curdir=`pwd`
+ABSPATH_AMPLSOLVER_UNINSTALLED=`${CYGPATH_W} ${curdir}/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
+AC_SUBST(ABSPATH_AMPLSOLVER_INSTALLED)
+AC_SUBST(ABSPATH_AMPLSOLVER_UNINSTALLED)
+
 # Determine flags to be passed on the command line to (n)make. The main
 # activity is to groom CFLAGS and set up ASLMAKEFLAGS to pass CFLAGS on the
 # (n)make command line.
