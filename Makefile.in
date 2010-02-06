@@ -56,8 +56,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../../config.guess $(srcdir)/../../config.sub \
 	$(srcdir)/../../install-sh $(srcdir)/../../ltmain.sh \
 	$(srcdir)/../../missing $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/asl-uninstalled.pc.in \
-	$(srcdir)/asl.pc.in $(srcdir)/asl_addlibs.txt.in \
+	$(srcdir)/Makefile.in $(srcdir)/asl_addlibs.txt.in \
+	$(srcdir)/coinasl-uninstalled.pc.in $(srcdir)/coinasl.pc.in \
 	$(srcdir)/compile_MS_ASL.in $(srcdir)/compile_Unix_ASL.in \
 	$(thirdpartyinclude_HEADERS) $(top_srcdir)/configure
 @HAVE_EXTERNALS_TRUE@am__append_1 = Externals
@@ -72,7 +72,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = asl_addlibs.txt compile_MS_ASL compile_Unix_ASL \
-	asl.pc asl-uninstalled.pc
+	coinasl.pc coinasl-uninstalled.pc
 SOURCES =
 DIST_SOURCES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -249,8 +249,8 @@ libampl = $(AMPLSOLVER_A)
 #  alltargets =
 #else
 alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
-thirdpartylibdir = $(prefix)/lib/ThirdParty
-addlibsdir = $(prefix)/share/doc/coin/ThirdParty/ASL
+thirdpartylibdir = $(libdir)/coin/ThirdParty
+addlibsdir = $(datadir)/coin/doc/ThirdParty/ASL
 addlibs_DATA = README asl_addlibs.txt
 thirdpartyincludedir = $(includedir)/coin/ThirdParty
 thirdpartyinclude_HEADERS = \
@@ -258,8 +258,8 @@ thirdpartyinclude_HEADERS = \
   solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
   stdio1.h arith.h
 
-pkgconfiglibdir = $(prefix)/lib/ThirdParty/pkgconfig
-pkgconfiglib_DATA = asl.pc
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = coinasl.pc
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
@@ -312,9 +312,9 @@ compile_MS_ASL: $(top_builddir)/config.status $(srcdir)/compile_MS_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 compile_Unix_ASL: $(top_builddir)/config.status $(srcdir)/compile_Unix_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-asl.pc: $(top_builddir)/config.status $(srcdir)/asl.pc.in
+coinasl.pc: $(top_builddir)/config.status $(srcdir)/coinasl.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-asl-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/asl-uninstalled.pc.in
+coinasl-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/coinasl-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:

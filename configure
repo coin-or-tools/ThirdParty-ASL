@@ -19839,7 +19839,7 @@ echo "$as_me: Configuring ASL to build $AMPLSOLVER_A." >&6;}
 
 # Set substitutable variables with the absolute path to the library name
 # translate to windows style if necessary, but use slashes instead of backslashes
-ABSPATH_AMPLSOLVER_INSTALLED=`${CYGPATH_W} ${prefix}/lib/ThirdParty/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
+ABSPATH_AMPLSOLVER_INSTALLED=`${CYGPATH_W} ${libdir}/coin/ThirdParty/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
 curdir=`pwd`
 ABSPATH_AMPLSOLVER_UNINSTALLED=`${CYGPATH_W} ${curdir}/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
 
@@ -20071,7 +20071,7 @@ fi
 
           ac_config_files="$ac_config_files compile_Unix_ASL"
 
-                    ac_config_files="$ac_config_files asl.pc asl-uninstalled.pc"
+                    ac_config_files="$ac_config_files coinasl.pc coinasl-uninstalled.pc"
 
 
 
@@ -20755,8 +20755,8 @@ do
   "asl_addlibs.txt" ) CONFIG_FILES="$CONFIG_FILES asl_addlibs.txt" ;;
   "compile_MS_ASL" ) CONFIG_FILES="$CONFIG_FILES compile_MS_ASL" ;;
   "compile_Unix_ASL" ) CONFIG_FILES="$CONFIG_FILES compile_Unix_ASL" ;;
-  "asl.pc" ) CONFIG_FILES="$CONFIG_FILES asl.pc" ;;
-  "asl-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES asl-uninstalled.pc" ;;
+  "coinasl.pc" ) CONFIG_FILES="$CONFIG_FILES coinasl.pc" ;;
+  "coinasl-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES coinasl-uninstalled.pc" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

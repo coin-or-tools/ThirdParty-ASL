@@ -34,7 +34,7 @@ endif
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
-thirdpartylibdir = $(prefix)/lib/ThirdParty
+thirdpartylibdir = $(libdir)/coin/ThirdParty
 install-exec-local: $(libampl)
 	test -z "$(DESTDIR)$(thirdpartylibdir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartylibdir)"
 	$(install_sh_DATA) $(libampl) "$(DESTDIR)$(thirdpartylibdir)/$(libampl)"
@@ -42,7 +42,7 @@ install-exec-local: $(libampl)
 uninstall-local:
 	rm -f $(DESTDIR)$(thirdpartylibdir)/$(libampl)
 
-addlibsdir = $(prefix)/share/doc/coin/ThirdParty/ASL
+addlibsdir = $(datadir)/coin/doc/ThirdParty/ASL
 addlibs_DATA = README asl_addlibs.txt
 
 thirdpartyincludedir = $(includedir)/coin/ThirdParty
@@ -51,8 +51,8 @@ thirdpartyinclude_HEADERS = \
   solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
   stdio1.h arith.h
 
-pkgconfiglibdir = $(prefix)/lib/ThirdParty/pkgconfig
-pkgconfiglib_DATA = asl.pc
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = coinasl.pc
 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 

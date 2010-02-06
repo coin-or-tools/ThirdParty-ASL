@@ -80,7 +80,7 @@ AC_MSG_NOTICE([Configuring ASL to build $AMPLSOLVER_A.])
 
 # Set substitutable variables with the absolute path to the library name
 # translate to windows style if necessary, but use slashes instead of backslashes
-ABSPATH_AMPLSOLVER_INSTALLED=`${CYGPATH_W} ${prefix}/lib/ThirdParty/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
+ABSPATH_AMPLSOLVER_INSTALLED=`${CYGPATH_W} ${libdir}/coin/ThirdParty/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
 curdir=`pwd`
 ABSPATH_AMPLSOLVER_UNINSTALLED=`${CYGPATH_W} ${curdir}/${AMPLSOLVER_A} | sed -e 's/\\\\/\\//g'`
 AC_SUBST(ABSPATH_AMPLSOLVER_INSTALLED)
@@ -184,6 +184,6 @@ AM_CONDITIONAL(MSVC_COMPILE, test x$msvc_compile = xyes)
 AC_CONFIG_FILES([Makefile asl_addlibs.txt])
 AC_CONFIG_FILES([compile_MS_ASL],[chmod a+x compile_MS_ASL])
 AC_CONFIG_FILES([compile_Unix_ASL],[chmod a+x compile_Unix_ASL])
-AC_CONFIG_FILES([asl.pc asl-uninstalled.pc])
+AC_CONFIG_FILES([coinasl.pc coinasl-uninstalled.pc])
 
 AC_COIN_FINALIZE
