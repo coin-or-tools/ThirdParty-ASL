@@ -58,6 +58,9 @@ AC_COIN_PROG_CC
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
 
+# Check if pkg-config is available (to setup addlibs file)
+AC_COIN_HAS_PKGCONFIG
+
 #############################################################################
 #                          AMPL SOLVER LIBRARY                              #
 #############################################################################
@@ -181,7 +184,7 @@ AC_ARG_VAR(ASLMAKEFLAGS, [Compilation flags necessary for compiling the AMPL sol
 
 AM_CONDITIONAL(MSVC_COMPILE, test x$msvc_compile = xyes)
 
-AC_CONFIG_FILES([Makefile asl_addlibs.txt])
+AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([compile_MS_ASL],[chmod a+x compile_MS_ASL])
 AC_CONFIG_FILES([compile_Unix_ASL],[chmod a+x compile_Unix_ASL])
 AC_CONFIG_FILES([coinasl.pc coinasl-uninstalled.pc])
