@@ -44,7 +44,7 @@ addlibsdir = $(datadir)/coin/doc/ThirdParty/ASL
 addlibs_DATA = asl_addlibs.txt
 
 asl_addlibs.txt : coinasl.pc
-	PKG_CONFIG_PATH=.:$(libdir)/pkgconfig:${PKG_CONFIG_PATH} $(PKG_CONFIG) --libs coinasl > asl_addlibs.txt
+	PKG_CONFIG_PATH=.:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs coinasl > asl_addlibs.txt
 endif
 
 pkgconfiglibdir = $(libdir)/pkgconfig
