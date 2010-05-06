@@ -3,7 +3,7 @@
 set -e
 
 wgetcmd=wget
-wgetcount=`which wget 2>/dev/null | wc -w`
+wgetcount=`which wget 2>/dev/null | wc -l`
 if test ! $wgetcount = 1; then
   echo "Utility wget not found in your PATH."
   if test `uname` = Darwin; then
