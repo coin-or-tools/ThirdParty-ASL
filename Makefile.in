@@ -27,6 +27,8 @@
 ########################################################################
 #                    Documentation installation                        #
 ########################################################################
+
+
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -54,8 +56,10 @@ DIST_COMMON = $(am__configure_deps) \
 	$(srcdir)/../../config.guess $(srcdir)/../../config.sub \
 	$(srcdir)/../../install-sh $(srcdir)/../../ltmain.sh \
 	$(srcdir)/../../missing $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/compile_MS_ASL.in \
-	$(srcdir)/compile_Unix_ASL.in $(top_srcdir)/configure
+	$(srcdir)/Makefile.in $(srcdir)/coinasl-uninstalled.pc.in \
+	$(srcdir)/coinasl.pc.in $(srcdir)/compile_MS_ASL.in \
+	$(srcdir)/compile_Unix_ASL.in $(thirdpartyinclude_HEADERS) \
+	$(top_srcdir)/configure
 @HAVE_EXTERNALS_TRUE@am__append_1 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_2 = .Externals-stamp
 subdir = .
@@ -67,9 +71,27 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES = compile_MS_ASL compile_Unix_ASL
+CONFIG_CLEAN_FILES = compile_MS_ASL compile_Unix_ASL coinasl.pc \
+	coinasl-uninstalled.pc
 SOURCES =
 DIST_SOURCES =
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(addlibsdir)" \
+	"$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartylibdir)" \
+	"$(DESTDIR)$(thirdpartyincludedir)"
+addlibsDATA_INSTALL = $(INSTALL_DATA)
+pkgconfiglibDATA_INSTALL = $(INSTALL_DATA)
+thirdpartylibDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(addlibs_DATA) $(pkgconfiglib_DATA) $(thirdpartylib_DATA)
+thirdpartyincludeHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(thirdpartyinclude_HEADERS)
+ETAGS = etags
+CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -81,6 +103,9 @@ DIST_ARCHIVES = $(distdir).tar.gz
 GZIP_ENV = --best
 distuninstallcheck_listfiles = find . -type f -print
 distcleancheck_listfiles = find . -type f -print
+ABSBUILDDIR = @ABSBUILDDIR@
+ABSPATH_AMPLSOLVER_INSTALLED = @ABSPATH_AMPLSOLVER_INSTALLED@
+ABSPATH_AMPLSOLVER_UNINSTALLED = @ABSPATH_AMPLSOLVER_UNINSTALLED@
 ACLOCAL = @ACLOCAL@
 ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
@@ -91,9 +116,7 @@ AMDEP_TRUE = @AMDEP_TRUE@
 AMPLSOLVER_A = @AMPLSOLVER_A@
 AMTAR = @AMTAR@
 AR = @AR@
-ASLLIB = @ASLLIB@
 ASLMAKEFLAGS = @ASLMAKEFLAGS@
-ASL_CPPFLAGS = @ASL_CPPFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -104,8 +127,9 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
-COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
-COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
+COIN_HAS_PKGCONFIG_FALSE = @COIN_HAS_PKGCONFIG_FALSE@
+COIN_HAS_PKGCONFIG_TRUE = @COIN_HAS_PKGCONFIG_TRUE@
+COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
@@ -144,7 +168,6 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
-MAKEOKFILE = @MAKEOKFILE@
 MPICC = @MPICC@
 MSVC_COMPILE_FALSE = @MSVC_COMPILE_FALSE@
 MSVC_COMPILE_TRUE = @MSVC_COMPILE_TRUE@
@@ -157,15 +180,15 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
-SKIPMAKE_FALSE = @SKIPMAKE_FALSE@
-SKIPMAKE_TRUE = @SKIPMAKE_TRUE@
 STRIP = @STRIP@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
+_SVN_REV = @_SVN_REV@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
@@ -178,6 +201,7 @@ ac_ct_F77 = @ac_ct_F77@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
 ac_cxx_preproc_warn_flag = @ac_cxx_preproc_warn_flag@
+ac_pt_PKG_CONFIG = @ac_pt_PKG_CONFIG@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
 am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
 am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
@@ -198,6 +222,7 @@ exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
 have_svn = @have_svn@
+have_svnversion = @have_svnversion@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -227,9 +252,20 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_1)
 ########################################################################
 compdir = compdir
 libampl = $(AMPLSOLVER_A)
-@SKIPMAKE_FALSE@alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
-@SKIPMAKE_TRUE@alltargets = 
-CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+thirdpartyincludedir = $(includedir)/coin/ThirdParty
+thirdpartyinclude_HEADERS = \
+  solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
+  solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
+  stdio1.h arith.h
+
+thirdpartylibdir = $(libdir)/coin/ThirdParty
+thirdpartylib_DATA = $(libampl)
+@COIN_HAS_PKGCONFIG_TRUE@addlibsdir = $(datadir)/coin/doc/ThirdParty/ASL
+@COIN_HAS_PKGCONFIG_TRUE@addlibs_DATA = asl_addlibs.txt
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = coinasl.pc
+CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT) asl_addlibs.txt
 
 ########################################################################
 #                         Maintainer Stuff                             #
@@ -238,7 +274,7 @@ CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(MAKEOKFILE) $(am__append_2) $(VPATH_DISTCLEANFILES)
 DocFiles = README AUTHORS LICENSE
-DocInstallDir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
+DocInstallDir = $(datadir)/coin/doc/$(PACKAGE_NAME)
 all: all-am
 
 .SUFFIXES:
@@ -279,6 +315,10 @@ compile_MS_ASL: $(top_builddir)/config.status $(srcdir)/compile_MS_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 compile_Unix_ASL: $(top_builddir)/config.status $(srcdir)/compile_Unix_ASL.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+coinasl.pc: $(top_builddir)/config.status $(srcdir)/coinasl.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+coinasl-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/coinasl-uninstalled.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -289,17 +329,127 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+install-addlibsDATA: $(addlibs_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(addlibsdir)" || $(mkdir_p) "$(DESTDIR)$(addlibsdir)"
+	@list='$(addlibs_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(addlibsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(addlibsdir)/$$f'"; \
+	  $(addlibsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
+
+uninstall-addlibsDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(addlibs_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(addlibsdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(addlibsdir)/$$f"; \
+	done
+install-pkgconfiglibDATA: $(pkgconfiglib_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(pkgconfiglibdir)" || $(mkdir_p) "$(DESTDIR)$(pkgconfiglibdir)"
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(pkgconfiglibDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  $(pkgconfiglibDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
+
+uninstall-pkgconfiglibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(pkgconfiglib_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
+	done
+install-thirdpartylibDATA: $(thirdpartylib_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(thirdpartylibdir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartylibdir)"
+	@list='$(thirdpartylib_DATA)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(thirdpartylibDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(thirdpartylibdir)/$$f'"; \
+	  $(thirdpartylibDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(thirdpartylibdir)/$$f"; \
+	done
+
+uninstall-thirdpartylibDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(thirdpartylib_DATA)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(thirdpartylibdir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(thirdpartylibdir)/$$f"; \
+	done
+install-thirdpartyincludeHEADERS: $(thirdpartyinclude_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(thirdpartyincludedir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartyincludedir)"
+	@list='$(thirdpartyinclude_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(thirdpartyincludeHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(thirdpartyincludedir)/$$f'"; \
+	  $(thirdpartyincludeHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(thirdpartyincludedir)/$$f"; \
+	done
+
+uninstall-thirdpartyincludeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(thirdpartyinclude_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(thirdpartyincludedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(thirdpartyincludedir)/$$f"; \
+	done
+
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	mkid -fID $$unique
 tags: TAGS
-TAGS:
 
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	if test -z "$(ETAGS_ARGS)$$tags$$unique"; then :; else \
+	  test -n "$$unique" || unique=$$empty_fix; \
+	  $(ETAGS) $(ETAGSFLAGS) $(AM_ETAGSFLAGS) $(ETAGS_ARGS) \
+	    $$tags $$unique; \
+	fi
 ctags: CTAGS
-CTAGS:
+CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
+	tags=; \
+	here=`pwd`; \
+	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(CTAGS_ARGS)$$tags$$unique" \
+	  || $(CTAGS) $(CTAGSFLAGS) $(AM_CTAGSFLAGS) $(CTAGS_ARGS) \
+	     $$tags $$unique
 
+GTAGS:
+	here=`$(am__cd) $(top_builddir) && pwd` \
+	  && cd $(top_srcdir) \
+	  && gtags -i $(GTAGS_ARGS) $$here
+
+distclean-tags:
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/../.. $(distdir)/../../BuildTools
+	$(mkdir_p) $(distdir)/. $(distdir)/../.. $(distdir)/../../BuildTools $(distdir)/solvers
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -425,8 +575,11 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-am
-all-am: Makefile all-local
+all-am: Makefile $(DATA) $(HEADERS) all-local
 installdirs:
+	for dir in "$(DESTDIR)$(addlibsdir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartylibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
+	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
+	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -460,7 +613,8 @@ clean-am: clean-generic clean-libtool mostlyclean-am
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-libtool
+distclean-am: clean-am distclean-generic distclean-libtool \
+	distclean-tags
 
 dvi: dvi-am
 
@@ -472,7 +626,8 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-addlibsDATA install-pkgconfiglibDATA \
+	install-thirdpartyincludeHEADERS install-thirdpartylibDATA
 
 install-exec-am:
 
@@ -500,19 +655,26 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-addlibsDATA uninstall-info-am \
+	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS \
+	uninstall-thirdpartylibDATA
 
-.PHONY: all all-am all-local am--refresh check check-am clean \
-	clean-generic clean-libtool dist dist-all dist-bzip2 dist-gzip \
-	dist-shar dist-tarZ dist-zip distcheck distclean \
-	distclean-generic distclean-libtool distcleancheck distdir \
-	distuninstallcheck dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-info-am
+.PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
+	clean clean-generic clean-libtool ctags dist dist-all \
+	dist-bzip2 dist-gzip dist-shar dist-tarZ dist-zip distcheck \
+	distclean distclean-generic distclean-libtool distclean-tags \
+	distcleancheck distdir distuninstallcheck dvi dvi-am html \
+	html-am info info-am install install-addlibsDATA install-am \
+	install-data install-data-am install-exec install-exec-am \
+	install-info install-info-am install-man \
+	install-pkgconfiglibDATA install-strip \
+	install-thirdpartyincludeHEADERS install-thirdpartylibDATA \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
+	uninstall-addlibsDATA uninstall-am uninstall-info-am \
+	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS \
+	uninstall-thirdpartylibDATA
 
 
 all-local: $(alltargets)
@@ -523,6 +685,9 @@ all-local: $(alltargets)
 @MSVC_COMPILE_FALSE@	./compile_Unix_ASL
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
+
+@COIN_HAS_PKGCONFIG_TRUE@asl_addlibs.txt : coinasl.pc
+@COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=.:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs coinasl > asl_addlibs.txt
 
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"

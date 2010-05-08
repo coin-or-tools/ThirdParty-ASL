@@ -16,11 +16,7 @@ compdir = compdir
 
 libampl   = $(AMPLSOLVER_A)
 
-if SKIPMAKE
-  alltargets =
-else
-  alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
-endif
+alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 all-local: $(alltargets)
 
@@ -34,7 +30,27 @@ endif
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
-CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+thirdpartyincludedir = $(includedir)/coin/ThirdParty
+thirdpartyinclude_HEADERS = \
+  solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
+  solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
+  stdio1.h arith.h
+
+thirdpartylibdir = $(libdir)/coin/ThirdParty
+thirdpartylib_DATA = $(libampl)
+
+if COIN_HAS_PKGCONFIG
+addlibsdir = $(datadir)/coin/doc/ThirdParty/ASL
+addlibs_DATA = asl_addlibs.txt
+
+asl_addlibs.txt : coinasl.pc
+	PKG_CONFIG_PATH=.:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs coinasl > asl_addlibs.txt
+endif
+
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = coinasl.pc
+
+CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT) asl_addlibs.txt
 
 ########################################################################
 #                         Maintainer Stuff                             #

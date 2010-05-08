@@ -1,0 +1,8 @@
+prefix=@prefix@
+libdir=@ABSBUILDDIR@
+
+Name: ASL
+Description: AMPL Solver Library
+Version: @PACKAGE_VERSION@
+Libs: @ABSPATH_AMPLSOLVER_UNINSTALLED@ @ADDLIBS@
+Cflags: -I@ABSBUILDDIR@ -I@abs_source_dir@/solvers
