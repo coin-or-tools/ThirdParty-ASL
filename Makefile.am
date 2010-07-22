@@ -47,7 +47,7 @@ addlibsdir = $(DESTDIR)$(datadir)/coin/doc/ThirdParty/ASL
 	
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
-	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ PKG_CONFIG_DISABLE_UNINSTALLED= \
+	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs coinasl > $(addlibsdir)/asl_addlibs.txt
 endif
 
