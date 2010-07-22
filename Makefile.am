@@ -39,16 +39,17 @@ thirdpartyinclude_HEADERS = \
 thirdpartylibdir = $(libdir)/coin/ThirdParty
 thirdpartylib_DATA = $(libampl)
 
-if COIN_HAS_PKGCONFIG
-addlibsdir = $(datadir)/coin/doc/ThirdParty/ASL
-addlibs_DATA = asl_addlibs.txt
-
-asl_addlibs.txt : coinasl.pc
-	PKG_CONFIG_PATH=.:@COIN_PKG_CONFIG_PATH@ $(PKG_CONFIG) --libs coinasl > asl_addlibs.txt
-endif
-
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = coinasl.pc
+
+if COIN_HAS_PKGCONFIG
+addlibsdir = $(DESTDIR)$(datadir)/coin/doc/ThirdParty/ASL
+	
+install-data-hook:
+	@$(mkdir_p) "$(addlibsdir)"
+	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ PKG_CONFIG_DISABLE_UNINSTALLED= \
+	$(PKG_CONFIG) --libs coinasl > $(addlibsdir)/asl_addlibs.txt
+endif
 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT) asl_addlibs.txt
 
