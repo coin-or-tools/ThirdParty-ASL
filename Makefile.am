@@ -49,9 +49,12 @@ install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs coinasl > $(addlibsdir)/asl_addlibs.txt
+	
+uninstall-hook:
+	rm -f $(addlibsdir)/asl_addlibs.txt
 endif
 
-CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT) asl_addlibs.txt
+CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
 #                         Maintainer Stuff                             #
