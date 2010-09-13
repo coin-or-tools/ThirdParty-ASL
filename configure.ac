@@ -189,4 +189,7 @@ AC_CONFIG_FILES([compile_MS_ASL],[chmod a+x compile_MS_ASL])
 AC_CONFIG_FILES([compile_Unix_ASL],[chmod a+x compile_Unix_ASL])
 AC_CONFIG_FILES([coinasl.pc coinasl-uninstalled.pc])
 
+AC_COIN_CHECK_LIBM(ASL)
+AC_SUBST(ASL_PCLIBS)
+
 AC_COIN_FINALIZE
