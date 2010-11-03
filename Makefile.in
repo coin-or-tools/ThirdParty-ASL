@@ -680,6 +680,9 @@ stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 @COIN_HAS_PKGCONFIG_TRUE@uninstall-hook:
 @COIN_HAS_PKGCONFIG_TRUE@	rm -f $(addlibsdir)/asl_addlibs.txt
 
+test: $(libampl)
+	@echo "No test available for ASL."
+
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
 	for file in $(DocFiles); do \

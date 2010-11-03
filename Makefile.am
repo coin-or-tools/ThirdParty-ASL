@@ -54,6 +54,9 @@ uninstall-hook:
 	rm -f $(addlibsdir)/asl_addlibs.txt
 endif
 
+test: $(libampl)
+	@echo "No test available for ASL."
+
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
