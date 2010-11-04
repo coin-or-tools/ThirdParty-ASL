@@ -39,7 +39,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_CANONICAL_BUILD
 
 # A bit of initial setup.
-AC_COIN_PROJECTDIR_INIT(ASL,2:0:2)
+AC_COIN_PROJECTDIR_INIT(ASL,2:0:1)
 
 # Turn off warnings and pedantic mode since they could make trouble on some
 # platforms, and we can't fix issues in third-party code.
