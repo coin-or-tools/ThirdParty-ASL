@@ -71,11 +71,11 @@ AC_COIN_HAS_PKGCONFIG
 AC_SUBST(AMPLSOLVER_A)
 case "$CC" in
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    AMPLSOLVER_A=amplsolv.lib
+    AMPLSOLVER_A=libamplsolver.lib
     msvc_compile=yes
     ;;
   *)
-    AMPLSOLVER_A=amplsolver.a
+    AMPLSOLVER_A=libamplsolver.a
     msvc_compile=no
     ;;
 esac

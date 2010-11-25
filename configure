@@ -20096,11 +20096,11 @@ fi
 
 case "$CC" in
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    AMPLSOLVER_A=amplsolv.lib
+    AMPLSOLVER_A=libamplsolv.lib
     msvc_compile=yes
     ;;
   *)
-    AMPLSOLVER_A=amplsolver.a
+    AMPLSOLVER_A=libamplsolver.a
     msvc_compile=no
     ;;
 esac
