@@ -6,5 +6,5 @@ includedir=@includedir@/coin/ThirdParty
 Name: ASL
 Description: AMPL Solver Library
 Version: @PACKAGE_VERSION@
-Libs: @ABSPATH_AMPLSOLVER_INSTALLED@ @ASL_PCLIBS@
+Libs: -L${libdir} -lamplsolver @ASL_PCLIBS@
 Cflags: -I${includedir}
