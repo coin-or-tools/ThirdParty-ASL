@@ -13,7 +13,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([ThirdPartyASL],[trunk],[http://projects.coin-or.org/BuildTools/newticket])
+AC_INIT([ThirdPartyASL],[1.2],[http://projects.coin-or.org/BuildTools/newticket])
 
 AC_COPYRIGHT([
 Copyright 2006, 2007, 2009 International Business Machines and others.
