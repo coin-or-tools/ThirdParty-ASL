@@ -36,7 +36,7 @@ thirdpartyinclude_HEADERS = \
   solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
   stdio1.h arith.h
 
-thirdpartylibdir = $(libdir)/coin/ThirdParty
+thirdpartylibdir = $(libdir)
 thirdpartylib_DATA = $(libampl)
 
 pkgconfiglibdir = $(libdir)/pkgconfig
