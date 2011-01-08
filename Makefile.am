@@ -30,6 +30,9 @@ endif
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
+test:
+	@echo "No test available for ASL."
+
 thirdpartyincludedir = $(includedir)/coin/ThirdParty
 thirdpartyinclude_HEADERS = \
   solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
@@ -41,18 +44,6 @@ thirdpartylib_DATA = $(libampl)
 
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = coinasl.pc
-
-if COIN_HAS_PKGCONFIG
-addlibsdir = $(DESTDIR)$(datadir)/coin/doc/ThirdParty/ASL
-	
-install-data-hook:
-	@$(mkdir_p) "$(addlibsdir)"
-	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
-	$(PKG_CONFIG) --libs coinasl > $(addlibsdir)/asl_addlibs.txt
-	
-uninstall-hook:
-	rm -f $(addlibsdir)/asl_addlibs.txt
-endif
 
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 

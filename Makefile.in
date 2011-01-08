@@ -259,7 +259,6 @@ thirdpartylibdir = $(libdir)
 thirdpartylib_DATA = $(libampl)
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = coinasl.pc
-@COIN_HAS_PKGCONFIG_TRUE@addlibsdir = $(DESTDIR)$(datadir)/coin/doc/ThirdParty/ASL
 CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
 
 ########################################################################
@@ -584,8 +583,6 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-@COIN_HAS_PKGCONFIG_FALSE@install-data-hook:
-@COIN_HAS_PKGCONFIG_FALSE@uninstall-hook:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -608,8 +605,6 @@ info-am:
 
 install-data-am: install-pkgconfiglibDATA \
 	install-thirdpartyincludeHEADERS install-thirdpartylibDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-data-hook
 
 install-exec-am:
 
@@ -639,8 +634,6 @@ ps-am:
 
 uninstall-am: uninstall-info-am uninstall-pkgconfiglibDATA \
 	uninstall-thirdpartyincludeHEADERS uninstall-thirdpartylibDATA
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 
 .PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
 	clean clean-generic clean-libtool ctags dist dist-all \
@@ -648,14 +641,13 @@ uninstall-am: uninstall-info-am uninstall-pkgconfiglibDATA \
 	distclean distclean-generic distclean-libtool distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-data-hook install-exec install-exec-am \
-	install-info install-info-am install-man \
-	install-pkgconfiglibDATA install-strip \
-	install-thirdpartyincludeHEADERS install-thirdpartylibDATA \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-hook uninstall-info-am \
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-man install-pkgconfiglibDATA \
+	install-strip install-thirdpartyincludeHEADERS \
+	install-thirdpartylibDATA installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+	ps ps-am tags uninstall uninstall-am uninstall-info-am \
 	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS \
 	uninstall-thirdpartylibDATA
 
@@ -669,13 +661,8 @@ all-local: $(alltargets)
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
-@COIN_HAS_PKGCONFIG_TRUE@install-data-hook:
-@COIN_HAS_PKGCONFIG_TRUE@	@$(mkdir_p) "$(addlibsdir)"
-@COIN_HAS_PKGCONFIG_TRUE@	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
-@COIN_HAS_PKGCONFIG_TRUE@	$(PKG_CONFIG) --libs coinasl > $(addlibsdir)/asl_addlibs.txt
-
-@COIN_HAS_PKGCONFIG_TRUE@uninstall-hook:
-@COIN_HAS_PKGCONFIG_TRUE@	rm -f $(addlibsdir)/asl_addlibs.txt
+test:
+	@echo "No test available for ASL."
 
 install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
