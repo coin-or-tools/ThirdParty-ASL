@@ -7,5 +7,5 @@ Name: ASL
 Description: AMPL Solver Library
 URL: https://projects.coin-or.org/BuildTools
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lamplsolver @ASL_PCLIBS@
+Libs: -L${libdir} -lcoinasl @ASL_PCLIBS@
 Cflags: -I${includedir}

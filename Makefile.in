@@ -18,6 +18,13 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
+# the idea is to use the ASL Makefiles to build a static $(AMPLSOLVER_A) library via the compile_*_ASL scripts
+# from this library, we create a libcoinasl.la libtool library
+# in a MS VC build, we assume static libraries are used, so we can use the usual libtool machinery via LIBADD
+# in a normal build, we build the libcoinasl.la library by extracting the $(AMPLSOLVER_A) library and relinking it via libtool
+#    in a shared library build, this should give a shared libcoinasl.so library
+#    further, configure should have taken care of adding -fPIC -DPIC to the CFLAGS when compiling the ASL sources
+
 # Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
@@ -27,6 +34,7 @@
 ########################################################################
 #                    Documentation installation                        #
 ########################################################################
+
 
 
 srcdir = @srcdir@
@@ -51,14 +59,15 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@COIN_CC_IS_CL_FALSE@am__append_1 = libcoinasl.la
 DIST_COMMON = $(am__configure_deps) $(srcdir)/BuildTools/Makemain.inc \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/coinasl-uninstalled.pc.in $(srcdir)/coinasl.pc.in \
 	$(srcdir)/compile_MS_ASL.in $(srcdir)/compile_Unix_ASL.in \
 	$(thirdpartyinclude_HEADERS) $(top_srcdir)/configure \
 	config.guess config.sub depcomp install-sh ltmain.sh missing
-@HAVE_EXTERNALS_TRUE@am__append_1 = Dependencies
-@HAVE_EXTERNALS_TRUE@am__append_2 = .Dependencies-stamp
+@HAVE_EXTERNALS_TRUE@am__append_2 = Dependencies
+@HAVE_EXTERNALS_TRUE@am__append_3 = .Dependencies-stamp
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -70,17 +79,34 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES = compile_MS_ASL compile_Unix_ASL coinasl.pc \
 	coinasl-uninstalled.pc
-SOURCES =
-DIST_SOURCES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(pkgconfiglibdir)" \
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" \
 	"$(DESTDIR)$(thirdpartylibdir)" \
 	"$(DESTDIR)$(thirdpartyincludedir)"
+libLTLIBRARIES_INSTALL = $(INSTALL)
+LTLIBRARIES = $(lib_LTLIBRARIES)
+am__DEPENDENCIES_1 =
+@COIN_CC_IS_CL_TRUE@libcoinasl_la_DEPENDENCIES =  \
+@COIN_CC_IS_CL_TRUE@	$(am__DEPENDENCIES_1)
+am_libcoinasl_la_OBJECTS =
+libcoinasl_la_OBJECTS = $(am_libcoinasl_la_OBJECTS)
+@COIN_CC_IS_CL_TRUE@am_libcoinasl_la_rpath = -rpath $(libdir)
+DEFAULT_INCLUDES = -I. -I$(srcdir)
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+SOURCES = $(libcoinasl_la_SOURCES)
+DIST_SOURCES = $(libcoinasl_la_SOURCES)
 pkgconfiglibDATA_INSTALL = $(INSTALL_DATA)
 thirdpartylibDATA_INSTALL = $(INSTALL_DATA)
 DATA = $(pkgconfiglib_DATA) $(thirdpartylib_DATA)
@@ -166,8 +192,6 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
-MSVC_COMPILE_FALSE = @MSVC_COMPILE_FALSE@
-MSVC_COMPILE_TRUE = @MSVC_COMPILE_TRUE@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 PACKAGE = @PACKAGE@
@@ -241,32 +265,37 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_1)
+EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_2)
+@COIN_CC_IS_CL_TRUE@lib_LTLIBRARIES = libcoinasl.la
+@COIN_CC_IS_CL_TRUE@libcoinasl_la_SOURCES = 
+@COIN_CC_IS_CL_TRUE@libcoinasl_la_LIBADD = $(AMPLSOLVER_A)
+
+# This is for libtool
+@COIN_CC_IS_CL_TRUE@libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
 
 ########################################################################
 #                           Extra Targets                              #
 ########################################################################
 compdir = compdir
-libampl = $(AMPLSOLVER_A)
-alltargets = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+alltargets = stdio1.h arith.h funcadd0.$(OBJEXT) $(am__append_1)
+@COIN_CC_IS_CL_FALSE@thirdpartylibdir = $(libdir)
+@COIN_CC_IS_CL_FALSE@thirdpartylib_DATA = libcoinasl.la
 thirdpartyincludedir = $(includedir)/coin/ThirdParty
 thirdpartyinclude_HEADERS = \
   solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
   solvers/nlp.h solvers/nlp2.h solvers/getstub.h solvers/opcode.hd solvers/r_opn.hd \
   stdio1.h arith.h
 
-thirdpartylibdir = $(libdir)
-thirdpartylib_DATA = $(libampl)
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = coinasl.pc
-CLEANFILES = $(libampl) stdio1.h arith.h funcadd0.$(OBJEXT)
+CLEANFILES = $(AMPLSOLVER_A) $(alltargets)
 
 ########################################################################
 #                         Maintainer Stuff                             #
 ########################################################################
 
 # Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES = $(MAKEOKFILE) $(am__append_2) $(VPATH_DISTCLEANFILES)
+DISTCLEANFILES = $(am__append_3) $(VPATH_DISTCLEANFILES)
 DocFiles = README AUTHORS LICENSE
 DocInstallDir = $(datadir)/coin/doc/$(PACKAGE_NAME)
 all: all-am
@@ -313,6 +342,41 @@ coinasl.pc: $(top_builddir)/config.status $(srcdir)/coinasl.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 coinasl-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/coinasl-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f=$(am__strip_dir) \
+	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
+	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@set -x; list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  p=$(am__strip_dir) \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
+	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
+	done
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
+	done
+@COIN_CC_IS_CL_TRUE@libcoinasl.la: $(libcoinasl_la_OBJECTS) $(libcoinasl_la_DEPENDENCIES) 
+@COIN_CC_IS_CL_TRUE@	$(LINK) $(am_libcoinasl_la_rpath) $(libcoinasl_la_LDFLAGS) $(libcoinasl_la_OBJECTS) $(libcoinasl_la_LIBADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT)
+
+distclean-compile:
+	-rm -f *.tab.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -552,9 +616,9 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-am
-all-am: Makefile $(DATA) $(HEADERS) all-local
+all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS) all-local
 installdirs:
-	for dir in "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartylibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartylibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -585,13 +649,14 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
-distclean-am: clean-am distclean-generic distclean-libtool \
-	distclean-tags
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-libtool distclean-tags
 
 dvi: dvi-am
 
@@ -606,7 +671,7 @@ info-am:
 install-data-am: install-pkgconfiglibDATA \
 	install-thirdpartyincludeHEADERS install-thirdpartylibDATA
 
-install-exec-am:
+install-exec-am: install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -622,7 +687,8 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 pdf: pdf-am
 
@@ -632,34 +698,43 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-info-am uninstall-pkgconfiglibDATA \
-	uninstall-thirdpartyincludeHEADERS uninstall-thirdpartylibDATA
-
-.PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
-	clean clean-generic clean-libtool ctags dist dist-all \
-	dist-bzip2 dist-gzip dist-shar dist-tarZ dist-zip distcheck \
-	distclean distclean-generic distclean-libtool distclean-tags \
-	distcleancheck distdir distuninstallcheck dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-pkgconfiglibDATA \
-	install-strip install-thirdpartyincludeHEADERS \
-	install-thirdpartylibDATA installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
-	ps ps-am tags uninstall uninstall-am uninstall-info-am \
+uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS \
 	uninstall-thirdpartylibDATA
 
+.PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
+	clean clean-generic clean-libLTLIBRARIES clean-libtool ctags \
+	dist dist-all dist-bzip2 dist-gzip dist-shar dist-tarZ \
+	dist-zip distcheck distclean distclean-compile \
+	distclean-generic distclean-libtool distclean-tags \
+	distcleancheck distdir distuninstallcheck dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-exec install-exec-am install-info \
+	install-info-am install-libLTLIBRARIES install-man \
+	install-pkgconfiglibDATA install-strip \
+	install-thirdpartyincludeHEADERS install-thirdpartylibDATA \
+	installcheck installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-info-am \
+	uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA \
+	uninstall-thirdpartyincludeHEADERS uninstall-thirdpartylibDATA
+
+
+@COIN_CC_IS_CL_TRUE@$(AMPLSOLVER_A):
+@COIN_CC_IS_CL_TRUE@	./compile_MS_ASL
+
+@COIN_CC_IS_CL_FALSE@$(AMPLSOLVER_A):
+@COIN_CC_IS_CL_FALSE@	./compile_Unix_ASL
+
+@COIN_CC_IS_CL_FALSE@libcoinasl.la : $(AMPLSOLVER_A)
+@COIN_CC_IS_CL_FALSE@	mkdir tmp ; cd tmp ; $(AR) x ../$(AMPLSOLVER_A) ; cd ..
+@COIN_CC_IS_CL_FALSE@	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) tmp/*.o
+@COIN_CC_IS_CL_FALSE@	rm -rf tmp
+
+stdio1.h arith.h funcadd0.$(OBJEXT): $(AMPLSOLVER_A)
 
 all-local: $(alltargets)
-
-@MSVC_COMPILE_TRUE@$(libampl):
-@MSVC_COMPILE_TRUE@	./compile_MS_ASL
-@MSVC_COMPILE_FALSE@$(libampl):
-@MSVC_COMPILE_FALSE@	./compile_Unix_ASL
-
-stdio1.h arith.h funcadd0.$(OBJEXT): $(libampl)
 
 test:
 	@echo "No test available for ASL."
