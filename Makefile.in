@@ -24,7 +24,7 @@
 # in a normal build, we build the libcoinasl.la library by extracting the $(AMPLSOLVER_A) library and relinking it via libtool
 #    in a shared library build, this should give a shared libcoinasl.so library
 #    further, configure should have taken care of adding -fPIC -DPIC to the CFLAGS when compiling the ASL sources
-#    to avoid a libtool warning and 
+#    to avoid a failure when building static libraries and a libtool warning, we additionally create .lo files for each object
 
 # Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
@@ -87,7 +87,6 @@ am__vpath_adj = case $$p in \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" \
-	"$(DESTDIR)$(thirdpartylibdir)" \
 	"$(DESTDIR)$(thirdpartyincludedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
@@ -109,8 +108,7 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 SOURCES = $(libcoinasl_la_SOURCES)
 DIST_SOURCES = $(libcoinasl_la_SOURCES)
 pkgconfiglibDATA_INSTALL = $(INSTALL_DATA)
-thirdpartylibDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(pkgconfiglib_DATA) $(thirdpartylib_DATA)
+DATA = $(pkgconfiglib_DATA)
 thirdpartyincludeHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(thirdpartyinclude_HEADERS)
 ETAGS = etags
@@ -279,8 +277,6 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_2)
 ########################################################################
 compdir = compdir
 alltargets = stdio1.h arith.h funcadd0.$(OBJEXT) $(am__append_1)
-@COIN_CC_IS_CL_FALSE@thirdpartylibdir = $(libdir)
-@COIN_CC_IS_CL_FALSE@thirdpartylib_DATA = libcoinasl.la
 thirdpartyincludedir = $(includedir)/coin/ThirdParty
 thirdpartyinclude_HEADERS = \
   solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
@@ -404,23 +400,6 @@ uninstall-pkgconfiglibDATA:
 	  f=$(am__strip_dir) \
 	  echo " rm -f '$(DESTDIR)$(pkgconfiglibdir)/$$f'"; \
 	  rm -f "$(DESTDIR)$(pkgconfiglibdir)/$$f"; \
-	done
-install-thirdpartylibDATA: $(thirdpartylib_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(thirdpartylibdir)" || $(mkdir_p) "$(DESTDIR)$(thirdpartylibdir)"
-	@list='$(thirdpartylib_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(thirdpartylibDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(thirdpartylibdir)/$$f'"; \
-	  $(thirdpartylibDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(thirdpartylibdir)/$$f"; \
-	done
-
-uninstall-thirdpartylibDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(thirdpartylib_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(thirdpartylibdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(thirdpartylibdir)/$$f"; \
 	done
 install-thirdpartyincludeHEADERS: $(thirdpartyinclude_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -619,7 +598,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS) all-local
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartylibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-am
@@ -648,6 +627,8 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@COIN_CC_IS_CL_TRUE@uninstall-local:
+@COIN_CC_IS_CL_TRUE@install-exec-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
@@ -670,9 +651,9 @@ info: info-am
 info-am:
 
 install-data-am: install-pkgconfiglibDATA \
-	install-thirdpartyincludeHEADERS install-thirdpartylibDATA
+	install-thirdpartyincludeHEADERS
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am: install-exec-local install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -700,8 +681,8 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
-	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS \
-	uninstall-thirdpartylibDATA
+	uninstall-local uninstall-pkgconfiglibDATA \
+	uninstall-thirdpartyincludeHEADERS
 
 .PHONY: CTAGS GTAGS all all-am all-local am--refresh check check-am \
 	clean clean-generic clean-libLTLIBRARIES clean-libtool ctags \
@@ -710,16 +691,16 @@ uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	distclean-generic distclean-libtool distclean-tags \
 	distcleancheck distdir distuninstallcheck dvi dvi-am html \
 	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-libLTLIBRARIES install-man \
-	install-pkgconfiglibDATA install-strip \
-	install-thirdpartyincludeHEADERS install-thirdpartylibDATA \
-	installcheck installcheck-am installdirs maintainer-clean \
+	install-data-am install-exec install-exec-am \
+	install-exec-local install-info install-info-am \
+	install-libLTLIBRARIES install-man install-pkgconfiglibDATA \
+	install-strip install-thirdpartyincludeHEADERS installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags uninstall uninstall-am uninstall-info-am \
-	uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA \
-	uninstall-thirdpartyincludeHEADERS uninstall-thirdpartylibDATA
+	uninstall-libLTLIBRARIES uninstall-local \
+	uninstall-pkgconfiglibDATA uninstall-thirdpartyincludeHEADERS
 
 
 @COIN_CC_IS_CL_TRUE@$(AMPLSOLVER_A):
@@ -734,12 +715,21 @@ uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 @COIN_CC_IS_CL_FALSE@	for i in *.o ; do \
 @COIN_CC_IS_CL_FALSE@	  lofile=`echo $$i | sed -e 's/.o$$/.lo/'`; \
 @COIN_CC_IS_CL_FALSE@	  echo "# fake line" > $$lofile ; \
-@COIN_CC_IS_CL_FALSE@	  echo "# Generated by bla libtool" >> $$lofile ; \
+@COIN_CC_IS_CL_FALSE@	  echo "# Generated by fake libtool" >> $$lofile ; \
 @COIN_CC_IS_CL_FALSE@	  echo "pic_object='$$i'" >> $$lofile ; \
 @COIN_CC_IS_CL_FALSE@	  echo "non_pic_object='$$i'" >> $$lofile ; \
 @COIN_CC_IS_CL_FALSE@	done ; cd ..
 @COIN_CC_IS_CL_FALSE@	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo
 @COIN_CC_IS_CL_FALSE@	rm -rf linkdir
+
+@COIN_CC_IS_CL_FALSE@install-exec-local: libcoinasl.la
+@COIN_CC_IS_CL_FALSE@	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
+@COIN_CC_IS_CL_FALSE@	if test -f libcoinasl.la; then \
+@COIN_CC_IS_CL_FALSE@          $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) libcoinasl.la "$(DESTDIR)$(libdir)/libcoinasl.la"; \
+@COIN_CC_IS_CL_FALSE@	fi
+
+@COIN_CC_IS_CL_FALSE@uninstall-local:
+@COIN_CC_IS_CL_FALSE@	$(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/libcoinasl.la"
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(AMPLSOLVER_A)
 

@@ -55,10 +55,17 @@ libcoinasl.la : $(AMPLSOLVER_A)
 	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo
 	rm -rf linkdir
 
+install-exec-local: libcoinasl.la
+	test -z "$(libdir)" || $(mkdir_p) "$(DESTDIR)$(libdir)"
+	if test -f libcoinasl.la; then \
+          $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) libcoinasl.la "$(DESTDIR)$(libdir)/libcoinasl.la"; \
+	fi
+	
+uninstall-local:
+	$(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/libcoinasl.la"
+
 alltargets += libcoinasl.la
 
-thirdpartylibdir = $(libdir)
-thirdpartylib_DATA = libcoinasl.la
 endif
 
 stdio1.h arith.h funcadd0.$(OBJEXT): $(AMPLSOLVER_A)
