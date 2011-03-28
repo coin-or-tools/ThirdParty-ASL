@@ -21,6 +21,7 @@ lib_LTLIBRARIES = libcoinasl.la
 
 libcoinasl_la_SOURCES = 
 libcoinasl_la_LIBADD = $(AMPLSOLVER_A)
+libcoinasl_la_DEPENDENCIES = $(AMPLSOLVER_A)
 
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)

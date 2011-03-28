@@ -91,8 +91,6 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" \
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-@COIN_CC_IS_CL_TRUE@libcoinasl_la_DEPENDENCIES =  \
-@COIN_CC_IS_CL_TRUE@	$(am__DEPENDENCIES_1)
 am_libcoinasl_la_OBJECTS =
 libcoinasl_la_OBJECTS = $(am_libcoinasl_la_OBJECTS)
 @COIN_CC_IS_CL_TRUE@am_libcoinasl_la_rpath = -rpath $(libdir)
@@ -268,6 +266,7 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_2)
 @COIN_CC_IS_CL_TRUE@lib_LTLIBRARIES = libcoinasl.la
 @COIN_CC_IS_CL_TRUE@libcoinasl_la_SOURCES = 
 @COIN_CC_IS_CL_TRUE@libcoinasl_la_LIBADD = $(AMPLSOLVER_A)
+@COIN_CC_IS_CL_TRUE@libcoinasl_la_DEPENDENCIES = $(AMPLSOLVER_A)
 
 # This is for libtool
 @COIN_CC_IS_CL_TRUE@libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
