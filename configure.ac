@@ -115,6 +115,12 @@ if test -z "$ASLMAKEFLAGS" ; then
   AC_CHECK_TYPE([long long],[],
     [asladdcflags="$asladdcflags -DNO_LONG_LONG"],[])
 
+# Check for dlopen, ASL uses it to load userdefined function libraries
+  AC_CHECK_LIB(dl,[dlopen],[
+    ASL_PCLIBS="-ldl $ASL_PCLIBS"
+    AC_DEFINE([HAVE_DLFCN],[1],[Define to 1 if dlfcn support is available])
+  ])
+
 # Back to whatever language we were in.
   AC_LANG_POP(C)
 
