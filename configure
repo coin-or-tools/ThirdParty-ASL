@@ -2811,7 +2811,7 @@ if test x"$CFLAGS" = x; then
       *)
         coin_opt_cflags="-O3"
         coin_add_cflags="-pipe"
-        coin_dbg_cflags="-g"
+        coin_dbg_cflags="-g -O0"
         coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas"
         case $build in
           *-darwin*)
@@ -21805,6 +21805,8 @@ echo "$as_me: error: cannot create directory $dir" >&2;}
     done
   fi
 
+  { echo "$as_me:$LINENO: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&5
+echo "$as_me: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&6;}
   if test x$coin_projectdir = xyes; then
     { echo "$as_me:$LINENO: Configuration of $PACKAGE_NAME successful" >&5
 echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
