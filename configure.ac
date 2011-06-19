@@ -69,17 +69,11 @@ AC_COIN_HAS_PKGCONFIG
 
 # Set a substitutable variable with the library name, and determine the compilation style.
 AC_SUBST(AMPLSOLVER_A)
-case "$CC" in
-  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    AMPLSOLVER_A=libamplsolver.lib
-    msvc_compile=yes
-    ;;
-  *)
-    AMPLSOLVER_A=libamplsolver.a
-    msvc_compile=no
-    ;;
-esac
-AC_MSG_NOTICE([Configuring ASL to build $AMPLSOLVER_A.])
+if test "x$coin_cc_is_cl" = xtrue ; then
+  AMPLSOLVER_A=libamplsolver.lib
+else
+  AMPLSOLVER_A=libamplsolver.a
+fi
 
 # Determine flags to be passed on the command line to (n)make. The main
 # activity is to groom CFLAGS and set up ASLMAKEFLAGS to pass CFLAGS on the
@@ -121,6 +115,9 @@ if test -z "$ASLMAKEFLAGS" ; then
   AC_CHECK_TYPE([long long],[],
     [asladdcflags="$asladdcflags -DNO_LONG_LONG"],[])
 
+# Check for dlopen, ASL uses it to load userdefined function libraries
+  AC_CHECK_LIB(dl,[dlopen],[ASL_PCLIBS="-ldl $ASL_PCLIBS"])
+
 # Back to whatever language we were in.
   AC_LANG_POP(C)
 
@@ -132,8 +129,10 @@ if test -z "$ASLMAKEFLAGS" ; then
 # Groom CFLAGS before we merge it with asladdcflags.
 # Remove -Werror if present, to make sure we are not interrupting compilation
 # of ASL because of warning messages. The cl equivalent is -WX.
+# SV: Our buildsystem should never add these flags to the CFLAGS, so why bother checking for them?
+#     If the user added some, shouldn't we listen to it and not just remove them again?
   bla=
-  if test x$msvc_compile = xyes ; then
+  if test "x$coin_cc_is_cl" = xtrue ; then
     warnToErr="-WX"
   else
     warnToErr="-Werror"
@@ -143,6 +142,12 @@ if test -z "$ASLMAKEFLAGS" ; then
       bla="$bla $i"
     fi
   done
+  
+# Add -fPIC -DPIC if we actually build shared libraries
+  if test x$enable_shared != xno; then
+    asladdcflags="$asladdcflags -fPIC -DPIC"
+  fi
+  
   ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
 # Somehow, the flags specified here cause ASL to segfault on the AIX
@@ -158,7 +163,7 @@ if test -z "$ASLMAKEFLAGS" ; then
 
 # Limit GNU make to one thread. But remember that if we're building with
 # cl, ultimately we're going to use nmake, which knows nothing of this.
-  if test x$msvc_compile = xno ; then
+  if test "x$coin_cc_is_cl" != xtrue ; then
     rm -rf conftest.mak
     ($am_make -v > conftest.grp) 2>&5
     if $EGREP GNU conftest.grp >&5 ; then
@@ -172,9 +177,7 @@ fi
 AC_MSG_NOTICE([Command line flags for (n)make \"$ASLMAKEFLAGS\".])
 AC_ARG_VAR(ASLMAKEFLAGS, [Compilation flags necessary for compiling the AMPL solver library])
 
-# Set automake conditional and generate the output files.
-
-AM_CONDITIONAL(MSVC_COMPILE, test x$msvc_compile = xyes)
+# generate the output files.
 
 AC_CONFIG_FILES([Makefile])
 AC_CONFIG_FILES([compile_MS_ASL],[chmod a+x compile_MS_ASL])

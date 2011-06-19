@@ -472,7 +472,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion ASL_SVN_REV EGREP LN_S COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED AMPLSOLVER_A ASLMAKEFLAGS MSVC_COMPILE_TRUE MSVC_COMPILE_FALSE ASL_PCLIBS LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion ASL_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED AMPLSOLVER_A ASLMAKEFLAGS ASL_PCLIBS LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1063,7 +1063,8 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          compile all projects with debug options tests
-  --enable-debug-asl compile this project (ASL) with debug options
+                          (implies --disable-shared)
+  --enable-debug-asl compile project ASL with debug compiler flags
   --enable-doscompile     Under Cygwin, compile so that executables run under
                           DOS. Set to mingw to use gcc/g++/ld with
                           -mno-cygwin. Set to msvc to use cl/link (or
@@ -1080,7 +1081,7 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-pkg-config     use pkg-config if available (default is yes)
+  --disable-pkg-config    disable use of pkg-config (if available)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1671,19 +1672,44 @@ fi
 # that we are in a project main directory
 coin_projectdir=yes
 
-# Set the project's version number
-if test "xASL" != x; then
+# Set the project's version numbers
+
 
 cat >>confdefs.h <<_ACEOF
 #define ASL_VERSION "$PACKAGE_VERSION"
 _ACEOF
 
-fi
 
-# Set the project's SVN revision number. The complicated sed expression
-# (made worse by quadrigraphs) ensures that things like 4123:4168MS end up
-# as a single number.
-# Extract the first word of "svnversion", so it can be a program name with args.
+  coin_majorver=`echo $PACKAGE_VERSION | sed -n -e 's/^\([0-9]*\).*/\1/gp'`
+  coin_minorver=`echo $PACKAGE_VERSION | sed -n -e 's/^[0-9]*\.\([0-9]*\).*/\1/gp'`
+  coin_releasever=`echo $PACKAGE_VERSION | sed -n -e 's/^[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/gp'`
+  if test "x$coin_majorver" = x ; then coin_majorver=9999 ; fi
+  if test "x$coin_minorver" = x ; then coin_minorver=9999 ; fi
+  if test "x$coin_releasever" = x ; then coin_releasever=9999 ; fi
+
+cat >>confdefs.h <<_ACEOF
+#define ASL_VERSION_MAJOR $coin_majorver
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define ASL_VERSION_MINOR $coin_minorver
+_ACEOF
+
+
+cat >>confdefs.h <<_ACEOF
+#define ASL_VERSION_RELEASE $coin_releasever
+_ACEOF
+
+
+  # We use the following variable to have a string with the upper case
+  # version of the project name
+  COIN_PRJCT=ASL
+
+  # Set the project's SVN revision number. The complicated sed expression
+  # (made worse by quadrigraphs) ensures that things like 4123:4168MS end up
+  # as a single number.
+  # Extract the first word of "svnversion", so it can be a program name with args.
 set dummy svnversion; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -1719,20 +1745,23 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-if test "x$have_svnversion" = xyes && test "xASL" != x; then
+  if test "x$have_svnversion" = xyes; then
 
-  svn_rev_tmp=`cd $srcdir/$coin_has_asl ; svnversion`
-  ASL_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
-  if test $ASL_SVN_REV != exported; then
+    svn_rev_tmp=`LANG=en_EN svnversion $srcdir 2>/dev/null`
+    if test "x$svn_rev_tmp" != xexported -a "x$svn_rev_tmp" != x; then
+      ASL_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
 
 cat >>confdefs.h <<_ACEOF
 #define ASL_SVN_REV $ASL_SVN_REV
 _ACEOF
 
+    fi
   fi
-fi
+
+
 
 # Capture libtool library version, if given.
+
 
 
 
@@ -1770,7 +1799,6 @@ if test "${enable_debug_asl+set}" = set; then
   enableval="$enable_debug_asl"
   case "${enableval}" in
     yes) coin_debug_compile=true
-         enable_shared=no
          ;;
     no)  coin_debug_compile=false
          ;;
@@ -1825,11 +1853,6 @@ fi;
 cat >>confdefs.h <<_ACEOF
 #define COIN_ASL_CHECKLEVEL $coin_asl_checklevel
 _ACEOF
-
-
-# We use the following variable to have a string with the upper case
-# version of the project name
-COIN_PRJCT=ASL
 
 
  # m4_ifvaln([ASL],
@@ -1938,26 +1961,6 @@ echo "$as_me: WARNING: C++ compiler name provided as $CXX, but CC is unset. Sett
       ;;
   esac
 fi
-
-# add automake conditional so we can recognize cl compiler in makefile
-coin_cc_is_cl=false
-if test x"$CXX" != x; then
-  case "$CXX" in
-    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-      coin_cc_is_cl=true
-      ;;
-  esac
-fi
-
-
-if test $coin_cc_is_cl = true; then
-  COIN_CC_IS_CL_TRUE=
-  COIN_CC_IS_CL_FALSE='#'
-else
-  COIN_CC_IS_CL_TRUE='#'
-  COIN_CC_IS_CL_FALSE=
-fi
-
 
 
 
@@ -2777,6 +2780,24 @@ echo "$as_me: Overruling autoconf; cl does not recognise -g." >&6;}
 esac
 CFLAGS="$save_cflags"
 
+# add automake conditional so we can recognize cl compiler in makefile
+coin_cc_is_cl=false
+case "$CC" in
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+    coin_cc_is_cl=true
+    ;;
+esac
+
+
+if test $coin_cc_is_cl = true; then
+  COIN_CC_IS_CL_TRUE=
+  COIN_CC_IS_CL_FALSE='#'
+else
+  COIN_CC_IS_CL_TRUE='#'
+  COIN_CC_IS_CL_FALSE=
+fi
+
+
 # Check if a project specific CFLAGS variable has been set
 if test x$COIN_PRJCT != x; then
   eval coin_tmp=\${${COIN_PRJCT}_CFLAGS+set}
@@ -2799,8 +2820,8 @@ if test x"$CFLAGS" = x; then
       *)
         coin_opt_cflags="-O3"
         coin_add_cflags="-pipe"
-        coin_dbg_cflags="-g"
-        coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas"
+        coin_dbg_cflags="-g -O0"
+        coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas -Wno-long-long"
         case $build in
           *-darwin*)
             ;;
@@ -3064,6 +3085,11 @@ case "$CFLAGS" in
       esac
     fi ;;
 esac
+
+# add -DPROJECT_BUILD to signal compiler preprocessor which config header file to include
+if test x$COIN_PRJCT != x; then
+  CFLAGS="$CFLAGS -D${COIN_PRJCT}_BUILD"
+fi
 
 # Try if CFLAGS works
 save_CFLAGS="$CFLAGS"
@@ -3611,6 +3637,7 @@ fi
 
 
 
+
 # AC_MSG_NOTICE([Beginning automake initialisation.])
 # Stuff for automake
 # test to see if srcdir already configured
@@ -4144,8 +4171,8 @@ echo "$as_me: error: I cannot find the libtool.m4 file." >&2;}
 fi
 
 
-  # Check if we have an Externals file
-  if test -r $srcdir/Externals; then
+  # Check if we have an Dependencies file
+  if test -r $srcdir/Dependencies; then
     coin_have_externals=yes
   fi
   # Check if subversion is installed and understands https
@@ -4218,11 +4245,16 @@ echo "${ECHO_T}$ac_cv_svn_understands_https" >&6
       else
         { { echo "$as_me:$LINENO: error: Cannot find the BuildTools directory" >&5
 echo "$as_me: error: Cannot find the BuildTools directory" >&2;}
-   { (exit 1); exit 1; }; }
+   { (exit better disable maintainer mode.); exit better disable maintainer mode.; }; }
       fi
     fi
   fi
 
+
+  # for running automake by make, we need to have Makemain.inc available at the place where it usually can be found during run_autotools
+  if test "$BUILDTOOLSDIR" != "$srcdir/BuildTools" ; then
+    $LN_S `cd $BUILDTOOLSDIR; pwd` "$srcdir/BuildTools"
+  fi
 
   # The following variable is set to the name of the directory where
   # the autotool scripts are located
@@ -4815,7 +4847,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4818 "configure"' > conftest.$ac_ext
+  echo '#line 4850 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6414,7 +6446,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6417:" \
+echo "$as_me:6449:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7481,11 +7513,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7484: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7516: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7488: \$? = $ac_status" >&5
+   echo "$as_me:7520: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7749,11 +7781,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7752: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7784: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7756: \$? = $ac_status" >&5
+   echo "$as_me:7788: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7853,11 +7885,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7856: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7888: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7860: \$? = $ac_status" >&5
+   echo "$as_me:7892: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10198,7 +10230,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10201 "configure"
+#line 10233 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10298,7 +10330,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10301 "configure"
+#line 10333 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12642,11 +12674,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12645: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12677: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12649: \$? = $ac_status" >&5
+   echo "$as_me:12681: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12746,11 +12778,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12749: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12781: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12753: \$? = $ac_status" >&5
+   echo "$as_me:12785: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14316,11 +14348,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14319: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14351: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14323: \$? = $ac_status" >&5
+   echo "$as_me:14355: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14420,11 +14452,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14423: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14455: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14427: \$? = $ac_status" >&5
+   echo "$as_me:14459: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16627,11 +16659,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16630: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16662: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16634: \$? = $ac_status" >&5
+   echo "$as_me:16666: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16895,11 +16927,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16898: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16930: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16902: \$? = $ac_status" >&5
+   echo "$as_me:16934: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16999,11 +17031,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17002: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17034: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17006: \$? = $ac_status" >&5
+   echo "$as_me:17038: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20003,7 +20035,7 @@ fi
 
   fi
   if test -n "$PKG_CONFIG"; then
-    _pkg_min_version=0.9.0
+    _pkg_min_version=0.16.0
     echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
 echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6
     if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
@@ -20044,9 +20076,9 @@ COIN_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
 # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
 # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
 if test "x${prefix}" = xNONE ; then
-  COIN_PKG_CONFIG_PATH="${ac_default_prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+  COIN_PKG_CONFIG_PATH="${ac_default_prefix}/lib/pkgconfig:${ac_default_prefix}/share/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 else
-  COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+  COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${prefix}/share/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 fi
 
 
@@ -20058,7 +20090,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
    fi
-   COIN_PKG_CONFIG_PATH="$withval/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+   COIN_PKG_CONFIG_PATH="$withval/lib/pkgconfig:$withval/share/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 
 fi;
 
@@ -20096,6 +20128,11 @@ if test x$coin_projectdir = xyes ; then
 
 fi
 
+if test -n "$PKG_CONFIG" && test x$coin_cc_is_cl = xtrue; then
+  { echo "$as_me:$LINENO: WARNING: Using pkg-config together with MS or Intel Compiler on Windows is not support by example Makefiles. Consider using --disable-pkg-config." >&5
+echo "$as_me: WARNING: Using pkg-config together with MS or Intel Compiler on Windows is not support by example Makefiles. Consider using --disable-pkg-config." >&2;}
+fi
+
 
 
 #############################################################################
@@ -20106,18 +20143,11 @@ fi
 
 # Set a substitutable variable with the library name, and determine the compilation style.
 
-case "$CC" in
-  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    AMPLSOLVER_A=libamplsolver.lib
-    msvc_compile=yes
-    ;;
-  *)
-    AMPLSOLVER_A=libamplsolver.a
-    msvc_compile=no
-    ;;
-esac
-{ echo "$as_me:$LINENO: Configuring ASL to build $AMPLSOLVER_A." >&5
-echo "$as_me: Configuring ASL to build $AMPLSOLVER_A." >&6;}
+if test "x$coin_cc_is_cl" = xtrue ; then
+  AMPLSOLVER_A=libamplsolver.lib
+else
+  AMPLSOLVER_A=libamplsolver.a
+fi
 
 # Determine flags to be passed on the command line to (n)make. The main
 # activity is to groom CFLAGS and set up ASLMAKEFLAGS to pass CFLAGS on the
@@ -20269,6 +20299,76 @@ else
 fi
 
 
+# Check for dlopen, ASL uses it to load userdefined function libraries
+  echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ldl  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char dlopen ();
+int
+main ()
+{
+dlopen ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_dl_dlopen=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_dl_dlopen=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
+if test $ac_cv_lib_dl_dlopen = yes; then
+  ASL_PCLIBS="-ldl $ASL_PCLIBS"
+fi
+
+
 # Back to whatever language we were in.
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -20285,8 +20385,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # Groom CFLAGS before we merge it with asladdcflags.
 # Remove -Werror if present, to make sure we are not interrupting compilation
 # of ASL because of warning messages. The cl equivalent is -WX.
+# SV: Our buildsystem should never add these flags to the CFLAGS, so why bother checking for them?
+#     If the user added some, shouldn't we listen to it and not just remove them again?
   bla=
-  if test x$msvc_compile = xyes ; then
+  if test "x$coin_cc_is_cl" = xtrue ; then
     warnToErr="-WX"
   else
     warnToErr="-Werror"
@@ -20296,6 +20398,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
       bla="$bla $i"
     fi
   done
+
+# Add -fPIC -DPIC if we actually build shared libraries
+  if test x$enable_shared != xno; then
+    asladdcflags="$asladdcflags -fPIC -DPIC"
+  fi
+
   ASLMAKEFLAGS="CFLAGS=\"$bla $asladdcflags\""
 
 # Somehow, the flags specified here cause ASL to segfault on the AIX
@@ -20311,7 +20419,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 # Limit GNU make to one thread. But remember that if we're building with
 # cl, ultimately we're going to use nmake, which knows nothing of this.
-  if test x$msvc_compile = xno ; then
+  if test "x$coin_cc_is_cl" != xtrue ; then
     rm -rf conftest.mak
     ($am_make -v > conftest.grp) 2>&5
     if $EGREP GNU conftest.grp >&5 ; then
@@ -20326,18 +20434,7 @@ fi
 echo "$as_me: Command line flags for (n)make \"$ASLMAKEFLAGS\"." >&6;}
 
 
-# Set automake conditional and generate the output files.
-
-
-
-if test x$msvc_compile = xyes; then
-  MSVC_COMPILE_TRUE=
-  MSVC_COMPILE_FALSE='#'
-else
-  MSVC_COMPILE_TRUE='#'
-  MSVC_COMPILE_FALSE=
-fi
-
+# generate the output files.
 
           ac_config_files="$ac_config_files Makefile"
 
@@ -20426,6 +20523,10 @@ if test x$coin_skip_ac_output != xyes; then
     ABSBUILDDIR="`pwd`"
 
   fi
+
+  # On AIX, the default sed cannot deal with somewhat long sed commands executed by config.status.
+  # So we reduce the hardcoded number of commands given to sed from 48 to 5 in config.status, hoping this will suffice.
+
 
   cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20602,13 +20703,6 @@ if test -z "${COIN_HAS_PKGCONFIG_TRUE}" && test -z "${COIN_HAS_PKGCONFIG_FALSE}"
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_PKGCONFIG\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"COIN_HAS_PKGCONFIG\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-if test -z "${MSVC_COMPILE_TRUE}" && test -z "${MSVC_COMPILE_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"MSVC_COMPILE\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"MSVC_COMPILE\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -21151,8 +21245,6 @@ s,@have_svnversion@,$have_svnversion,;t t
 s,@ASL_SVN_REV@,$ASL_SVN_REV,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LN_S@,$LN_S,;t t
-s,@COIN_CC_IS_CL_TRUE@,$COIN_CC_IS_CL_TRUE,;t t
-s,@COIN_CC_IS_CL_FALSE@,$COIN_CC_IS_CL_FALSE,;t t
 s,@CDEFS@,$CDEFS,;t t
 s,@ADD_CFLAGS@,$ADD_CFLAGS,;t t
 s,@DBG_CFLAGS@,$DBG_CFLAGS,;t t
@@ -21165,6 +21257,8 @@ s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CC@,$ac_ct_CC,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
+s,@COIN_CC_IS_CL_TRUE@,$COIN_CC_IS_CL_TRUE,;t t
+s,@COIN_CC_IS_CL_FALSE@,$COIN_CC_IS_CL_FALSE,;t t
 s,@MPICC@,$MPICC,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
@@ -21245,8 +21339,6 @@ s,@COIN_PKG_CONFIG_PATH@,$COIN_PKG_CONFIG_PATH,;t t
 s,@COIN_PKG_CONFIG_PATH_UNINSTALLED@,$COIN_PKG_CONFIG_PATH_UNINSTALLED,;t t
 s,@AMPLSOLVER_A@,$AMPLSOLVER_A,;t t
 s,@ASLMAKEFLAGS@,$ASLMAKEFLAGS,;t t
-s,@MSVC_COMPILE_TRUE@,$MSVC_COMPILE_TRUE,;t t
-s,@MSVC_COMPILE_FALSE@,$MSVC_COMPILE_FALSE,;t t
 s,@ASL_PCLIBS@,$ASL_PCLIBS,;t t
 s,@LIBEXT@,$LIBEXT,;t t
 s,@VPATH_DISTCLEANFILES@,$VPATH_DISTCLEANFILES,;t t
@@ -21707,6 +21799,16 @@ chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
 
 
+    case $build in
+      *-aix*)
+        { echo "$as_me:$LINENO: patching config.status to reduce ac_max_sed_lines to 5" >&5
+echo "$as_me: patching config.status to reduce ac_max_sed_lines to 5" >&6;}
+        sed -e 's/ac_max_sed_lines=48/ac_max_sed_lines=5/g' config.status > config.status.tmp
+        mv config.status.tmp config.status
+      ;;
+    esac
+
+
 # configure is writing to config.log, and then calls config.status.
 # config.status does its own redirection, appending to config.log.
 # Unfortunately, on DOS this fails, as config.log is still kept open
@@ -21783,6 +21885,8 @@ echo "$as_me: error: cannot create directory $dir" >&2;}
     done
   fi
 
+  { echo "$as_me:$LINENO: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&5
+echo "$as_me: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&6;}
   if test x$coin_projectdir = xyes; then
     { echo "$as_me:$LINENO: Configuration of $PACKAGE_NAME successful" >&5
 echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
