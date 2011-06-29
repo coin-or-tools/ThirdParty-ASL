@@ -20410,7 +20410,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # compiler, so take them out.
   case $CC in
     xlc* | */xlc* | mpxlc* | */mpxlc*)
-      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
+      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e 's/-O3/-O/g'`
       ;;
     pgcc* | */pgcc*)
       ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-fast/-O1/g'`
@@ -20523,10 +20523,6 @@ if test x$coin_skip_ac_output != xyes; then
     ABSBUILDDIR="`pwd`"
 
   fi
-
-  # On AIX, the default sed cannot deal with somewhat long sed commands executed by config.status.
-  # So we reduce the hardcoded number of commands given to sed from 48 to 5 in config.status, hoping this will suffice.
-
 
   cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -21797,16 +21793,6 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 _ACEOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
-
-
-    case $build in
-      *-aix*)
-        { echo "$as_me:$LINENO: patching config.status to reduce ac_max_sed_lines to 5" >&5
-echo "$as_me: patching config.status to reduce ac_max_sed_lines to 5" >&6;}
-        sed -e 's/ac_max_sed_lines=48/ac_max_sed_lines=5/g' config.status > config.status.tmp
-        mv config.status.tmp config.status
-      ;;
-    esac
 
 
 # configure is writing to config.log, and then calls config.status.
