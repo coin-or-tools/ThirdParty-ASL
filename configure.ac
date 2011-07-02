@@ -149,7 +149,7 @@ if test -z "$ASLMAKEFLAGS" ; then
 # compiler, so take them out.
   case $CC in
     xlc* | */xlc* | mpxlc* | */mpxlc*)
-      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e sed 's/-O3/-O/g'`
+      ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-qtune=auto//g' -e 's/-qarch=auto//g' -e 's/-qcache=auto//g' -e 's/-qhot//g' -e 's/-O3/-O/g'`
       ;;
     pgcc* | */pgcc*)
       ASLMAKEFLAGS=`echo $ASLMAKEFLAGS | sed -e 's/-fast/-O1/g'`
