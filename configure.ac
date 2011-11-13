@@ -111,9 +111,15 @@ if test -z "$ASLMAKEFLAGS" ; then
 # solution, comptry.bat, fails. To safely discard comptry.bat, we need to do
 # this check. It's hardly likely that long long is missing on any modern
 # system, but it's easy to check.
+# Also, if it's present, then ASL uses strtoull, which is not supported on Windows systems.
+# Instead, there should be a _strtoui64.
 
-  AC_CHECK_TYPE([long long],[],
+  AC_CHECK_TYPE([long long],[
+     if test "x$coin_cc_is_cl" = xtrue ; then
+       asladdcflags="$asladdcflags -Dstrtoull=_strtoui64"
+     fi],
     [asladdcflags="$asladdcflags -DNO_LONG_LONG"],[])
+
 
 # Check for dlopen, ASL uses it to load userdefined function libraries
   AC_CHECK_LIB(dl,[dlopen],[ASL_PCLIBS="-ldl $ASL_PCLIBS"])

@@ -20235,6 +20235,8 @@ rm -f conftest.err conftest.$ac_objext \
 # solution, comptry.bat, fails. To safely discard comptry.bat, we need to do
 # this check. It's hardly likely that long long is missing on any modern
 # system, but it's easy to check.
+# Also, if it's present, then ASL uses strtoull, which is not supported on Windows systems.
+# Instead, there should be a _strtoui64.
 
   echo "$as_me:$LINENO: checking for long long" >&5
 echo $ECHO_N "checking for long long... $ECHO_C" >&6
@@ -20293,10 +20295,14 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_type_long_long" >&5
 echo "${ECHO_T}$ac_cv_type_long_long" >&6
 if test $ac_cv_type_long_long = yes; then
-  :
+
+     if test "x$coin_cc_is_cl" = xtrue ; then
+       asladdcflags="$asladdcflags -Dstrtoull=_strtoui64"
+     fi
 else
   asladdcflags="$asladdcflags -DNO_LONG_LONG"
 fi
+
 
 
 # Check for dlopen, ASL uses it to load userdefined function libraries
