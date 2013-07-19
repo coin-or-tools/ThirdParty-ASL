@@ -23,7 +23,7 @@ echo " "
 
 rm -f solvers.tar
 echo "Downloading the source code from www.netlib.org..."
-$wgetcmd ftp://www.netlib.org/ampl/solvers.tar
+$wgetcmd http://www.netlib.org/ampl/solvers.tar
 
 rm -rf solvers
 
