@@ -23,7 +23,14 @@ echo " "
 
 rm -f solvers.tar
 echo "Downloading the source code from www.netlib.org..."
-$wgetcmd ftp://www.netlib.org/ampl/solvers.tar
+if ! $wgetcmd ftp://www.netlib.org/ampl/solvers.tar ;
+then
+  echo
+  echo "Failed, try downloading the source code from netlib.sandia.gov..."
+  rm -f netlibfiles.tar*
+  $wgetcmd http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
+  mv netlibfiles.tar* solvers.tar
+fi
 
 rm -rf solvers
 
