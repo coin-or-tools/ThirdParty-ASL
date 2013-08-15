@@ -22,14 +22,22 @@ echo "Running script for downloading the source code for the ASL"
 echo " "
 
 rm -f solvers.tar
-echo "Downloading the source code from www.netlib.org..."
-if ! $wgetcmd ftp://www.netlib.org/ampl/solvers.tar ;
+
+echo "Downloading the source code from projects.coin-or.org..."
+if $wgetcmd https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/src/solvers-20130815.tar ;
 then
+  mv solvers-20130815.tar solvers.tar
+else
   echo
-  echo "Failed, try downloading the source code from netlib.sandia.gov..."
-  rm -f netlibfiles.tar*
-  $wgetcmd http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
-  mv netlibfiles.tar* solvers.tar
+  echo "Failed, try downloading the source code from www.netlib.org..."
+  if ! $wgetcmd ftp://www.netlib.org/ampl/solvers.tar ;
+  then
+    echo
+    echo "Failed, try downloading the source code from netlib.sandia.gov..."
+    rm -f netlibfiles.tar*
+    $wgetcmd http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
+    mv netlibfiles.tar* solvers.tar
+  fi
 fi
 
 rm -rf solvers
