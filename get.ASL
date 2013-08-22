@@ -2,7 +2,7 @@
 
 set -e
 
-wgetcmd=wget
+wgetcmd="wget --no-check-certificate"
 wgetcount=`which wget 2>/dev/null | wc -l`
 if test ! $wgetcount = 1; then
   echo "Utility wget not found in your PATH."
