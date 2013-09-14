@@ -31,9 +31,9 @@ then
   mv $coinasl solvers.tar
 else
   echo
-  echo "Failed, try downloading the source code from www.netlib.org..."
-  if ! $wgetcmd ftp://www.netlib.org/ampl/solvers.tar ;
-  then
+  #echo "Failed, try downloading the source code from www.netlib.org..."
+  #if ! $wgetcmd ftp://www.netlib.org/ampl/solvers.tar ;
+  #then
     # Gus reported problems with the ASL tarball downloaded from sandia via his wget, so we give the coin-or server another chance first
     trysandia=1
     if test "$wgetcmd" = wget ;
@@ -64,7 +64,7 @@ else
       $wgetcmd http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
       mv netlibfiles.tar* solvers.tar
     fi
-  fi
+  #fi
 fi
 
 rm -rf solvers
