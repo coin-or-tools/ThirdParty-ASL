@@ -120,6 +120,10 @@ if test -z "$ASLMAKEFLAGS" ; then
      fi],
     [asladdcflags="$asladdcflags -DNO_LONG_LONG"],[])
 
+# Check for ssize_t; we need to define NO_SSIZE_T if it's not present.
+
+  AC_CHECK_TYPE([ssize_t],[],
+    [asladdcflags="$asladdcflags -DNO_SSIZE_T"],[])
 
 # Check for dlopen, ASL uses it to load userdefined function libraries
   AC_CHECK_LIB(dl,[dlopen],[ASL_PCLIBS="-ldl $ASL_PCLIBS"])
