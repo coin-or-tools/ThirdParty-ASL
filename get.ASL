@@ -31,40 +31,33 @@ then
   mv $coinasl solvers.tar
 else
   echo
-  echo "Failed, try downloading the source code from www.ampl.com..."
-  if ! $wgetcmd http://www.ampl.com/netlib/ampl/solvers.tgz ;
+  tryamplcom=1
+  if test "$wgetcmd" = wget ;
   then
-    # Gus reported problems with the ASL tarball downloaded from sandia via his wget, so we give the coin-or server another chance first
-    trysandia=1
-    if test "$wgetcmd" = wget ;
+    # the ASL tarball on ampl.com is changing over time, so we give the coin-or server another chance first
+    echo -n "Failed, try downloading from https://projects.coin-or.org without certificate check? (y/n) "
+    if test "$1" = "-y" ;
     then
-      echo -n "Failed, try downloading from https://projects.coin-or.org without certificate check? (y/n) "
-      if test "$1" = "-y" ;
-      then
-        doit=y
-        echo y
-      else
-        read doit
-        echo
-      fi
-      if test "$doit" = y ;
-      then
-        if $wgetcmd --no-check-certificate https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/src/$coinasl ;
-        then
-          mv $coinasl solvers.tar
-          trysandia=0
-        fi
-      fi
-    fi
-    if test $trysandia = 1 ;
-    then
+      doit=y
+      echo y
+    else
+      read doit
       echo
-      echo "Failed, try downloading the source code from netlib.sandia.gov..."
-      rm -f netlibfiles.tar*
-      $wgetcmd http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
-      mv netlibfiles.tar* solvers.tar
     fi
-  else
+    if test "$doit" = y ;
+    then
+      if $wgetcmd --no-check-certificate https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/src/$coinasl ;
+      then
+        mv $coinasl solvers.tar
+        tryamplcom=0
+      fi
+    fi
+  fi
+  if test $tryamplcom = 1 ;
+  then
+    echo
+    echo "Failed, try downloading the source code from www.ampl.com..."
+    $wgetcmd http://www.ampl.com/netlib/ampl/solvers.tgz ;
     gunzip solvers.tgz
   fi
 fi
