@@ -17,54 +17,28 @@ if test ! $wgetcount = 1; then
   fi
 fi
 
-coinasl=solvers-20130815.tar
+coinasl=solvers-20130815.tgz
 
 echo " "
 echo "Running script for downloading the source code for the ASL"
 echo " "
 
-rm -f solvers.tar
+rm -f solvers.tgz
 
 echo "Downloading the source code from projects.coin-or.org..."
-if $wgetcmd https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/src/$coinasl ;
+if $wgetcmd http://www.coin-or.org/BuildTools/ASL/$coinasl ;
 then
-  mv $coinasl solvers.tar
+  mv $coinasl solvers.tgz
 else
   echo
-  tryamplcom=1
-  if test "$wgetcmd" = wget ;
-  then
-    # the ASL tarball on ampl.com is changing over time, so we give the coin-or server another chance first
-    echo -n "Failed, try downloading from https://projects.coin-or.org without certificate check? (y/n) "
-    if test "$1" = "-y" ;
-    then
-      doit=y
-      echo y
-    else
-      read doit
-      echo
-    fi
-    if test "$doit" = y ;
-    then
-      if $wgetcmd --no-check-certificate https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/src/$coinasl ;
-      then
-        mv $coinasl solvers.tar
-        tryamplcom=0
-      fi
-    fi
-  fi
-  if test $tryamplcom = 1 ;
-  then
-    echo
-    echo "Failed, try downloading the source code from www.ampl.com..."
-    $wgetcmd http://www.ampl.com/netlib/ampl/solvers.tgz ;
-    gunzip solvers.tgz
-  fi
+  echo "Failed, try downloading the source code from www.ampl.com..."
+  $wgetcmd http://www.ampl.com/netlib/ampl/solvers.tgz
 fi
 
 rm -rf solvers
 
 echo "Unpacking the source code..."
+gunzip -f solvers.tgz
 tar xf solvers.tar
 
 echo "Uncompressing the source files..."
