@@ -41,8 +41,8 @@ echo "Unpacking the source code..."
 gunzip -f solvers.tgz
 tar xf solvers.tar
 
-echo "Uncompressing the source files..."
-gunzip -fr solvers
+#echo "Uncompressing the source files..."
+#gunzip -fr solvers
 
 echo "Adding No_dtoa to CFLAGS..."
 cd solvers
