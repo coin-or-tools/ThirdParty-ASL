@@ -60,15 +60,18 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_CC_IS_CL_FALSE@am__append_1 = libcoinasl.la
+@COIN_CC_IS_CL_FALSE@libcoinasl_la_DEPENDENCIES =  \
+@COIN_CC_IS_CL_FALSE@	$(am__DEPENDENCIES_2)
+@DEPENDENCY_LINKING_TRUE@am__append_1 = $(ASL_PCLIBS)
+@COIN_CC_IS_CL_FALSE@am__append_2 = libcoinasl.la
 DIST_COMMON = $(am__configure_deps) $(srcdir)/BuildTools/Makemain.inc \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/coinasl-uninstalled.pc.in $(srcdir)/coinasl.pc.in \
 	$(srcdir)/compile_MS_ASL.in $(srcdir)/compile_Unix_ASL.in \
 	$(thirdpartyinclude_HEADERS) $(top_srcdir)/configure \
 	config.guess config.sub depcomp install-sh ltmain.sh missing
-@HAVE_EXTERNALS_TRUE@am__append_2 = Dependencies
-@HAVE_EXTERNALS_TRUE@am__append_3 = .Dependencies-stamp
+@HAVE_EXTERNALS_TRUE@am__append_3 = Dependencies
+@HAVE_EXTERNALS_TRUE@am__append_4 = .Dependencies-stamp
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -91,6 +94,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" \
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
+@DEPENDENCY_LINKING_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
 am_libcoinasl_la_OBJECTS =
 libcoinasl_la_OBJECTS = $(am_libcoinasl_la_OBJECTS)
 @COIN_CC_IS_CL_TRUE@am_libcoinasl_la_rpath = -rpath $(libdir)
@@ -161,6 +165,8 @@ CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DEPENDENCY_LINKING_FALSE = @DEPENDENCY_LINKING_FALSE@
+DEPENDENCY_LINKING_TRUE = @DEPENDENCY_LINKING_TRUE@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -262,10 +268,12 @@ sol_cc_compiler = @sol_cc_compiler@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
-EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_2)
+EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_3)
 @COIN_CC_IS_CL_TRUE@lib_LTLIBRARIES = libcoinasl.la
 @COIN_CC_IS_CL_TRUE@libcoinasl_la_SOURCES = 
-@COIN_CC_IS_CL_TRUE@libcoinasl_la_LIBADD = $(AMPLSOLVER_A)
+@COIN_CC_IS_CL_FALSE@libcoinasl_la_LIBADD = $(am__append_1)
+@COIN_CC_IS_CL_TRUE@libcoinasl_la_LIBADD = $(AMPLSOLVER_A) \
+@COIN_CC_IS_CL_TRUE@	$(am__append_1)
 @COIN_CC_IS_CL_TRUE@libcoinasl_la_DEPENDENCIES = $(AMPLSOLVER_A)
 
 # This is for libtool
@@ -275,7 +283,7 @@ EXTRA_DIST = get.ASL INSTALL.ASL $(am__append_2)
 #                           Extra Targets                              #
 ########################################################################
 compdir = compdir
-alltargets = stdio1.h arith.h funcadd0.$(OBJEXT) $(am__append_1)
+alltargets = stdio1.h arith.h funcadd0.$(OBJEXT) $(am__append_2)
 thirdpartyincludedir = $(includedir)/coin/ThirdParty
 thirdpartyinclude_HEADERS = \
   solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
@@ -291,7 +299,7 @@ CLEANFILES = $(AMPLSOLVER_A) $(alltargets)
 ########################################################################
 
 # Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES = $(am__append_3) $(VPATH_DISTCLEANFILES)
+DISTCLEANFILES = $(am__append_4) $(VPATH_DISTCLEANFILES)
 DocFiles = README AUTHORS LICENSE
 DocInstallDir = $(datadir)/coin/doc/$(PACKAGE_NAME)
 all: all-am
@@ -718,7 +726,7 @@ uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 @COIN_CC_IS_CL_FALSE@	  echo "pic_object='$$i'" >> $$lofile ; \
 @COIN_CC_IS_CL_FALSE@	  echo "non_pic_object='$$i'" >> $$lofile ; \
 @COIN_CC_IS_CL_FALSE@	done ; cd ..
-@COIN_CC_IS_CL_FALSE@	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo
+@COIN_CC_IS_CL_FALSE@	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo $(libcoinasl_la_LIBADD)
 @COIN_CC_IS_CL_FALSE@	rm -rf linkdir
 
 @COIN_CC_IS_CL_FALSE@install-exec-local: libcoinasl.la

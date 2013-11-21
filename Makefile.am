@@ -25,6 +25,13 @@ libcoinasl_la_DEPENDENCIES = $(AMPLSOLVER_A)
 
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
+
+else
+libcoinasl_la_LIBADD = 
+endif
+
+if DEPENDENCY_LINKING
+libcoinasl_la_LIBADD += $(ASL_PCLIBS)
 endif
 
 ########################################################################
@@ -53,7 +60,7 @@ libcoinasl.la : $(AMPLSOLVER_A)
 	  echo "pic_object='$$i'" >> $$lofile ; \
 	  echo "non_pic_object='$$i'" >> $$lofile ; \
 	done ; cd ..
-	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo $(libcoinasl_la_LIBADD)
 	rm -rf linkdir
 
 install-exec-local: libcoinasl.la
