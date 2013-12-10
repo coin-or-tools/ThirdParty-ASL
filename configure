@@ -472,7 +472,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion ASL_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS DEPENDENCY_LINKING_TRUE DEPENDENCY_LINKING_FALSE LT_LDFLAGS PKG_CONFIG ac_ct_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED AMPLSOLVER_A ASLMAKEFLAGS ASL_PCLIBS LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion ASL_SVN_REV EGREP LN_S CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS DEPENDENCY_LINKING_TRUE DEPENDENCY_LINKING_FALSE LT_LDFLAGS PKG_CONFIG ac_ct_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED AMPLSOLVER_A HOST_TYPE HOST_IS_CYGWIN_TRUE HOST_IS_CYGWIN_FALSE ASLMAKEFLAGS ASL_PCLIBS LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1941,23 +1941,6 @@ echo "$as_me: error: --enable-msvc option makes sense only under Cygwin or MinGW
  fi
 
 
-# Check whether --enable-static-standardlibs or --disable-static-standardlibs was given.
-if test "${enable_static_standardlibs+set}" = set; then
-  enableval="$enable_static_standardlibs"
-  case "$enableval" in
-     no | yes | auto ) ;;
-     *)
-       { { echo "$as_me:$LINENO: error: invalid argument for --enable-static-standardlibs: $enableval" >&5
-echo "$as_me: error: invalid argument for --enable-static-standardlibs: $enableval" >&2;}
-   { (exit 1); exit 1; }; } ;;
-   esac
-   use_static_standardlibs=$enableval
-else
-  use_static_standardlibs=no
-fi;
-
-
-
 
 
 ac_ext=c
@@ -3046,7 +3029,6 @@ rm -f conftest.err conftest.$ac_objext \
   else
     CFLAGS="$OPT_CFLAGS"
   fi
-
 else
   CFLAGS="$CFLAGS $ADD_CFLAGS $CDEFS"
   if test x${DBG_CFLAGS+set} != xset; then
@@ -3196,82 +3178,6 @@ case "$CC" in
 
     ;;
 esac
-
-# check whether to add flags for static linking against standard libraries to LDFLAGS
-if test x$use_static_standardlibs != xno ; then
-  case $build in
-    *-mingw*)
-      static_standardlib_flag=-static
-      ;;
-    *)
-      static_standardlib_flag=-static-libgcc
-      ;;
-  esac
-  case " $LDFLAGS " in
-    *" $static_standardlib_flag "* ) ;;
-    *)
-    echo "$as_me:$LINENO: checking whether linking with $static_standardlib_flag works" >&5
-echo $ECHO_N "checking whether linking with $static_standardlib_flag works... $ECHO_C" >&6
-    coin_save_LDFLAGS="$LDFLAGS"
-    LDFLAGS="$LDFLAGS $static_standardlib_flag"
-    cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-int i=0;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-       LDFLAGS="$coin_save_LDFLAGS"
-       if test $use_static_standardlibs = yes ; then
-         { { echo "$as_me:$LINENO: error: failed to link with $static_standardlib_flag" >&5
-echo "$as_me: error: failed to link with $static_standardlib_flag" >&2;}
-   { (exit 1); exit 1; }; }
-       fi
-
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-    ;;
-  esac
-fi
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4914,7 +4820,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4917 "configure"' > conftest.$ac_ext
+  echo '#line 4823 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6513,7 +6419,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:6516:" \
+echo "$as_me:6422:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -7580,11 +7486,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7583: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7489: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7587: \$? = $ac_status" >&5
+   echo "$as_me:7493: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7848,11 +7754,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7851: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7757: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7855: \$? = $ac_status" >&5
+   echo "$as_me:7761: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7952,11 +7858,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7955: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7861: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7959: \$? = $ac_status" >&5
+   echo "$as_me:7865: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10297,7 +10203,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10300 "configure"
+#line 10206 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10397,7 +10303,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10400 "configure"
+#line 10306 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12741,11 +12647,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12744: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12650: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12748: \$? = $ac_status" >&5
+   echo "$as_me:12654: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12845,11 +12751,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12848: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12754: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12852: \$? = $ac_status" >&5
+   echo "$as_me:12758: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14415,11 +14321,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14418: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14324: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14422: \$? = $ac_status" >&5
+   echo "$as_me:14328: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14519,11 +14425,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14522: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14428: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14526: \$? = $ac_status" >&5
+   echo "$as_me:14432: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16726,11 +16632,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16729: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16635: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16733: \$? = $ac_status" >&5
+   echo "$as_me:16639: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16994,11 +16900,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16997: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16903: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17001: \$? = $ac_status" >&5
+   echo "$as_me:16907: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17098,11 +17004,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17101: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17007: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17105: \$? = $ac_status" >&5
+   echo "$as_me:17011: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20242,6 +20148,35 @@ else
   AMPLSOLVER_A=libamplsolver.a
 fi
 
+# Determine the host type to set linker options in the Makefile
+
+case $host in
+  *-cygwin* | *-mingw*)
+
+
+if test 0 = 0; then
+  HOST_IS_CYGWIN_TRUE=
+  HOST_IS_CYGWIN_FALSE='#'
+else
+  HOST_IS_CYGWIN_TRUE='#'
+  HOST_IS_CYGWIN_FALSE=
+fi
+
+  ;;
+  *)
+
+
+if test 0 = 1; then
+  HOST_IS_CYGWIN_TRUE=
+  HOST_IS_CYGWIN_FALSE='#'
+else
+  HOST_IS_CYGWIN_TRUE='#'
+  HOST_IS_CYGWIN_FALSE=
+fi
+
+  ;;
+esac
+
 # Determine flags to be passed on the command line to (n)make. The main
 # activity is to groom CFLAGS and set up ASLMAKEFLAGS to pass CFLAGS on the
 # (n)make command line.
@@ -20865,6 +20800,20 @@ if test -z "${COIN_HAS_PKGCONFIG_TRUE}" && test -z "${COIN_HAS_PKGCONFIG_FALSE}"
   { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_PKGCONFIG\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
 echo "$as_me: error: conditional \"COIN_HAS_PKGCONFIG\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${HOST_IS_CYGWIN_TRUE}" && test -z "${HOST_IS_CYGWIN_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"HOST_IS_CYGWIN\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"HOST_IS_CYGWIN\" was never defined.
+Usually this means the macro was only invoked conditionally." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+if test -z "${HOST_IS_CYGWIN_TRUE}" && test -z "${HOST_IS_CYGWIN_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"HOST_IS_CYGWIN\" was never defined.
+Usually this means the macro was only invoked conditionally." >&5
+echo "$as_me: error: conditional \"HOST_IS_CYGWIN\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -21502,6 +21451,9 @@ s,@COIN_HAS_PKGCONFIG_FALSE@,$COIN_HAS_PKGCONFIG_FALSE,;t t
 s,@COIN_PKG_CONFIG_PATH@,$COIN_PKG_CONFIG_PATH,;t t
 s,@COIN_PKG_CONFIG_PATH_UNINSTALLED@,$COIN_PKG_CONFIG_PATH_UNINSTALLED,;t t
 s,@AMPLSOLVER_A@,$AMPLSOLVER_A,;t t
+s,@HOST_TYPE@,$HOST_TYPE,;t t
+s,@HOST_IS_CYGWIN_TRUE@,$HOST_IS_CYGWIN_TRUE,;t t
+s,@HOST_IS_CYGWIN_FALSE@,$HOST_IS_CYGWIN_FALSE,;t t
 s,@ASLMAKEFLAGS@,$ASLMAKEFLAGS,;t t
 s,@ASL_PCLIBS@,$ASL_PCLIBS,;t t
 s,@LIBEXT@,$LIBEXT,;t t

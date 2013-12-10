@@ -33,7 +33,9 @@ endif
 
 if DEPENDENCY_LINKING
 libcoinasl_la_LIBADD += $(ASL_PCLIBS)
+if HOST_IS_CYGWIN
 libcoinasl_la_LDFLAGS += -Wl,--export-all-symbols
+endif
 endif
 
 ########################################################################

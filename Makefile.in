@@ -63,7 +63,7 @@ host_triplet = @host@
 @COIN_CC_IS_CL_FALSE@libcoinasl_la_DEPENDENCIES =  \
 @COIN_CC_IS_CL_FALSE@	$(am__DEPENDENCIES_2)
 @DEPENDENCY_LINKING_TRUE@am__append_1 = $(ASL_PCLIBS)
-@DEPENDENCY_LINKING_TRUE@am__append_2 = -Wl,--export-all-symbols
+@DEPENDENCY_LINKING_TRUE@@HOST_IS_CYGWIN_TRUE@am__append_2 = -Wl,--export-all-symbols
 @COIN_CC_IS_CL_FALSE@am__append_3 = libcoinasl.la
 DIST_COMMON = $(am__configure_deps) $(srcdir)/BuildTools/Makemain.inc \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
@@ -178,6 +178,9 @@ F77 = @F77@
 FFLAGS = @FFLAGS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
+HOST_IS_CYGWIN_FALSE = @HOST_IS_CYGWIN_FALSE@
+HOST_IS_CYGWIN_TRUE = @HOST_IS_CYGWIN_TRUE@
+HOST_TYPE = @HOST_TYPE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
