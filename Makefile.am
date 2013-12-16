@@ -25,6 +25,17 @@ libcoinasl_la_DEPENDENCIES = $(AMPLSOLVER_A)
 
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
+
+else
+libcoinasl_la_LIBADD = 
+libcoinasl_la_LDFLAGS =
+endif
+
+if DEPENDENCY_LINKING
+libcoinasl_la_LIBADD += $(ASL_PCLIBS)
+if HOST_IS_CYGWIN
+libcoinasl_la_LDFLAGS += -Wl,--export-all-symbols
+endif
 endif
 
 ########################################################################
@@ -38,7 +49,6 @@ alltargets = stdio1.h arith.h funcadd0.$(OBJEXT)
 if COIN_CC_IS_CL
 $(AMPLSOLVER_A):
 	./compile_MS_ASL
-	
 else
 $(AMPLSOLVER_A):
 	./compile_Unix_ASL
@@ -53,7 +63,7 @@ libcoinasl.la : $(AMPLSOLVER_A)
 	  echo "pic_object='$$i'" >> $$lofile ; \
 	  echo "non_pic_object='$$i'" >> $$lofile ; \
 	done ; cd ..
-	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo
+	$(LIBTOOL) --tag=CC --mode=link $(CC) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@ -rpath $(libdir) $(LT_LDFLAGS) linkdir/*.lo $(libcoinasl_la_LIBADD) $(libcoinasl_la_LDFLAGS)
 	rm -rf linkdir
 
 install-exec-local: libcoinasl.la
@@ -61,7 +71,7 @@ install-exec-local: libcoinasl.la
 	if test -f libcoinasl.la; then \
           $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) libcoinasl.la "$(DESTDIR)$(libdir)/libcoinasl.la"; \
 	fi
-	
+
 uninstall-local:
 	$(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/libcoinasl.la"
 

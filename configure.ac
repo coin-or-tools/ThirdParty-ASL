@@ -75,6 +75,17 @@ else
   AMPLSOLVER_A=libamplsolver.a
 fi
 
+# Determine the host type to set linker options in the Makefile
+AC_SUBST(HOST_TYPE)
+case $host in
+  *-cygwin* | *-mingw*)
+    AM_CONDITIONAL(HOST_IS_CYGWIN, [test 0 = 0])
+  ;;
+  *)
+    AM_CONDITIONAL(HOST_IS_CYGWIN, [test 0 = 1])
+  ;;
+esac
+
 # Determine flags to be passed on the command line to (n)make. The main
 # activity is to groom CFLAGS and set up ASLMAKEFLAGS to pass CFLAGS on the
 # (n)make command line.
