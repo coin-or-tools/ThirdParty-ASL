@@ -15,8 +15,12 @@ if test ! $wgetcount = 1; then
   else
     exit -1
   fi
+else
+  if test `name` = MSYS_NT-10.0; then
+    wgetcmd="wget --ca-directory=/usr/ssl/certs"
+  fi
 fi
-
+  
 coinasl=1.3.0
 
 echo " "
