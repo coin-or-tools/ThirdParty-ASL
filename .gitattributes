@@ -1,6 +1,7 @@
 * text=auto !eol
 /INSTALL.ASL -text
 /Makefile.am -text
+/certificate.patch -text
 /coinasl-uninstalled.pc.in -text
 /coinasl.pc.in -text
 /compile_MS_ASL.in -text

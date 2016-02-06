@@ -1,0 +1,13 @@
+Index: get.ASL
+===================================================================
+--- get.ASL	(revision 3563)
++++ get.ASL	(working copy)
+@@ -2,7 +2,7 @@
+ 
+ set -e
+ 
+-wgetcmd="wget"
++wgetcmd="wget --no-check-certificate"
+ wgetcount=`which wget 2>/dev/null | wc -l`
+ if test ! $wgetcount = 1; then
+   echo "Utility wget not found in your PATH."
