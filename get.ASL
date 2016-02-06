@@ -16,7 +16,7 @@ if test ! $wgetcount = 1; then
     exit -1
   fi
 else
-  if test `name` = MSYS_NT-10.0; then
+  if test `uname` = MSYS_NT-10.0; then
     wgetcmd="wget --ca-directory=/usr/ssl/certs"
   fi
 fi
