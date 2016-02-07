@@ -30,8 +30,13 @@ if $wgetcmd https://github.com/ampl/mp/archive/$coinasl.tar.gz ;
 then
   echo "Download finished."
 else
-  echo
-  echo "Download failed...exiting"
+    echo "Downloading from Github failed, trying www.coin-or.org..."
+    if $wgetcmd http://www.coin-or.org/BuildTools/ASL/$coinasl.tar.gz ;
+    then
+      echo "Download finished."
+    else
+      echo "Download failed...exiting"
+    fi	
 fi
 
 rm -rf solvers
