@@ -17,7 +17,7 @@ if test ! $wgetcount = 1; then
   fi
 fi
 
-coinasl=1.3.0
+coinasl=2.0.3
 
 echo " "
 echo "Running script for downloading the source code for the ASL"
@@ -30,8 +30,13 @@ if $wgetcmd https://github.com/ampl/mp/archive/$coinasl.tar.gz ;
 then
   echo "Download finished."
 else
-  echo
-  echo "Download failed...exiting"
+  echo "Downloading from Github failed, trying www.coin-or.org..."
+  if $wgetcmd http://www.coin-or.org/BuildTools/ASL/$coinasl.tar.gz ;
+  then
+    echo "Download finished."
+  else
+    echo "Download failed...exiting"
+  fi
 fi
 
 rm -rf solvers
