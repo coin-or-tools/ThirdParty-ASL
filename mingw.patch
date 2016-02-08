@@ -1,0 +1,22 @@
+220,240d219
+< #ifndef NO_matherr
+< #ifdef __MINGW32__
+< #define matherr _matherr
+< #endif
+< 
+<  matherr_rettype
+< matherr( struct _exception *e )
+< {
+< 	switch(e->type) {
+< 	  case _DOMAIN:
+< 	  case _SING:
+< 		errno = set_errno(EDOM);
+< 		break;
+< 	  case _TLOSS:
+< 	  case _OVERFLOW:
+< 		errno = set_errno(ERANGE);
+< 	  }
+< 	return 0;
+< 	}
+< #endif /*NO_matherr*/
+< 
