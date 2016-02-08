@@ -53,6 +53,9 @@ mv makefile.u makefile.u.orig
 sed -e 's/CFLAGS = /CFLAGS = -DNo_dtoa /g' makefile.u.orig > makefile.u 
 cd ..
 
+echo "Applying path for MinGW"
+patch -p0 <mingw.patch
+
 echo "Deleting the tar file..."
 rm $coinasl.tar
 
