@@ -12,4 +12,5 @@
 /get.ASL -text
 /install-sh -text
 /ltmain.sh -text
+/mingw.patch -text
 /missing -text
