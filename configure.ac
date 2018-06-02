@@ -13,7 +13,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([ThirdPartyASL],[1.4],[http://projects.coin-or.org/BuildTools/newticket])
+AC_INIT([ThirdPartyASL],[1.4.0],[http://projects.coin-or.org/BuildTools/newticket])
 
 AC_COPYRIGHT([
 Copyright 2006, 2007, 2009 International Business Machines and others.
@@ -39,7 +39,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_CANONICAL_BUILD
 
 # A bit of initial setup.
-AC_COIN_PROJECTDIR_INIT(ASL)
+AC_COIN_PROJECTDIR_INIT(ASL,5:0:4)
 
 # Turn off warnings and pedantic mode since they could make trouble on some
 # platforms, and we can't fix issues in third-party code.
