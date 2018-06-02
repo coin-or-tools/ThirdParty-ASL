@@ -17,23 +17,25 @@ if test ! $wgetcount = 1; then
   fi
 fi
 
-coinasl=2.0.3
+coinasl=solvers-20180528
 
 echo " "
 echo "Running script for downloading the source code for the ASL"
 echo " "
 
-rm -f $coinasl.tar.gz
+rm -f $coinasl
 
-echo "Downloading the source code from Github..."
-if $wgetcmd https://github.com/ampl/mp/archive/$coinasl.tar.gz ;
+echo "Downloading the source code from www.coin-or.org..."
+if $wgetcmd https://www.coin-or.org/BuildTools/ASL/${coinasl}.tgz ;
 then
   echo "Download finished."
 else
-  echo "Downloading from Github failed, trying www.coin-or.org..."
-  if $wgetcmd http://www.coin-or.org/BuildTools/ASL/$coinasl.tar.gz ;
+  echo
+  echo "Downloading from COIN-OR failed, trying ampl.com..."
+  if $wgetcmd https://ampl.com/netlib/ampl/solvers.tgz ;
   then
     echo "Download finished."
+    mv solvers.tgz ${coinasl}.tgz
   else
     echo "Download failed...exiting"
   fi
@@ -42,10 +44,8 @@ fi
 rm -rf solvers
 
 echo "Unpacking the source code..."
-gunzip -f $coinasl.tar.gz
+gunzip -f ${coinasl}.tgz
 tar xf $coinasl.tar
-mv mp-$coinasl/src/asl/solvers .
-rm -rf mp-$coinasl
 
 echo "Adding No_dtoa to CFLAGS..."
 cd solvers
