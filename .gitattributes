@@ -1,0 +1,3 @@
+* text=auto !eol
+/solvers-20130815.tgz -text svneol=unset#application/gzip
+/solvers-20180528.tgz -text svneol=unset#application/gzip
