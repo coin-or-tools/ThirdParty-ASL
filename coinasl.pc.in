@@ -1,11 +1,12 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
-includedir=@includedir@/coin/ThirdParty
+includedir=@includedir@/coin-or/asl
 
 Name: ASL
 Description: AMPL Solver Library
-URL: https://projects.coin-or.org/BuildTools
+URL: https://github.com/coin-or-tools/ThirdParty-ASL
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lcoinasl @ASL_PCLIBS@
+Libs: -L${libdir} -lcoinasl
+Libs.private: @ASL_LFLAGS_NOPC@
 Cflags: -I${includedir}

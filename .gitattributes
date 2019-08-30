@@ -3,12 +3,12 @@
 /Makefile.am -text
 /coinasl-uninstalled.pc.in -text
 /coinasl.pc.in -text
-/compile_MS_ASL.in -text
-/compile_Unix_ASL.in -text
+/compile -text
 /config.guess -text
 /config.sub -text
 /configure -text
 /depcomp -text
+/dtoa.patch -text
 /get.ASL -text
 /install-sh -text
 /ltmain.sh -text
