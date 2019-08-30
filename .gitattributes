@@ -1,7 +1,6 @@
 * text=auto !eol
 /INSTALL.ASL -text
 /Makefile.am -text
-/coinasl-uninstalled.pc.in -text
 /coinasl.pc.in -text
 /compile -text
 /config.guess -text

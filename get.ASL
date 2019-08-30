@@ -47,12 +47,6 @@ echo "Unpacking the source code..."
 gunzip -f ${coinasl}.tgz
 tar xf $coinasl.tar
 
-#echo "Adding No_dtoa to CFLAGS..."
-#cd solvers
-#mv makefile.u makefile.u.orig
-#sed -e 's/CFLAGS = /CFLAGS = -DNo_dtoa /g' makefile.u.orig > makefile.u 
-#cd ..
-
 echo "Applying patches"
 patch -p0 < mingw.patch
 patch -p0 < dtoa.patch
@@ -63,4 +57,3 @@ rm $coinasl.tar
 echo " "
 echo "Done downloading the source code for ASL."
 echo " "
-
