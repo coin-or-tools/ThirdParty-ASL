@@ -645,6 +645,8 @@ LTLIBOBJS
 LIBOBJS
 ASL_CFLAGS_NOPC
 ASL_LFLAGS_NOPC
+CC_IS_CL_FALSE
+CC_IS_CL_TRUE
 ASL_LFLAGS
 LT_LDFLAGS
 CPP
@@ -12262,6 +12264,19 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+case "$CC" in
+  *cl ) cc_is_cl=true ;;
+  * ) cc_is_cl=false ;;
+esac
+ if $cc_is_cl; then
+  CC_IS_CL_TRUE=
+  CC_IS_CL_FALSE='#'
+else
+  CC_IS_CL_TRUE='#'
+  CC_IS_CL_FALSE=
+fi
+
+
 # generate the output files.
 
 ac_config_links="$ac_config_links stdio1.h:solvers/stdio1.h0"
@@ -12501,6 +12516,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${CC_IS_CL_TRUE}" && test -z "${CC_IS_CL_FALSE}"; then
+  as_fn_error $? "conditional \"CC_IS_CL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

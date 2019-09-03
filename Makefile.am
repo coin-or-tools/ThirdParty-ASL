@@ -35,7 +35,6 @@ libcoinasl_la_SOURCES = \
 	solvers/fg_write.c \
 	solvers/fgh_read.c \
 	solvers/fpecatch.c \
-	solvers/fpinit.c \
 	solvers/fullhes.c \
 	solvers/func_add.c \
 	solvers/funcadd1.c \
@@ -100,6 +99,12 @@ libcoinasl_la_SOURCES = \
 	solvers/xp2known.c \
 	details.c
 
+if CC_IS_CL
+  libcoinasl_la_SOURCES += solvers/fpinitmt.c
+else
+  libcoinasl_la_SOURCES += solvers/fpinit.c
+endif
+
 libcoinasl_la_LIBADD = $(ASL_LFLAGS)
 
 # This is for libtool
@@ -113,8 +118,13 @@ $(libcoinasl_la_SOURCES) : arith.h
 # NOTE: current ASL provides an alternative that doesn't require
 #  building and executing something first
 noinst_PROGRAMS = arithchk
-arithchk_SOURCES = solvers/arithchk.c fpinit.c
-arithchk_CPPFLAGS = -DASL_NO_FPINITMT -DNO_FPINIT
+arithchk_SOURCES = solvers/arithchk.c
+if CC_IS_CL
+  arithchk_CPPFLAGS = -DNO_FPINIT
+else
+  arithchk_CPPFLAGS = -DASL_NO_FPINITMT
+  arithchk_SOURCES += fpinit.c
+endif
 arithchk_LDADD = $(ASL_LFLAGS)
 
 arith.h : arithchk$(EXEEXT)

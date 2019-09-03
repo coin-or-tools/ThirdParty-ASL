@@ -70,6 +70,12 @@ AC_COIN_CHK_LIBM(ASL)
 # Back to whatever language we were in.
 AC_LANG_POP(C)
 
+case "$CC" in
+  *cl ) cc_is_cl=true ;;
+  * ) cc_is_cl=false ;;
+esac
+AM_CONDITIONAL([CC_IS_CL], [$cc_is_cl])
+
 # generate the output files.
 
 AC_CONFIG_LINKS(stdio1.h:solvers/stdio1.h0)

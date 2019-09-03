@@ -95,7 +95,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@CC_IS_CL_TRUE@am__append_1 = solvers/fpinitmt.c
+@CC_IS_CL_FALSE@am__append_2 = solvers/fpinit.c
 noinst_PROGRAMS = arithchk$(EXEEXT)
+@CC_IS_CL_FALSE@am__append_3 = fpinit.c
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -142,6 +145,8 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libcoinasl_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
+@CC_IS_CL_TRUE@am__objects_1 = solvers/fpinitmt.lo
+@CC_IS_CL_FALSE@am__objects_2 = solvers/fpinit.lo
 am_libcoinasl_la_OBJECTS = solvers/asldate.lo solvers/atof.lo \
 	solvers/auxinfo.lo solvers/avltree.lo solvers/b_search.lo \
 	solvers/basename.lo solvers/bscanf.lo solvers/com2eval.lo \
@@ -151,28 +156,28 @@ am_libcoinasl_la_OBJECTS = solvers/asldate.lo solvers/atof.lo \
 	solvers/derprop.lo solvers/duthes.lo solvers/dtoa1.lo \
 	solvers/dynlink.lo solvers/f_read.lo solvers/fg_read.lo \
 	solvers/fg_write.lo solvers/fgh_read.lo solvers/fpecatch.lo \
-	solvers/fpinit.lo solvers/fullhes.lo solvers/func_add.lo \
-	solvers/funcadd1.lo solvers/g_fmt.lo solvers/genrowno.lo \
-	solvers/getenv.lo solvers/getstub.lo solvers/htcl.lo \
-	solvers/indic_cons.lo solvers/jac0dim.lo solvers/jac2dim.lo \
-	solvers/jacdim.lo solvers/jacinc.lo solvers/jacinc1.lo \
-	solvers/libnamsave.lo solvers/mach.lo solvers/mainexit.lo \
-	solvers/mip_pri.lo solvers/misc.lo solvers/mpec_adj.lo \
-	solvers/mqpcheckv.lo solvers/mypow.lo solvers/names.lo \
-	solvers/nl_obj.lo solvers/nqpcheck.lo solvers/nqpcheckZ.lo \
-	solvers/obj2val.lo solvers/obj_adj.lo solvers/obj_prec.lo \
-	solvers/objconst.lo solvers/objval.lo solvers/objval_.lo \
-	solvers/op_type.lo solvers/pfg_read.lo solvers/pfghread.lo \
-	solvers/printf.lo solvers/pshvprod.lo solvers/punknown.lo \
-	solvers/qp_read.lo solvers/qpcheck.lo solvers/qpcheckZ.lo \
-	solvers/qsortv.lo solvers/readsol.lo solvers/repwhere.lo \
-	solvers/rops.lo solvers/rops2.lo solvers/sigcatch.lo \
-	solvers/sos_add.lo solvers/sphes.lo solvers/sscanf.lo \
-	solvers/stderr.lo solvers/studchk0.lo solvers/suf_sos.lo \
-	solvers/value.lo solvers/writesol.lo solvers/wrtsol_.lo \
-	solvers/ws_desc.lo solvers/wsu_desc.lo solvers/x2check.lo \
-	solvers/xectim.lo solvers/xp1known.lo solvers/xp2known.lo \
-	details.lo
+	solvers/fullhes.lo solvers/func_add.lo solvers/funcadd1.lo \
+	solvers/g_fmt.lo solvers/genrowno.lo solvers/getenv.lo \
+	solvers/getstub.lo solvers/htcl.lo solvers/indic_cons.lo \
+	solvers/jac0dim.lo solvers/jac2dim.lo solvers/jacdim.lo \
+	solvers/jacinc.lo solvers/jacinc1.lo solvers/libnamsave.lo \
+	solvers/mach.lo solvers/mainexit.lo solvers/mip_pri.lo \
+	solvers/misc.lo solvers/mpec_adj.lo solvers/mqpcheckv.lo \
+	solvers/mypow.lo solvers/names.lo solvers/nl_obj.lo \
+	solvers/nqpcheck.lo solvers/nqpcheckZ.lo solvers/obj2val.lo \
+	solvers/obj_adj.lo solvers/obj_prec.lo solvers/objconst.lo \
+	solvers/objval.lo solvers/objval_.lo solvers/op_type.lo \
+	solvers/pfg_read.lo solvers/pfghread.lo solvers/printf.lo \
+	solvers/pshvprod.lo solvers/punknown.lo solvers/qp_read.lo \
+	solvers/qpcheck.lo solvers/qpcheckZ.lo solvers/qsortv.lo \
+	solvers/readsol.lo solvers/repwhere.lo solvers/rops.lo \
+	solvers/rops2.lo solvers/sigcatch.lo solvers/sos_add.lo \
+	solvers/sphes.lo solvers/sscanf.lo solvers/stderr.lo \
+	solvers/studchk0.lo solvers/suf_sos.lo solvers/value.lo \
+	solvers/writesol.lo solvers/wrtsol_.lo solvers/ws_desc.lo \
+	solvers/wsu_desc.lo solvers/x2check.lo solvers/xectim.lo \
+	solvers/xp1known.lo solvers/xp2known.lo details.lo \
+	$(am__objects_1) $(am__objects_2)
 libcoinasl_la_OBJECTS = $(am_libcoinasl_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -181,8 +186,9 @@ am__v_lt_1 =
 libcoinasl_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libcoinasl_la_LDFLAGS) $(LDFLAGS) -o $@
+@CC_IS_CL_FALSE@am__objects_3 = arithchk-fpinit.$(OBJEXT)
 am_arithchk_OBJECTS = solvers/arithchk-arithchk.$(OBJEXT) \
-	arithchk-fpinit.$(OBJEXT)
+	$(am__objects_3)
 arithchk_OBJECTS = $(am_arithchk_OBJECTS)
 arithchk_DEPENDENCIES = $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
@@ -215,38 +221,38 @@ am__depfiles_remade = ./$(DEPDIR)/arithchk-fpinit.Po \
 	solvers/$(DEPDIR)/dynlink.Plo solvers/$(DEPDIR)/f_read.Plo \
 	solvers/$(DEPDIR)/fg_read.Plo solvers/$(DEPDIR)/fg_write.Plo \
 	solvers/$(DEPDIR)/fgh_read.Plo solvers/$(DEPDIR)/fpecatch.Plo \
-	solvers/$(DEPDIR)/fpinit.Plo solvers/$(DEPDIR)/fullhes.Plo \
-	solvers/$(DEPDIR)/func_add.Plo solvers/$(DEPDIR)/funcadd1.Plo \
-	solvers/$(DEPDIR)/g_fmt.Plo solvers/$(DEPDIR)/genrowno.Plo \
-	solvers/$(DEPDIR)/getenv.Plo solvers/$(DEPDIR)/getstub.Plo \
-	solvers/$(DEPDIR)/htcl.Plo solvers/$(DEPDIR)/indic_cons.Plo \
-	solvers/$(DEPDIR)/jac0dim.Plo solvers/$(DEPDIR)/jac2dim.Plo \
-	solvers/$(DEPDIR)/jacdim.Plo solvers/$(DEPDIR)/jacinc.Plo \
-	solvers/$(DEPDIR)/jacinc1.Plo solvers/$(DEPDIR)/libnamsave.Plo \
-	solvers/$(DEPDIR)/mach.Plo solvers/$(DEPDIR)/mainexit.Plo \
-	solvers/$(DEPDIR)/mip_pri.Plo solvers/$(DEPDIR)/misc.Plo \
-	solvers/$(DEPDIR)/mpec_adj.Plo solvers/$(DEPDIR)/mqpcheckv.Plo \
-	solvers/$(DEPDIR)/mypow.Plo solvers/$(DEPDIR)/names.Plo \
-	solvers/$(DEPDIR)/nl_obj.Plo solvers/$(DEPDIR)/nqpcheck.Plo \
-	solvers/$(DEPDIR)/nqpcheckZ.Plo solvers/$(DEPDIR)/obj2val.Plo \
-	solvers/$(DEPDIR)/obj_adj.Plo solvers/$(DEPDIR)/obj_prec.Plo \
-	solvers/$(DEPDIR)/objconst.Plo solvers/$(DEPDIR)/objval.Plo \
-	solvers/$(DEPDIR)/objval_.Plo solvers/$(DEPDIR)/op_type.Plo \
-	solvers/$(DEPDIR)/pfg_read.Plo solvers/$(DEPDIR)/pfghread.Plo \
-	solvers/$(DEPDIR)/printf.Plo solvers/$(DEPDIR)/pshvprod.Plo \
-	solvers/$(DEPDIR)/punknown.Plo solvers/$(DEPDIR)/qp_read.Plo \
-	solvers/$(DEPDIR)/qpcheck.Plo solvers/$(DEPDIR)/qpcheckZ.Plo \
-	solvers/$(DEPDIR)/qsortv.Plo solvers/$(DEPDIR)/readsol.Plo \
-	solvers/$(DEPDIR)/repwhere.Plo solvers/$(DEPDIR)/rops.Plo \
-	solvers/$(DEPDIR)/rops2.Plo solvers/$(DEPDIR)/sigcatch.Plo \
-	solvers/$(DEPDIR)/sos_add.Plo solvers/$(DEPDIR)/sphes.Plo \
-	solvers/$(DEPDIR)/sscanf.Plo solvers/$(DEPDIR)/stderr.Plo \
-	solvers/$(DEPDIR)/studchk0.Plo solvers/$(DEPDIR)/suf_sos.Plo \
-	solvers/$(DEPDIR)/value.Plo solvers/$(DEPDIR)/writesol.Plo \
-	solvers/$(DEPDIR)/wrtsol_.Plo solvers/$(DEPDIR)/ws_desc.Plo \
-	solvers/$(DEPDIR)/wsu_desc.Plo solvers/$(DEPDIR)/x2check.Plo \
-	solvers/$(DEPDIR)/xectim.Plo solvers/$(DEPDIR)/xp1known.Plo \
-	solvers/$(DEPDIR)/xp2known.Plo
+	solvers/$(DEPDIR)/fpinit.Plo solvers/$(DEPDIR)/fpinitmt.Plo \
+	solvers/$(DEPDIR)/fullhes.Plo solvers/$(DEPDIR)/func_add.Plo \
+	solvers/$(DEPDIR)/funcadd1.Plo solvers/$(DEPDIR)/g_fmt.Plo \
+	solvers/$(DEPDIR)/genrowno.Plo solvers/$(DEPDIR)/getenv.Plo \
+	solvers/$(DEPDIR)/getstub.Plo solvers/$(DEPDIR)/htcl.Plo \
+	solvers/$(DEPDIR)/indic_cons.Plo solvers/$(DEPDIR)/jac0dim.Plo \
+	solvers/$(DEPDIR)/jac2dim.Plo solvers/$(DEPDIR)/jacdim.Plo \
+	solvers/$(DEPDIR)/jacinc.Plo solvers/$(DEPDIR)/jacinc1.Plo \
+	solvers/$(DEPDIR)/libnamsave.Plo solvers/$(DEPDIR)/mach.Plo \
+	solvers/$(DEPDIR)/mainexit.Plo solvers/$(DEPDIR)/mip_pri.Plo \
+	solvers/$(DEPDIR)/misc.Plo solvers/$(DEPDIR)/mpec_adj.Plo \
+	solvers/$(DEPDIR)/mqpcheckv.Plo solvers/$(DEPDIR)/mypow.Plo \
+	solvers/$(DEPDIR)/names.Plo solvers/$(DEPDIR)/nl_obj.Plo \
+	solvers/$(DEPDIR)/nqpcheck.Plo solvers/$(DEPDIR)/nqpcheckZ.Plo \
+	solvers/$(DEPDIR)/obj2val.Plo solvers/$(DEPDIR)/obj_adj.Plo \
+	solvers/$(DEPDIR)/obj_prec.Plo solvers/$(DEPDIR)/objconst.Plo \
+	solvers/$(DEPDIR)/objval.Plo solvers/$(DEPDIR)/objval_.Plo \
+	solvers/$(DEPDIR)/op_type.Plo solvers/$(DEPDIR)/pfg_read.Plo \
+	solvers/$(DEPDIR)/pfghread.Plo solvers/$(DEPDIR)/printf.Plo \
+	solvers/$(DEPDIR)/pshvprod.Plo solvers/$(DEPDIR)/punknown.Plo \
+	solvers/$(DEPDIR)/qp_read.Plo solvers/$(DEPDIR)/qpcheck.Plo \
+	solvers/$(DEPDIR)/qpcheckZ.Plo solvers/$(DEPDIR)/qsortv.Plo \
+	solvers/$(DEPDIR)/readsol.Plo solvers/$(DEPDIR)/repwhere.Plo \
+	solvers/$(DEPDIR)/rops.Plo solvers/$(DEPDIR)/rops2.Plo \
+	solvers/$(DEPDIR)/sigcatch.Plo solvers/$(DEPDIR)/sos_add.Plo \
+	solvers/$(DEPDIR)/sphes.Plo solvers/$(DEPDIR)/sscanf.Plo \
+	solvers/$(DEPDIR)/stderr.Plo solvers/$(DEPDIR)/studchk0.Plo \
+	solvers/$(DEPDIR)/suf_sos.Plo solvers/$(DEPDIR)/value.Plo \
+	solvers/$(DEPDIR)/writesol.Plo solvers/$(DEPDIR)/wrtsol_.Plo \
+	solvers/$(DEPDIR)/ws_desc.Plo solvers/$(DEPDIR)/wsu_desc.Plo \
+	solvers/$(DEPDIR)/x2check.Plo solvers/$(DEPDIR)/xectim.Plo \
+	solvers/$(DEPDIR)/xp1known.Plo solvers/$(DEPDIR)/xp2known.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -422,104 +428,44 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign subdir-objects
 EXTRA_DIST = get.ASL INSTALL.ASL
 lib_LTLIBRARIES = libcoinasl.la
-libcoinasl_la_SOURCES = \
-	solvers/asldate.c \
-	solvers/atof.c \
-	solvers/auxinfo.c \
-	solvers/avltree.c \
-	solvers/b_search.c \
-	solvers/basename.c \
-	solvers/bscanf.c \
-	solvers/com2eval.c \
-	solvers/comeval.c \
-	solvers/con1ival.c \
-	solvers/con2ival.c \
-	solvers/con2val.c \
-	solvers/conadj.c \
-	solvers/conpval.c \
-	solvers/conscale.c \
-	solvers/conval.c \
-	solvers/degree.c \
-	solvers/derprop.c \
-	solvers/duthes.c \
-	solvers/dtoa1.c \
-	solvers/dynlink.c \
-	solvers/f_read.c \
-	solvers/fg_read.c \
-	solvers/fg_write.c \
-	solvers/fgh_read.c \
-	solvers/fpecatch.c \
-	solvers/fpinit.c \
-	solvers/fullhes.c \
-	solvers/func_add.c \
-	solvers/funcadd1.c \
-	solvers/g_fmt.c \
-	solvers/genrowno.c \
-	solvers/getenv.c \
-	solvers/getstub.c \
-	solvers/htcl.c \
-	solvers/indic_cons.c \
-	solvers/jac0dim.c \
-	solvers/jac2dim.c \
-	solvers/jacdim.c \
-	solvers/jacinc.c \
-	solvers/jacinc1.c \
-	solvers/libnamsave.c \
-	solvers/mach.c \
-	solvers/mainexit.c \
-	solvers/mip_pri.c \
-	solvers/misc.c \
-	solvers/mpec_adj.c \
-	solvers/mqpcheckv.c \
-	solvers/mypow.c \
-	solvers/names.c \
-	solvers/nl_obj.c \
-	solvers/nqpcheck.c \
-	solvers/nqpcheckZ.c \
-	solvers/obj2val.c \
-	solvers/obj_adj.c \
-	solvers/obj_prec.c \
-	solvers/objconst.c \
-	solvers/objval.c \
-	solvers/objval_.c \
-	solvers/op_type.c \
-	solvers/pfg_read.c \
-	solvers/pfghread.c \
-	solvers/printf.c \
-	solvers/pshvprod.c \
-	solvers/punknown.c \
-	solvers/qp_read.c \
-	solvers/qpcheck.c \
-	solvers/qpcheckZ.c \
-	solvers/qsortv.c \
-	solvers/readsol.c \
-	solvers/repwhere.c \
-	solvers/rops.c \
-	solvers/rops2.c \
-	solvers/sigcatch.c \
-	solvers/sos_add.c \
-	solvers/sphes.c \
-	solvers/sscanf.c \
-	solvers/stderr.c \
-	solvers/studchk0.c \
-	solvers/suf_sos.c \
-	solvers/value.c \
-	solvers/writesol.c \
-	solvers/wrtsol_.c \
-	solvers/ws_desc.c \
-	solvers/wsu_desc.c \
-	solvers/x2check.c \
-	solvers/xectim.c \
-	solvers/xp1known.c \
-	solvers/xp2known.c \
-	details.c
-
+libcoinasl_la_SOURCES = solvers/asldate.c solvers/atof.c \
+	solvers/auxinfo.c solvers/avltree.c solvers/b_search.c \
+	solvers/basename.c solvers/bscanf.c solvers/com2eval.c \
+	solvers/comeval.c solvers/con1ival.c solvers/con2ival.c \
+	solvers/con2val.c solvers/conadj.c solvers/conpval.c \
+	solvers/conscale.c solvers/conval.c solvers/degree.c \
+	solvers/derprop.c solvers/duthes.c solvers/dtoa1.c \
+	solvers/dynlink.c solvers/f_read.c solvers/fg_read.c \
+	solvers/fg_write.c solvers/fgh_read.c solvers/fpecatch.c \
+	solvers/fullhes.c solvers/func_add.c solvers/funcadd1.c \
+	solvers/g_fmt.c solvers/genrowno.c solvers/getenv.c \
+	solvers/getstub.c solvers/htcl.c solvers/indic_cons.c \
+	solvers/jac0dim.c solvers/jac2dim.c solvers/jacdim.c \
+	solvers/jacinc.c solvers/jacinc1.c solvers/libnamsave.c \
+	solvers/mach.c solvers/mainexit.c solvers/mip_pri.c \
+	solvers/misc.c solvers/mpec_adj.c solvers/mqpcheckv.c \
+	solvers/mypow.c solvers/names.c solvers/nl_obj.c \
+	solvers/nqpcheck.c solvers/nqpcheckZ.c solvers/obj2val.c \
+	solvers/obj_adj.c solvers/obj_prec.c solvers/objconst.c \
+	solvers/objval.c solvers/objval_.c solvers/op_type.c \
+	solvers/pfg_read.c solvers/pfghread.c solvers/printf.c \
+	solvers/pshvprod.c solvers/punknown.c solvers/qp_read.c \
+	solvers/qpcheck.c solvers/qpcheckZ.c solvers/qsortv.c \
+	solvers/readsol.c solvers/repwhere.c solvers/rops.c \
+	solvers/rops2.c solvers/sigcatch.c solvers/sos_add.c \
+	solvers/sphes.c solvers/sscanf.c solvers/stderr.c \
+	solvers/studchk0.c solvers/suf_sos.c solvers/value.c \
+	solvers/writesol.c solvers/wrtsol_.c solvers/ws_desc.c \
+	solvers/wsu_desc.c solvers/x2check.c solvers/xectim.c \
+	solvers/xp1known.c solvers/xp2known.c details.c \
+	$(am__append_1) $(am__append_2)
 libcoinasl_la_LIBADD = $(ASL_LFLAGS)
 
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
-arithchk_SOURCES = solvers/arithchk.c fpinit.c
-arithchk_CPPFLAGS = -DASL_NO_FPINITMT -DNO_FPINIT
+arithchk_SOURCES = solvers/arithchk.c $(am__append_3)
+@CC_IS_CL_FALSE@arithchk_CPPFLAGS = -DASL_NO_FPINITMT
+@CC_IS_CL_TRUE@arithchk_CPPFLAGS = -DNO_FPINIT
 arithchk_LDADD = $(ASL_LFLAGS)
 thirdpartyincludedir = $(includedir)/coin-or/asl
 thirdpartyinclude_HEADERS = \
@@ -678,8 +624,6 @@ solvers/fgh_read.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/fpecatch.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
-solvers/fpinit.lo: solvers/$(am__dirstamp) \
-	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/fullhes.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/func_add.lo: solvers/$(am__dirstamp) \
@@ -804,6 +748,10 @@ solvers/xp1known.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/xp2known.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
+solvers/fpinitmt.lo: solvers/$(am__dirstamp) \
+	solvers/$(DEPDIR)/$(am__dirstamp)
+solvers/fpinit.lo: solvers/$(am__dirstamp) \
+	solvers/$(DEPDIR)/$(am__dirstamp)
 
 libcoinasl.la: $(libcoinasl_la_OBJECTS) $(libcoinasl_la_DEPENDENCIES) $(EXTRA_libcoinasl_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libcoinasl_la_LINK) -rpath $(libdir) $(libcoinasl_la_OBJECTS) $(libcoinasl_la_LIBADD) $(LIBS)
@@ -852,6 +800,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/fgh_read.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/fpecatch.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/fpinit.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/fpinitmt.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/fullhes.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/func_add.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/funcadd1.Plo@am__quote@ # am--include-marker
@@ -1161,6 +1110,7 @@ distclean: distclean-am
 	-rm -f solvers/$(DEPDIR)/fgh_read.Plo
 	-rm -f solvers/$(DEPDIR)/fpecatch.Plo
 	-rm -f solvers/$(DEPDIR)/fpinit.Plo
+	-rm -f solvers/$(DEPDIR)/fpinitmt.Plo
 	-rm -f solvers/$(DEPDIR)/fullhes.Plo
 	-rm -f solvers/$(DEPDIR)/func_add.Plo
 	-rm -f solvers/$(DEPDIR)/funcadd1.Plo
@@ -1301,6 +1251,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f solvers/$(DEPDIR)/fgh_read.Plo
 	-rm -f solvers/$(DEPDIR)/fpecatch.Plo
 	-rm -f solvers/$(DEPDIR)/fpinit.Plo
+	-rm -f solvers/$(DEPDIR)/fpinitmt.Plo
 	-rm -f solvers/$(DEPDIR)/fullhes.Plo
 	-rm -f solvers/$(DEPDIR)/func_add.Plo
 	-rm -f solvers/$(DEPDIR)/funcadd1.Plo
