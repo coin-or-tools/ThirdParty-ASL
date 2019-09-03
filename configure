@@ -12265,8 +12265,18 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 case "$CC" in
-  *cl ) cc_is_cl=true ;;
-  * ) cc_is_cl=false ;;
+  *cl )
+    cc_is_cl=true
+    case "$CFLAGS" in *-MDd* | *-MTd* )
+      CFLAGS=`echo $CFLAGS | sed -e 's/-MDd/-MD/g' -e 's/-MTd/-MT/g'`
+      { $as_echo "$as_me:${as_lineno-$LINENO}: ASL libraries linked with debug MSVC runtime libs do not work. Replaced -MDd and -MTd by -MD and -MT in CFLAGS, resp." >&5
+$as_echo "$as_me: ASL libraries linked with debug MSVC runtime libs do not work. Replaced -MDd and -MTd by -MD and -MT in CFLAGS, resp." >&6;}
+      ;;
+    esac
+    ;;
+  * )
+    cc_is_cl=false
+    ;;
 esac
  if $cc_is_cl; then
   CC_IS_CL_TRUE=

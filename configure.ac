@@ -71,8 +71,17 @@ AC_COIN_CHK_LIBM(ASL)
 AC_LANG_POP(C)
 
 case "$CC" in
-  *cl ) cc_is_cl=true ;;
-  * ) cc_is_cl=false ;;
+  *cl )
+    cc_is_cl=true
+    case "$CFLAGS" in *-MDd* | *-MTd* )
+      CFLAGS=`echo $CFLAGS | sed -e 's/-MDd/-MD/g' -e 's/-MTd/-MT/g'`
+      AC_MSG_NOTICE([ASL libraries linked with debug MSVC runtime libs do not work. Replaced -MDd and -MTd by -MD and -MT in CFLAGS, resp.])
+      ;;
+    esac
+    ;;
+  * )
+    cc_is_cl=false
+    ;;
 esac
 AM_CONDITIONAL([CC_IS_CL], [$cc_is_cl])
 
