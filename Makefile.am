@@ -114,7 +114,7 @@ $(libcoinasl_la_SOURCES) : arith.h
 #  building and executing something first
 noinst_PROGRAMS = arithchk
 arithchk_SOURCES = solvers/arithchk.c fpinit.c
-arithchk_CPPFLAGS = -DASL_NO_FPINITMT
+arithchk_CPPFLAGS = -DASL_NO_FPINITMT -DNO_FPINIT
 arithchk_LDADD = $(ASL_LFLAGS)
 
 arith.h : arithchk$(EXEEXT)

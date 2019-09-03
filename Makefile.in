@@ -519,7 +519,7 @@ libcoinasl_la_LIBADD = $(ASL_LFLAGS)
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
 arithchk_SOURCES = solvers/arithchk.c fpinit.c
-arithchk_CPPFLAGS = -DASL_NO_FPINITMT
+arithchk_CPPFLAGS = -DASL_NO_FPINITMT -DNO_FPINIT
 arithchk_LDADD = $(ASL_LFLAGS)
 thirdpartyincludedir = $(includedir)/coin-or/asl
 thirdpartyinclude_HEADERS = \
