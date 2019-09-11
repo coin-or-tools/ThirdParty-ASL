@@ -97,7 +97,8 @@ libcoinasl_la_SOURCES = \
 	solvers/xectim.c \
 	solvers/xp1known.c \
 	solvers/xp2known.c \
-	details.c
+	details.c \
+	arith.h
 
 if CC_IS_CL
   libcoinasl_la_SOURCES += solvers/fpinitmt.c
@@ -110,9 +111,8 @@ libcoinasl_la_LIBADD = $(ASL_LFLAGS)
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
 
-# this seems to make sure that arith.h build before any of the actual ASL
-# sources are compiled
-$(libcoinasl_la_SOURCES) : arith.h
+# make sure that arith.h is build before any of the actual ASL sources
+BUILT_SOURCES = arith.h
 
 # program that generates arith.h
 # NOTE: current ASL provides an alternative that doesn't require

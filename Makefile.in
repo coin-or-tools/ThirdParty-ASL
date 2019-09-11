@@ -455,12 +455,15 @@ libcoinasl_la_SOURCES = solvers/asldate.c solvers/atof.c \
 	solvers/studchk0.c solvers/suf_sos.c solvers/value.c \
 	solvers/writesol.c solvers/wrtsol_.c solvers/ws_desc.c \
 	solvers/wsu_desc.c solvers/x2check.c solvers/xectim.c \
-	solvers/xp1known.c solvers/xp2known.c details.c \
+	solvers/xp1known.c solvers/xp2known.c details.c arith.h \
 	$(am__append_1) $(am__append_2)
 libcoinasl_la_LIBADD = $(ASL_LFLAGS)
 
 # This is for libtool
 libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
+
+# make sure that arith.h is build before any of the actual ASL sources
+BUILT_SOURCES = arith.h
 arithchk_SOURCES = solvers/arithchk.c $(am__append_3)
 @CC_IS_CL_FALSE@arithchk_CPPFLAGS = -DASL_NO_FPINITMT
 @CC_IS_CL_TRUE@arithchk_CPPFLAGS = -DNO_FPINIT
@@ -481,7 +484,8 @@ CLEANFILES = arith.h details.c
 
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = 
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -1031,13 +1035,15 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 	-rm -f cscope.out cscope.in.out cscope.po.out cscope.files
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfiglibdir)" "$(DESTDIR)$(thirdpartyincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -1071,6 +1077,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
@@ -1331,7 +1338,7 @@ ps-am:
 uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA \
 	uninstall-thirdpartyincludeHEADERS
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles am--refresh check \
 	check-am clean clean-cscope clean-generic clean-libLTLIBRARIES \
@@ -1352,10 +1359,6 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA \
 
 .PRECIOUS: Makefile
 
-
-# this seems to make sure that arith.h build before any of the actual ASL
-# sources are compiled
-$(libcoinasl_la_SOURCES) : arith.h
 
 arith.h : arithchk$(EXEEXT)
 	./arithchk$(EXEEXT) > $@
