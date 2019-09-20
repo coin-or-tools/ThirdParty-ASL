@@ -1,4 +1,4 @@
-Installation of the Ampl Solver Library (ASL) for COIN
+Installation of the Ampl Solver Library (ASL) for COIN-OR
 
 **********************************************************************
 Note: It is YOUR RESPONSIBILITY to ensure that you are entitled to
