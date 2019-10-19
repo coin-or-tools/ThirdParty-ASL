@@ -7,7 +7,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([ThirdPartyASL],[trunk],[https://github.com/coin-or-tools/ThirdParty-ASL/issues/new],,[https://github.com/coin-or-tools/ThirdParty-ASL])
+AC_INIT([ThirdPartyASL],[2.0.0],[https://github.com/coin-or-tools/ThirdParty-ASL/issues/new],,[https://github.com/coin-or-tools/ThirdParty-ASL])
 
 AC_COPYRIGHT([
 Copyright 2006, 2007, 2009 International Business Machines and others.
