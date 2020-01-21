@@ -672,6 +672,7 @@ EGREP
 GREP
 SED
 LIBTOOL
+ADD_CFLAGS
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
@@ -723,10 +724,6 @@ host_os
 host_vendor
 host_cpu
 host
-ADD_CXXFLAGS
-ADD_CFLAGS
-ADD_FCFLAGS
-ADD_FFLAGS
 CC
 build_os
 build_vendor
@@ -794,15 +791,12 @@ enable_libtool_lock
       ac_precious_vars='build_alias
 host_alias
 target_alias
-ADD_FFLAGS
-ADD_FCFLAGS
-ADD_CFLAGS
-ADD_CXXFLAGS
 CC
 CFLAGS
 LDFLAGS
 LIBS
 CPPFLAGS
+ADD_CFLAGS
 LT_SYS_LIBRARY_PATH
 CPP'
 
@@ -1457,12 +1451,6 @@ Optional Packages:
                           compiler's sysroot if not specified).
 
 Some influential environment variables:
-  ADD_FFLAGS  Additional Fortran 77 compiler options (if not overwriting
-              FFLAGS)
-  ADD_FCFLAGS Additional Fortran compiler options (if not overwriting FCFLAGS)
-  ADD_CFLAGS  Additional C compiler options (if not overwriting CFLAGS)
-  ADD_CXXFLAGS
-              Additional C++ compiler options (if not overwriting CXXFLAGS)
   CC          C compiler command
   CFLAGS      C compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -1470,6 +1458,7 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
+  ADD_CFLAGS  Additional C compiler options (if not overwriting CFLAGS)
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
   CPP         C preprocessor
@@ -2374,12 +2363,6 @@ fi
 # This macro should run before the compiler checks (doesn't seem to be
 # sufficient for CFLAGS)
 
-
-
-
-
-
-# Allow user to augment defaults
 
 
 
@@ -4094,6 +4077,9 @@ else
   am__fastdepCC_FALSE=
 fi
 
+
+
+  # Declare precious variable for additional compiler flags
 
 
 
