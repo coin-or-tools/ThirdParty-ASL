@@ -798,7 +798,8 @@ LIBS
 CPPFLAGS
 ADD_CFLAGS
 LT_SYS_LIBRARY_PATH
-CPP'
+CPP
+LT_LDFLAGS'
 
 
 # Initialize some variables set by options.
@@ -1462,6 +1463,8 @@ Some influential environment variables:
   LT_SYS_LIBRARY_PATH
               User-defined run-time library search path.
   CPP         C preprocessor
+  LT_LDFLAGS  Flags passed to libtool when building libraries or executables
+              that are installed
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -12124,7 +12127,7 @@ CC=$lt_save_CC
       ;;
   esac
 
-  # Set up LT_LDFLAGS.
+  # Set up LT_LDFLAGS, user can initialize and we augment below
 
 
   # Use the libtool library info, if defined, otherwise use the project version info,
