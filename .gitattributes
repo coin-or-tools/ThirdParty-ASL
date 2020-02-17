@@ -1,5 +1,6 @@
 * text=auto !eol
 /INSTALL.ASL -text
+/LICENSE -text
 /Makefile.am -text
 /coinasl.pc.in -text
 /compile -text
