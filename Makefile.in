@@ -424,7 +424,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AUTOMAKE_OPTIONS = foreign subdir-objects
 EXTRA_DIST = get.ASL INSTALL.ASL
 lib_LTLIBRARIES = libcoinasl.la
 libcoinasl_la_SOURCES = solvers/asldate.c solvers/atof.c \
