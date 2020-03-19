@@ -2,6 +2,7 @@
 /INSTALL.ASL -text
 /LICENSE -text
 /Makefile.am -text
+/ar-lib -text
 /coinasl.pc.in -text
 /compile -text
 /config.guess -text
