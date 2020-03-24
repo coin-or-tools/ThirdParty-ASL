@@ -2877,25 +2877,23 @@ rmdir .tst 2>/dev/null
   # ac-define AC_PACKAGE_VERSION macros, use 9999 for missing values
 
 cat >>confdefs.h <<_ACEOF
-#define ASL_VERSION "trunk"
+#define THIRDPARTYASL_VERSION "trunk"
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define ASL_VERSION_MAJOR 9999
+#define THIRDPARTYASL_VERSION_MAJOR 9999
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define ASL_VERSION_MINOR 9999
+#define THIRDPARTYASL_VERSION_MINOR 9999
 _ACEOF
 
 
 cat >>confdefs.h <<_ACEOF
-#define ASL_VERSION_RELEASE 9999
+#define THIRDPARTYASL_VERSION_RELEASE 9999
 _ACEOF
-
-
 
 
 
@@ -12561,6 +12559,9 @@ cat >>confdefs.h <<_ACEOF
 #define ASL_EXPORT $libexport_attribute
 _ACEOF
 
+
+      # add -DXYZ_BUILD to XYZ_CFLAGS
+      ASL_CFLAGS="${ASL_CFLAGS} -DASL_BUILD"
 
 # Define BUILDTOOLS_DEBUG to enable debugging output
 
