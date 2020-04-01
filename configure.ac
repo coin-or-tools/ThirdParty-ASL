@@ -30,8 +30,6 @@ AC_COIN_PROG_LIBTOOL(no-win32-dll)
 # Determine additional pre-compiler flags using various feature checks
 AC_LANG_PUSH(C)
 
-CPPFLAGS="$CPPFLAGS -DNo_dtoa"
-
 case $build in
   *-linux*)
     case $CC in
