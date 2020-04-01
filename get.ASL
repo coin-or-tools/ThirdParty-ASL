@@ -17,7 +17,7 @@ if test ! $wgetcount = 1; then
   fi
 fi
 
-coinasl=solvers-20180528
+coinasl=solvers-64919f75f
 
 echo " "
 echo "Running script for downloading the source code for the ASL"
