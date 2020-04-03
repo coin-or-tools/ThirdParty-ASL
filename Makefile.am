@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-AUTOMAKE_OPTIONS = foreign subdir-objects
-
 EXTRA_DIST = get.ASL INSTALL.ASL
 
 lib_LTLIBRARIES = libcoinasl.la
@@ -153,10 +151,3 @@ pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = coinasl.pc
 
 CLEANFILES = arith.h details.c
-
-########################################################################
-#                         Maintainer Stuff                             #
-########################################################################
-
-# Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES =

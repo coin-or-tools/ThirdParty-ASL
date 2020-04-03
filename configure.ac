@@ -19,7 +19,7 @@ under the Eclipse Public License.])
 # whether the package is actually there
 AC_CONFIG_SRCDIR(solvers/asl.h)
 
-AC_COIN_INITIALIZE(ASL)
+AC_COIN_INITIALIZE
 
 # Get the name of the C compiler and compiler flags
 AC_COIN_PROG_CC
@@ -29,8 +29,6 @@ AC_COIN_PROG_LIBTOOL(no-win32-dll)
 
 # Determine additional pre-compiler flags using various feature checks
 AC_LANG_PUSH(C)
-
-CPPFLAGS="$CPPFLAGS -DNo_dtoa"
 
 case $build in
   *-linux*)

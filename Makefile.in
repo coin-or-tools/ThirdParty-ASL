@@ -424,7 +424,6 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AUTOMAKE_OPTIONS = foreign subdir-objects
 EXTRA_DIST = get.ASL INSTALL.ASL
 lib_LTLIBRARIES = libcoinasl.la
 libcoinasl_la_SOURCES = solvers/asldate.c solvers/atof.c \
@@ -478,13 +477,6 @@ thirdpartyinclude_HEADERS = \
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = coinasl.pc
 CLEANFILES = arith.h details.c
-
-########################################################################
-#                         Maintainer Stuff                             #
-########################################################################
-
-# Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES = 
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -1073,7 +1065,6 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f solvers/$(DEPDIR)/$(am__dirstamp)
 	-rm -f solvers/$(am__dirstamp)
-	-test -z "$(DISTCLEANFILES)" || rm -f $(DISTCLEANFILES)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
