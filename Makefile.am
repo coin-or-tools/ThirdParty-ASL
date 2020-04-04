@@ -92,7 +92,6 @@ libcoinasl_la_SOURCES = \
 	solvers/ws_desc.c \
 	solvers/wsu_desc.c \
 	solvers/x2check.c \
-	solvers/xectim.c \
 	solvers/xp1known.c \
 	solvers/xp2known.c \
 	details.c \

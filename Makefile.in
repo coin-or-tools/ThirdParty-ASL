@@ -175,9 +175,9 @@ am_libcoinasl_la_OBJECTS = solvers/asldate.lo solvers/atof.lo \
 	solvers/sphes.lo solvers/sscanf.lo solvers/stderr.lo \
 	solvers/studchk0.lo solvers/suf_sos.lo solvers/value.lo \
 	solvers/writesol.lo solvers/wrtsol_.lo solvers/ws_desc.lo \
-	solvers/wsu_desc.lo solvers/x2check.lo solvers/xectim.lo \
-	solvers/xp1known.lo solvers/xp2known.lo details.lo \
-	$(am__objects_1) $(am__objects_2)
+	solvers/wsu_desc.lo solvers/x2check.lo solvers/xp1known.lo \
+	solvers/xp2known.lo details.lo $(am__objects_1) \
+	$(am__objects_2)
 libcoinasl_la_OBJECTS = $(am_libcoinasl_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -251,8 +251,8 @@ am__depfiles_remade = ./$(DEPDIR)/arithchk-fpinit.Po \
 	solvers/$(DEPDIR)/suf_sos.Plo solvers/$(DEPDIR)/value.Plo \
 	solvers/$(DEPDIR)/writesol.Plo solvers/$(DEPDIR)/wrtsol_.Plo \
 	solvers/$(DEPDIR)/ws_desc.Plo solvers/$(DEPDIR)/wsu_desc.Plo \
-	solvers/$(DEPDIR)/x2check.Plo solvers/$(DEPDIR)/xectim.Plo \
-	solvers/$(DEPDIR)/xp1known.Plo solvers/$(DEPDIR)/xp2known.Plo
+	solvers/$(DEPDIR)/x2check.Plo solvers/$(DEPDIR)/xp1known.Plo \
+	solvers/$(DEPDIR)/xp2known.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -454,9 +454,9 @@ libcoinasl_la_SOURCES = solvers/asldate.c solvers/atof.c \
 	solvers/sphes.c solvers/sscanf.c solvers/stderr.c \
 	solvers/studchk0.c solvers/suf_sos.c solvers/value.c \
 	solvers/writesol.c solvers/wrtsol_.c solvers/ws_desc.c \
-	solvers/wsu_desc.c solvers/x2check.c solvers/xectim.c \
-	solvers/xp1known.c solvers/xp2known.c details.c arith.h \
-	$(am__append_1) $(am__append_2)
+	solvers/wsu_desc.c solvers/x2check.c solvers/xp1known.c \
+	solvers/xp2known.c details.c arith.h $(am__append_1) \
+	$(am__append_2)
 libcoinasl_la_LIBADD = $(ASL_LFLAGS)
 
 # This is for libtool
@@ -737,8 +737,6 @@ solvers/wsu_desc.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/x2check.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
-solvers/xectim.lo: solvers/$(am__dirstamp) \
-	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/xp1known.lo: solvers/$(am__dirstamp) \
 	solvers/$(DEPDIR)/$(am__dirstamp)
 solvers/xp2known.lo: solvers/$(am__dirstamp) \
@@ -855,7 +853,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/ws_desc.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/wsu_desc.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/x2check.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/xectim.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/xp1known.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@solvers/$(DEPDIR)/xp2known.Plo@am__quote@ # am--include-marker
 
@@ -1167,7 +1164,6 @@ distclean: distclean-am
 	-rm -f solvers/$(DEPDIR)/ws_desc.Plo
 	-rm -f solvers/$(DEPDIR)/wsu_desc.Plo
 	-rm -f solvers/$(DEPDIR)/x2check.Plo
-	-rm -f solvers/$(DEPDIR)/xectim.Plo
 	-rm -f solvers/$(DEPDIR)/xp1known.Plo
 	-rm -f solvers/$(DEPDIR)/xp2known.Plo
 	-rm -f Makefile
@@ -1308,7 +1304,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f solvers/$(DEPDIR)/ws_desc.Plo
 	-rm -f solvers/$(DEPDIR)/wsu_desc.Plo
 	-rm -f solvers/$(DEPDIR)/x2check.Plo
-	-rm -f solvers/$(DEPDIR)/xectim.Plo
 	-rm -f solvers/$(DEPDIR)/xp1known.Plo
 	-rm -f solvers/$(DEPDIR)/xp2known.Plo
 	-rm -f Makefile
