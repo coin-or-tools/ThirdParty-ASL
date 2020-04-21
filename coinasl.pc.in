@@ -8,6 +8,6 @@ Name: ASL
 Description: AMPL Solver Library
 URL: https://github.com/coin-or-tools/ThirdParty-ASL
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lcoinasl
-Libs.private: @ASL_LFLAGS_NOPC@
 Cflags: -I${includedir}
+@COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lcoinasl
+@COIN_STATIC_BUILD_TRUE@Libs: -L${libdir} -lcoinasl @ASL_LFLAGS_NOPC@
