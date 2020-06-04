@@ -26,7 +26,7 @@ echo " "
 rm -f $coinasl
 
 echo "Downloading the source code from www.coin-or.org..."
-if $wgetcmd https://www.coin-or.org/BuildTools/ASL/${coinasl}.tgz ;
+if $wgetcmd https://coin-or-tools.github.io/ThirdParty-ASL/${coinasl}.tgz ;
 then
   echo "Download finished."
 else
