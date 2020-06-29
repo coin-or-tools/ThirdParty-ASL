@@ -692,9 +692,6 @@ LDFLAGS
 CFLAGS
 COIN_RELOCATABLE_FALSE
 COIN_RELOCATABLE_TRUE
-MAINT
-MAINTAINER_MODE_FALSE
-MAINTAINER_MODE_TRUE
 am__untar
 am__tar
 AMTAR
@@ -718,6 +715,9 @@ am__isrc
 INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
+MAINT
+MAINTAINER_MODE_FALSE
+MAINTAINER_MODE_TRUE
 AM_BACKSLASH
 AM_DEFAULT_VERBOSITY
 AM_DEFAULT_V
@@ -731,8 +731,6 @@ build_os
 build_vendor
 build_cpu
 build
-ALWAYS_FALSE_FALSE
-ALWAYS_FALSE_TRUE
 target_alias
 host_alias
 build_alias
@@ -2354,7 +2352,6 @@ fi
 
 
 
-  # We want --enable-msvc setup and checked
 
 
   # Check whether --enable-debug was given.
@@ -2365,18 +2362,10 @@ else
 fi
 
 
-# This macro should run before the compiler checks (doesn't seem to be
-# sufficient for CFLAGS)
 
 
 
 
-
-
-# change default compiler flags
-# - debugging enabled: enable debug symbols (-g/-Z7)
-# - debugging disabled: disable debug code (-DNDEBUG); enable (more) optimization (-O2)
-# - enable exceptions for (i)cl
 
   if test "$enable_debug" = yes ; then
     if test "$enable_msvc" = yes ; then
@@ -2863,18 +2852,13 @@ fi
 rmdir .tst 2>/dev/null
 
 
-# Enforce the required autoconf version
-
-
-# Set the project's version numbers
-
-  # break up package version number in major.minor.release
-  # AC_PACKAGE_VERSION is defined by AC_INIT
 
 
 
 
-  # ac-define AC_PACKAGE_VERSION macros, use 9999 for missing values
+
+
+
 
 cat >>confdefs.h <<_ACEOF
 #define THIRDPARTYASL_VERSION "2.0.0"
@@ -2899,25 +2883,12 @@ _ACEOF
 
 
 
-# A useful makefile conditional that is always false
-   if false; then
-  ALWAYS_FALSE_TRUE=
-  ALWAYS_FALSE_FALSE='#'
-else
-  ALWAYS_FALSE_TRUE='#'
-  ALWAYS_FALSE_FALSE=
-fi
-
-
-# Change the default compiler flags. This needs to run before
-# AC_CANONICAL_BUILD.
-
-
-# Get the build and host types
 
 
 
-# libtool has some magic for host_os and build_os being mingw, but doesn't know about msys
+
+
+  # libtool has some magic for host_os and build_os being mingw, but doesn't know about msys
   if test $host_os = msys ; then
     host_os=mingw
     host=`echo $host | sed -e 's/msys/mingw/'`
@@ -2928,9 +2899,6 @@ fi
     build=`echo $build | sed -e 's/msys/mingw/'`
   fi
 
-# Make silent build rules the default (https://www.gnu.org/software/automake/
-# manual/html_node/Automake-Silent-Rules.html). Run before AM_INIT_AUTOMAKE,
-# which will AC_REQUIRE it anyway.
   # Check whether --enable-silent-rules was given.
 if test "${enable_silent_rules+set}" = set; then :
   enableval=$enable_silent_rules;
@@ -2971,13 +2939,30 @@ fi
 AM_BACKSLASH='\'
 
 
-# Initialize automake
-# - do not be as strict as for GNU projects
-# - don't AC_DEFINE PACKAGE or VERSION (but there're still defined as shell
-#   variables in configure, and as make variables).
-# - disable dist target
-# - place objects from sources in subdirs into corresponding subdirs
-# - enable all automake warnings
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable maintainer-specific portions of Makefiles" >&5
+$as_echo_n "checking whether to enable maintainer-specific portions of Makefiles... " >&6; }
+    # Check whether --enable-maintainer-mode was given.
+if test "${enable_maintainer_mode+set}" = set; then :
+  enableval=$enable_maintainer_mode; USE_MAINTAINER_MODE=$enableval
+else
+  USE_MAINTAINER_MODE=no
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $USE_MAINTAINER_MODE" >&5
+$as_echo "$USE_MAINTAINER_MODE" >&6; }
+   if test $USE_MAINTAINER_MODE = yes; then
+  MAINTAINER_MODE_TRUE=
+  MAINTAINER_MODE_FALSE='#'
+else
+  MAINTAINER_MODE_TRUE='#'
+  MAINTAINER_MODE_FALSE=
+fi
+
+  MAINT=$MAINTAINER_MODE_TRUE
+
+
+
   if test "`cd $srcdir && pwd`" != "`pwd`"; then
   # Use -I$(srcdir) only when $(srcdir) != ., so that make's output
   # is not polluted with repeated "-I."
@@ -3085,37 +3070,12 @@ END
 fi
 
 
-# Disable automatic rebuild of configure/Makefile. Use run_autotools.
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to enable maintainer-specific portions of Makefiles" >&5
-$as_echo_n "checking whether to enable maintainer-specific portions of Makefiles... " >&6; }
-    # Check whether --enable-maintainer-mode was given.
-if test "${enable_maintainer_mode+set}" = set; then :
-  enableval=$enable_maintainer_mode; USE_MAINTAINER_MODE=$enableval
-else
-  USE_MAINTAINER_MODE=no
-fi
-
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $USE_MAINTAINER_MODE" >&5
-$as_echo "$USE_MAINTAINER_MODE" >&6; }
-   if test $USE_MAINTAINER_MODE = yes; then
-  MAINTAINER_MODE_TRUE=
-  MAINTAINER_MODE_FALSE='#'
-else
-  MAINTAINER_MODE_TRUE='#'
-  MAINTAINER_MODE_FALSE=
-fi
-
-  MAINT=$MAINTAINER_MODE_TRUE
-
-
-
-# Figure out the path where libraries are installed.
-# Unless the user specifies --prefix, prefix is set to NONE until the
-# end of configuration, at which point it will be set to $ac_default_prefix.
-# Unless the user specifies --exec-prefix, exec-prefix is set to NONE until
-# the end of configuration, at which point it's set to '${prefix}'.
-# Sheesh.  So do the expansion, then back it out.
+  # Figure out the path where libraries are installed.
+  # Unless the user specifies --prefix, prefix is set to NONE until the
+  # end of configuration, at which point it will be set to $ac_default_prefix.
+  # Unless the user specifies --exec-prefix, exec-prefix is set to NONE until
+  # the end of configuration, at which point it's set to '${prefix}'.
+  # Sheesh.  So do the expansion, then back it out.
   save_prefix=$prefix
   save_exec_prefix=$exec_prefix
   if test "x$prefix" = xNONE ; then
@@ -3131,8 +3091,6 @@ fi
   prefix=$save_prefix
   exec_prefix=$save_exec_prefix
 
-# add a configure flag to indicate whether .pc files should be made relocatable
-# off by default, as it creates libtool warnings
   # Check whether --enable-relocatable was given.
 if test "${enable_relocatable+set}" = set; then :
   enableval=$enable_relocatable; coin_enable_relocatable=$enableval
@@ -3217,17 +3175,7 @@ fi
 
 
 
-  # Setting up libtool with LT_INIT will AC_REQUIRE AC_PROG_CC, but we want
-  # to invoke it from this macro first so that we can supply a parameter.
 
-
-  # If enable-msvc, then test for Intel (on Windows) and MS C compiler
-  # explicitly and add the compile wrapper before AC_PROG_CC. The compile
-  # wrapper works around issues related to finding MS link.exe. (Unix link.exe
-  # occurs first in PATH, which causes compile and link checks to fail.) For
-  # the same reason, set LD to use the compile wrapper. If CC remains unset
-  # (neither icl or cl was found, and CC was not set by the user), stop with
-  # an error.
 
   if test $enable_msvc = yes ; then
     for ac_prog in icl cl
@@ -3281,11 +3229,6 @@ done
       as_fn_error $? "Neither MS nor Intel C compiler found in PATH and CC is unset." "$LINENO" 5
     fi
   fi
-
-  # Look for some C compiler and check that it works. If the user has set CC
-  # or we found icl/cl above, this shouldn't overwrite CC. Unlike the macros
-  # that establish C++ or Fortran compilers, PROG_CC also takes care of adding
-  # the compile wrapper if needed.
 
   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4072,7 +4015,6 @@ fi
 
 
 
-  # Declare precious variable for additional compiler flags
 
 
 
@@ -7776,7 +7718,6 @@ fi
 done
 
 
-# checkout AR and decide whether to use ar-lib wrapper
   if test -n "$ac_tool_prefix"; then
   for ac_prog in ar lib "link -lib"
   do
@@ -7949,7 +7890,6 @@ unknown)
 esac
 
 
-# Create libtool.
 
 
 
@@ -12245,31 +12185,6 @@ CC=$lt_save_CC
 
 
 
-# Patch libtool to circumvent some issues when using MSVC and MS lib.
-# This needs to be run after config.status has created libtool.
-# 1. Relax check which libraries can be used when linking a DLL.
-#    libtool's func_mode_link() would reject linking a .lib file when building a DLL,
-#    even though this .lib file may just be the one that eventually loads a depending DLL,
-#    e.g., mkl_core_dll.lib. Setting deplibs_check_method=pass_all will still print a
-#    warning, but the .lib is still passed to the linker.
-# 2. Ensure always_export_symbols=no if win32-dll. Even when we pass win32-dll,
-#    libtool forces always_export_symbols=yes for --tag=CXX if using MS compiler.
-#    This leads to a nm call that collects ALL C-functions from a library
-#    and explicitly dll-exporting them, leading to warnings about duplicates
-#    regarding those that are properly marked for dll-export in the source.
-# 3. Do not add mkl_*.lib to old_deplibs, which can result in trying to unpack and repack
-#    the MKL libraries (which are pretty big). Instead, treat them like other -l<...> libs.
-# 4. Add MKL libraries to dependency_libs in .la file, which I guess should be
-#    the case due to point 5.
-#
-# Patch libtool also to circumvent some issues when using MinGW (Msys+GCC).
-# 1. Relax check which libraries can be used when linking a DLL.
-#    libtool's func_mode_link() would reject linking MinGW system libraries,
-#    e.g., -lmingw32, when building a DLL, because it does not find this
-#    library in the installation path, and then falls back to build only
-#    static libraries. Setting deplibs_check_method=pass_all will avoid
-#    this faulty check.
-
   case "$am_cv_ar_interface" in
     lib )
       ac_config_commands="$ac_config_commands libtoolclpatch"
@@ -12285,21 +12200,15 @@ CC=$lt_save_CC
       ;;
   esac
 
-  # Set up LT_LDFLAGS, user can initialize and we augment below
 
 
-  # Use the libtool library info, if defined, otherwise use the project version info,
-  # if a full major.minor.release number was available
   LT_LDFLAGS="$LT_LDFLAGS -version-number 2:0:0"
        { $as_echo "$as_me:${as_lineno-$LINENO}: libtool version info: -version-number 2:0:0" >&5
 $as_echo "$as_me: libtool version info: -version-number 2:0:0" >&6;}
 
 
-  # shared libraries should have no undefined symbols
-  # for Windows DLLs, it is mandatory to add this
   LT_LDFLAGS="$LT_LDFLAGS -no-undefined"
 
-  # add automake conditional on whether we build shared or static, useful for .pc files
    if test "$enable_shared" = no; then
   COIN_STATIC_BUILD_TRUE=
   COIN_STATIC_BUILD_FALSE='#'
@@ -12518,7 +12427,6 @@ fi
 
 
 # generate the output files.
-
 ac_config_links="$ac_config_links stdio1.h:solvers/stdio1.h0"
 
 
@@ -12728,8 +12636,8 @@ LIBOBJS=$ac_libobjs
 LTLIBOBJS=$ac_ltlibobjs
 
 
-if test -z "${ALWAYS_FALSE_TRUE}" && test -z "${ALWAYS_FALSE_FALSE}"; then
-  as_fn_error $? "conditional \"ALWAYS_FALSE\" was never defined.
+if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
+  as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking that generated files are newer than configure" >&5
@@ -12748,10 +12656,6 @@ else
   am__EXEEXT_FALSE=
 fi
 
-if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
-  as_fn_error $? "conditional \"MAINTAINER_MODE\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
 if test -z "${COIN_RELOCATABLE_TRUE}" && test -z "${COIN_RELOCATABLE_FALSE}"; then
   as_fn_error $? "conditional \"COIN_RELOCATABLE\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
@@ -14789,7 +14693,6 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
-  #AC_MSG_NOTICE([In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting])
   { $as_echo "$as_me:${as_lineno-$LINENO}: Configuration of $PACKAGE_NAME successful" >&5
 $as_echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
 

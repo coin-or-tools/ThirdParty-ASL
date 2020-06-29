@@ -1,11 +1,9 @@
 # Copyright (C) 2007, 2009 International Business Machines.
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
-
+#
 # Author:  Andreas Waechter            IBM    2006-04-13
-# Revised: Lou Hafer		       SFU    2007-09-15
-
-AC_PREREQ(2.59)
+# Revised: Lou Hafer                   SFU    2007-09-15
 
 AC_INIT([ThirdPartyASL],[2.0.0],[https://github.com/coin-or-tools/ThirdParty-ASL/issues/new],,[https://github.com/coin-or-tools/ThirdParty-ASL])
 
@@ -84,7 +82,6 @@ esac
 AM_CONDITIONAL([CC_IS_CL], [$cc_is_cl])
 
 # generate the output files.
-
 AC_CONFIG_LINKS(stdio1.h:solvers/stdio1.h0)
 
 # we need a second fpinit.c because we need it for a libtool lib and a non-libtool program

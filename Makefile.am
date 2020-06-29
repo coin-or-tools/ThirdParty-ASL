@@ -2,8 +2,6 @@
 # All Rights Reserved.
 # This file is distributed under the Eclipse Public License.
 
-EXTRA_DIST = get.ASL INSTALL.ASL
-
 lib_LTLIBRARIES = libcoinasl.la
 
 libcoinasl_la_SOURCES = \

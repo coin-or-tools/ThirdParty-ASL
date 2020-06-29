@@ -6,7 +6,7 @@ includedir=@includedir@/coin-or/asl
 
 Name: ASL
 Description: AMPL Solver Library
-URL: https://github.com/coin-or-tools/ThirdParty-ASL
+URL: @PACKAGE_URL@
 Version: @PACKAGE_VERSION@
 Cflags: -I${includedir}
 @COIN_STATIC_BUILD_FALSE@Libs: -L${libdir} -lcoinasl
