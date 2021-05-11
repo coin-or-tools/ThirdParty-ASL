@@ -26,3 +26,14 @@ Ampl Solver Library (ASL) as it is used by some COIN-OR projects.
 3. Run `make` to build the ASL library.
 
 4. Run `make install` to install the ASL library and header files.
+
+## Jacobians with for more than 2^31 nonzeros
+
+If selecting configure option `--with-intsize=64`, a define for `ASL_big_goff`
+will be enabled. This allows ASL to compute Jacobians with more than 2^31
+entries. Some solvers may be able to make use of this.
+
+The name of the configure option is chosen to be compatible with some other
+projects, in particular, ThirdParty-Mumps and Ipopt. However, in the context
+of ASL it actually changes the type of some index variables from int to ssize_t.
+On many common 64-bit systems, int has a size of 32 bit and ssize_t has a size of 64 bit.

@@ -1349,6 +1349,7 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA \
 
 arith.h : arithchk$(EXEEXT)
 	./arithchk$(EXEEXT) > $@
+@ASL_INT64_TRUE@	echo "#define ASL_big_goff" >> $@
 
 details.c :
 	echo "char sysdetails_ASL[] = \"$(build)\";" > $@

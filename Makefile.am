@@ -124,6 +124,9 @@ arithchk_LDADD = $(ASL_LFLAGS)
 
 arith.h : arithchk$(EXEEXT)
 	./arithchk$(EXEEXT) > $@
+if ASL_INT64
+	echo "#define ASL_big_goff" >> $@
+endif
 
 details.c :
 	echo "char sysdetails_ASL[] = \"$(build)\";" > $@

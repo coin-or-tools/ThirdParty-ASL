@@ -675,6 +675,8 @@ ASL_LFLAGS_NOPC
 CC_IS_CL_FALSE
 CC_IS_CL_TRUE
 ASL_LFLAGS
+ASL_INT64_FALSE
+ASL_INT64_TRUE
 COIN_STATIC_BUILD_FALSE
 COIN_STATIC_BUILD_TRUE
 LT_LDFLAGS
@@ -814,6 +816,7 @@ with_aix_soname
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
+with_intsize
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1485,6 +1488,8 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot[=DIR]    Search for dependent libraries within DIR (or the
                           compiler's sysroot if not specified).
+  --with-intsize          integer type to use: specify 32 for int or 64 for
+                          ssize_t (defines ASL_big_goff)
 
 Some influential environment variables:
   CC          C compiler command
@@ -12689,8 +12694,30 @@ case $build in
     ;;
 esac
 
-# The critical function for NO_RUSAGE is getrusage(). Use a standard test.
+# check whether to switch to long integers
 
+# Check whether --with-intsize was given.
+if test ${with_intsize+y}
+then :
+  withval=$with_intsize; intsize=$withval
+else $as_nop
+  intsize=32
+fi
+
+case "$intsize" in
+  32 | 64 ) ;;
+  *) as_fn_error $? "unsupported value $intsize for option --with-intsize" "$LINENO" 5 ;;
+esac
+ if test "$intsize" = 64; then
+  ASL_INT64_TRUE=
+  ASL_INT64_FALSE='#'
+else
+  ASL_INT64_TRUE='#'
+  ASL_INT64_FALSE=
+fi
+
+
+# The critical function for NO_RUSAGE is getrusage(). Use a standard test.
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for getrusage" >&5
 printf %s "checking for getrusage... " >&6; }
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -12720,7 +12747,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
 # It's hardly likely that long long is missing on any modern system, but it's easy to check.
 # Also, if it's present, then ASL uses strtoull, which is not supported on Windows systems.
 # Instead, there should be a _strtoui64.
-
 ac_fn_c_check_type "$LINENO" "long long" "ac_cv_type_long_long" "$ac_includes_default"
 if test "x$ac_cv_type_long_long" = xyes
 then :
@@ -13127,6 +13153,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${COIN_STATIC_BUILD_TRUE}" && test -z "${COIN_STATIC_BUILD_FALSE}"; then
   as_fn_error $? "conditional \"COIN_STATIC_BUILD\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ASL_INT64_TRUE}" && test -z "${ASL_INT64_FALSE}"; then
+  as_fn_error $? "conditional \"ASL_INT64\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${CC_IS_CL_TRUE}" && test -z "${CC_IS_CL_FALSE}"; then

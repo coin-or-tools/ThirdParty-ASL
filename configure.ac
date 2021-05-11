@@ -37,8 +37,18 @@ case $build in
     ;;
 esac
 
-# The critical function for NO_RUSAGE is getrusage(). Use a standard test.
+# check whether to switch to long integers
+AC_ARG_WITH([intsize],
+            [AS_HELP_STRING([--with-intsize],[integer type to use: specify 32 for int or 64 for ssize_t (defines ASL_big_goff)])],
+            [intsize=$withval],
+            [intsize=32])
+case "$intsize" in
+  32 | 64 ) ;;
+  *) AC_MSG_ERROR([unsupported value $intsize for option --with-intsize]) ;;
+esac
+AM_CONDITIONAL([ASL_INT64],[test "$intsize" = 64])
 
+# The critical function for NO_RUSAGE is getrusage(). Use a standard test.
 AC_MSG_CHECKING([for getrusage])
 AC_LINK_IFELSE(
   [AC_LANG_PROGRAM([[]],[[getrusage()]])],
@@ -50,7 +60,6 @@ AC_LINK_IFELSE(
 # It's hardly likely that long long is missing on any modern system, but it's easy to check.
 # Also, if it's present, then ASL uses strtoull, which is not supported on Windows systems.
 # Instead, there should be a _strtoui64.
-
 AC_CHECK_TYPE([long long],
   [case "$CC" in *cl ) CPPFLAGS="$CPPFLAGS -Dstrtoull=_strtoui64" ;; esac],
   [CPPFLAGS="$CPPFLAGS -DNO_LONG_LONG"])
