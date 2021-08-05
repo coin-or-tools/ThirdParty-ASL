@@ -2744,7 +2744,7 @@ fi
       : ${FFLAGS:="-nologo -fpp -Z7 -MDd $ADD_FFLAGS"}
       : ${FCFLAGS:="-nologo -fpp -Z7 -MDd $ADD_FCFLAGS"}
       : ${CFLAGS:="-nologo -Z7 -MDd $ADD_CFLAGS"}
-      : ${CXXFLAGS:="-nologo -EHs -Z7 -MDd $ADD_CXXFLAGS"}
+      : ${CXXFLAGS:="-nologo -EHs -Z7 -MDd -Zc:__cplusplus $ADD_CXXFLAGS"}
     else
       : ${FFLAGS:="-g $ADD_FFLAGS"}
       : ${FCFLAGS:="-g $ADD_FCFLAGS"}
@@ -2756,7 +2756,7 @@ fi
       : ${FFLAGS:="-nologo -fpp -O2 -MD $ADD_FFLAGS"}
       : ${FCFLAGS:="-nologo -fpp -O2 -MD $ADD_FCFLAGS"}
       : ${CFLAGS:="-nologo -DNDEBUG -O2 -MD $ADD_CFLAGS"}
-      : ${CXXFLAGS:="-nologo -EHs -DNDEBUG -O2 -MD $ADD_CXXFLAGS"}
+      : ${CXXFLAGS:="-nologo -EHs -DNDEBUG -O2 -MD -Zc:__cplusplus $ADD_CXXFLAGS"}
     else
       : ${FFLAGS:="-O2 $ADD_FFLAGS"}
       : ${FCFLAGS:="-O2 $ADD_FCFLAGS"}
@@ -12891,12 +12891,12 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 case "$CC" in
   *cl )
     cc_is_cl=true
-    case "$CFLAGS" in *-MDd* | *-MTd* )
-      CFLAGS=`echo $CFLAGS | sed -e 's/-MDd/-MD/g' -e 's/-MTd/-MT/g'`
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: ASL libraries linked with debug MSVC runtime libs do not work. Replaced -MDd and -MTd by -MD and -MT in CFLAGS, resp." >&5
-printf "%s\n" "$as_me: ASL libraries linked with debug MSVC runtime libs do not work. Replaced -MDd and -MTd by -MD and -MT in CFLAGS, resp." >&6;}
-      ;;
-    esac
+    # took this out, as with MSVS 2019 and Intel 2021 I could not reproduce an issue with ASL debug libs anymore
+    #case "$CFLAGS" in *-MDd* | *-MTd* )
+    #  CFLAGS=`echo $CFLAGS | sed -e 's/-MDd/-MD/g' -e 's/-MTd/-MT/g'`
+    #  AC_MSG_NOTICE([ASL libraries linked with debug MSVC runtime libs do not work. Replaced -MDd and -MTd by -MD and -MT in CFLAGS, resp.])
+    #  ;;
+    #esac
     ;;
   * )
     cc_is_cl=false
