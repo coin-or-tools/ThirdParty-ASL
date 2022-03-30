@@ -97,8 +97,8 @@ build_triplet = @build@
 host_triplet = @host@
 @CC_IS_CL_TRUE@am__append_1 = solvers/fpinitmt.c
 @CC_IS_CL_FALSE@am__append_2 = solvers/fpinit.c
-noinst_PROGRAMS = arithchk$(EXEEXT)
-@CC_IS_CL_FALSE@am__append_3 = fpinit.c
+@USE_ARITH_H1_FALSE@noinst_PROGRAMS = arithchk$(EXEEXT)
+@CC_IS_CL_FALSE@@USE_ARITH_H1_FALSE@am__append_3 = fpinit.c
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -186,11 +186,13 @@ am__v_lt_1 =
 libcoinasl_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libcoinasl_la_LDFLAGS) $(LDFLAGS) -o $@
-@CC_IS_CL_FALSE@am__objects_3 = arithchk-fpinit.$(OBJEXT)
-am_arithchk_OBJECTS = solvers/arithchk-arithchk.$(OBJEXT) \
-	$(am__objects_3)
+@CC_IS_CL_FALSE@@USE_ARITH_H1_FALSE@am__objects_3 =  \
+@CC_IS_CL_FALSE@@USE_ARITH_H1_FALSE@	arithchk-fpinit.$(OBJEXT)
+@USE_ARITH_H1_FALSE@am_arithchk_OBJECTS =  \
+@USE_ARITH_H1_FALSE@	solvers/arithchk-arithchk.$(OBJEXT) \
+@USE_ARITH_H1_FALSE@	$(am__objects_3)
 arithchk_OBJECTS = $(am_arithchk_OBJECTS)
-arithchk_DEPENDENCIES = $(am__DEPENDENCIES_1)
+@USE_ARITH_H1_FALSE@arithchk_DEPENDENCIES = $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -463,10 +465,11 @@ libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
 
 # make sure that arith.h is build before any of the actual ASL sources
 BUILT_SOURCES = arith.h
-arithchk_SOURCES = solvers/arithchk.c $(am__append_3)
-@CC_IS_CL_FALSE@arithchk_CPPFLAGS = -DASL_NO_FPINITMT
-@CC_IS_CL_TRUE@arithchk_CPPFLAGS = -DNO_FPINIT
-arithchk_LDADD = $(ASL_LFLAGS)
+@USE_ARITH_H1_FALSE@arithchk_SOURCES = solvers/arithchk.c \
+@USE_ARITH_H1_FALSE@	$(am__append_3)
+@CC_IS_CL_FALSE@@USE_ARITH_H1_FALSE@arithchk_CPPFLAGS = -DASL_NO_FPINITMT
+@CC_IS_CL_TRUE@@USE_ARITH_H1_FALSE@arithchk_CPPFLAGS = -DNO_FPINIT
+@USE_ARITH_H1_FALSE@arithchk_LDADD = $(ASL_LFLAGS)
 thirdpartyincludedir = $(includedir)/coin-or/asl
 thirdpartyinclude_HEADERS = \
   solvers/asl.h solvers/asl_pfg.h solvers/asl_pfgh.h solvers/psinfo.h solvers/funcadd.h \
@@ -1347,9 +1350,13 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgconfiglibDATA \
 .PRECIOUS: Makefile
 
 
-arith.h : arithchk$(EXEEXT)
-	./arithchk$(EXEEXT) > $@
-@ASL_INT64_TRUE@	echo "#define ASL_big_goff" >> $@
+@USE_ARITH_H1_TRUE@arith.h : $(srcdir)/solvers/arith.h1
+@USE_ARITH_H1_TRUE@	cp $^ $@
+@ASL_INT64_TRUE@@USE_ARITH_H1_TRUE@	echo "#define ASL_big_goff" >> $@
+
+@USE_ARITH_H1_FALSE@arith.h : arithchk$(EXEEXT)
+@USE_ARITH_H1_FALSE@	./arithchk$(EXEEXT) > $@
+@ASL_INT64_TRUE@@USE_ARITH_H1_FALSE@	echo "#define ASL_big_goff" >> $@
 
 details.c :
 	echo "char sysdetails_ASL[] = \"$(build)\";" > $@

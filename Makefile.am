@@ -109,6 +109,15 @@ libcoinasl_la_LDFLAGS = $(LT_LDFLAGS)
 # make sure that arith.h is build before any of the actual ASL sources
 BUILT_SOURCES = arith.h
 
+if USE_ARITH_H1
+arith.h : $(srcdir)/solvers/arith.h1
+	cp $^ $@
+if ASL_INT64
+	echo "#define ASL_big_goff" >> $@
+endif
+
+else # if USE_ARITH_H1
+
 # program that generates arith.h
 # NOTE: current ASL provides an alternative that doesn't require
 #  building and executing something first
@@ -127,6 +136,8 @@ arith.h : arithchk$(EXEEXT)
 if ASL_INT64
 	echo "#define ASL_big_goff" >> $@
 endif
+
+endif # USE_ARITH_H1
 
 details.c :
 	echo "char sysdetails_ASL[] = \"$(build)\";" > $@

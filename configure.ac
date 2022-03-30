@@ -91,6 +91,9 @@ case "$CC" in
 esac
 AM_CONDITIONAL([CC_IS_CL], [$cc_is_cl])
 
+# whether to use arith.h1 for arith.h instead of arithchk
+AM_CONDITIONAL([USE_ARITH_H1], [test $cross_compiling = yes])
+
 # generate the output files.
 AC_CONFIG_LINKS(stdio1.h:solvers/stdio1.h0)
 
