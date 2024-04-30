@@ -1,0 +1,7 @@
+# Ignore autotools cache files
+aclocal.m4*
+acinclude.m4
+autom4te*
+
+# ASL download
+solvers/
