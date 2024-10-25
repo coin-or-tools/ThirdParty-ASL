@@ -51,7 +51,7 @@ AM_CONDITIONAL([ASL_INT64],[test "$intsize" = 64])
 # The critical function for NO_RUSAGE is getrusage(). Use a standard test.
 AC_MSG_CHECKING([for getrusage])
 AC_LINK_IFELSE(
-  [AC_LANG_PROGRAM([#include <sys/resource.h>],[struct rusage r; getrusage(RUSAGE_SELF, &r)])]
+  [AC_LANG_PROGRAM([#include <sys/resource.h>],[struct rusage r; getrusage(RUSAGE_SELF, &r)])],
   [AC_MSG_RESULT([yes])],
   [CPPFLAGS="$CPPFLAGS -DNO_RUSAGE"
    AC_MSG_RESULT([no])])
