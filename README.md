@@ -2,6 +2,7 @@
 
 This is an autotools-based build system to build and install the
 Ampl Solver Library (ASL) as it is used by some COIN-OR projects.
+The build system is based on [COIN-OR BuildTools](https://github.com/coin-or-tools/BuildTools).
 
 ## Installation steps
 
