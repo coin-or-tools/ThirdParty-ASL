@@ -5,7 +5,7 @@
 # Author:  Andreas Waechter            IBM    2006-04-13
 # Revised: Lou Hafer                   SFU    2007-09-15
 
-AC_INIT([ThirdPartyASL],[2.0.1],[https://github.com/coin-or-tools/ThirdParty-ASL/issues/new],[],[https://github.com/coin-or-tools/ThirdParty-ASL])
+AC_INIT([ThirdPartyASL],[2.0.2],[https://github.com/coin-or-tools/ThirdParty-ASL/issues/new],[],[https://github.com/coin-or-tools/ThirdParty-ASL])
 
 AC_COPYRIGHT([
 Copyright 2006, 2007, 2009 International Business Machines and others.
