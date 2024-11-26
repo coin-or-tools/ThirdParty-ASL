@@ -12869,32 +12869,6 @@ else
 fi
 
 
-# The critical function for NO_RUSAGE is getrusage(). Use a standard test.
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for getrusage" >&5
-printf %s "checking for getrusage... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <sys/resource.h>
-int
-main (void)
-{
-struct rusage r; getrusage(RUSAGE_SELF, &r)
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"
-then :
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-else $as_nop
-  CPPFLAGS="$CPPFLAGS -DNO_RUSAGE"
-   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-
 # Check for long long; we need to define NO_LONG_LONG if it's not present.
 # It's hardly likely that long long is missing on any modern system, but it's easy to check.
 # Also, if it's present, then ASL uses strtoull, which is not supported on Windows systems.
