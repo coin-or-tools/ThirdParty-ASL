@@ -20,7 +20,7 @@ else
 wgetcmd="wget"
 fi
 
-coinasl=solvers-20241109
+coinasl=solvers-20241108
 
 echo " "
 echo "Running script for downloading the source code for the ASL"
