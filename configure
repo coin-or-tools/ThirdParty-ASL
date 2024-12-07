@@ -13859,6 +13859,17 @@ esac
 fi
 
 
+# Tell icx to honor NAN compares (for NaN_test in solvers/mach.c)
+case "$CC" in *icx )
+  case $build in
+    *-mingw* | *-cygwin* | *-msys* )
+      CPPFLAGS="$CPPFLAGS -Qhonor-nan-compares"
+      ;;
+    *) CPPFLAGS="$CPPFLAGS -fhonor-nan-compares"
+      ;;
+  esac
+esac
+
 # Check for dlopen, ASL uses it to load userdefined function libraries
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for dlopen in -ldl" >&5
 printf %s "checking for dlopen in -ldl... " >&6; }

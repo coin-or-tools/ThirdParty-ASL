@@ -59,6 +59,17 @@ AC_CHECK_TYPE([long long],
 # Check for ssize_t; we need to define NO_SSIZE_T if it's not present.
 AC_CHECK_TYPE([ssize_t],[],[CPPFLAGS="$CPPFLAGS -DNO_SSIZE_T"])
 
+# Tell icx to honor NAN compares (for NaN_test in solvers/mach.c)
+case "$CC" in *icx )
+  case $build in
+    *-mingw* | *-cygwin* | *-msys* )
+      CPPFLAGS="$CPPFLAGS -Qhonor-nan-compares"
+      ;;
+    *) CPPFLAGS="$CPPFLAGS -fhonor-nan-compares"
+      ;;
+  esac
+esac
+
 # Check for dlopen, ASL uses it to load userdefined function libraries
 AC_CHECK_LIB(dl,[dlopen],[ASL_LFLAGS="-ldl $ASL_LFLAGS"])
 
