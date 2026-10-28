@@ -1,0 +1,95 @@
+--- solvers/con1ival.c
++++ solvers/con1ival.c
+@@ -176,6 +176,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (nerror && *nerror)
+ 			return;
++		if (nerror)	/* con1ival_nomap_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	if (asl->i.Derrs)
+ 		deriv_errchk_ASL((ASL*)asl, nerror, i, 1);
+--- solvers/con2ival.c
++++ solvers/con2ival.c
+@@ -176,6 +176,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (nerror && *nerror)
+ 			return;
++		if (nerror)	/* con2ival_nomap_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	if (asl->i.Derrs)
+ 		deriv_errchk_ASL((ASL*)asl, nerror, i, 1);
+--- solvers/con2val.c
++++ solvers/con2val.c
+@@ -140,6 +140,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			goto done;
++		if (ne0 >= 0)	/* con2val_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	k = n_conjac[1];
+ 	if (asl->i.Derrs)
+--- solvers/conpval.c
++++ solvers/conpval.c
+@@ -324,6 +324,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			return;
++		if (ne0 >= 0)	/* conpval_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	nx = asl->i.nxval;
+ 	Adjoints = adjoints;
+@@ -530,6 +532,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			return;
++		if (ne0 >= 0)	/* objpval_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	if (asl->i.Derrs)
+ 		deriv_errchk_ASL(a, nerror, -(i+1), 1);
+@@ -747,6 +751,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			return;
++		if (ne0 >= 0)	/* conpival_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	if (asl->i.Derrs)
+ 		deriv_errchk_ASL((ASL*)asl, nerror, i, 1);
+--- solvers/conval.c
++++ solvers/conval.c
+@@ -140,6 +140,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			goto done;
++		if (ne0 >= 0)	/* con1val_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	k = n_conjac[1];
+ 	if (asl->i.Derrs)
+--- solvers/obj2val.c
++++ solvers/obj2val.c
+@@ -143,6 +143,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			goto done;
++		if (ne0 >= 0)	/* obj2val_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	if (asl->i.Derrs)
+ 		deriv_errchk_ASL(a, nerror, -(i+1), 1);
+--- solvers/objval.c
++++ solvers/objval.c
+@@ -209,6 +209,8 @@
+ 		asl->i.x_known = xksave;
+ 		if (ne0 >= 0 && *nerror)
+ 			goto done;
++		if (ne0 >= 0)	/* obj1val_ASL() cleared err_jmp */
++			err_jmp = &err_jmp0;
+ 		}
+ 	if (asl->i.Derrs)
+ 		deriv_errchk_ASL(a, nerror, -(i+1), 1);
