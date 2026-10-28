@@ -10,6 +10,7 @@
 /configure -text
 /depcomp -text
 /dtoa.patch -text
+/errjmp.patch -text
 /get.ASL -text
 /install-sh -text
 /ltmain.sh -text

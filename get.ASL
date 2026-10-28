@@ -50,6 +50,9 @@ echo "Unpacking the source code..."
 gunzip -f ${coinasl}.tgz
 tar xf $coinasl.tar
 
+echo "Applying patches"
+patch -p0 < errjmp.patch
+
 echo "Deleting the tar file..."
 rm $coinasl.tar
 
