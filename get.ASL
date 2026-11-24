@@ -20,7 +20,7 @@ else
 wgetcmd="wget"
 fi
 
-coinasl=solvers-20241108
+coinasl=solvers-asl1.0.2
 
 echo " "
 echo "Running script for downloading the source code for the ASL"
@@ -49,9 +49,6 @@ rm -rf solvers
 echo "Unpacking the source code..."
 gunzip -f ${coinasl}.tgz
 tar xf $coinasl.tar
-
-echo "Applying patches"
-patch -p0 < errjmp.patch
 
 echo "Deleting the tar file..."
 rm $coinasl.tar
